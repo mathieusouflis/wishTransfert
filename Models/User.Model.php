@@ -34,18 +34,19 @@ class User {
 
     public static function create($username, $password, $email){
         $result = Model::insert(self::$table, ["username"=> $username,"password"=> $password,"email"=> $email]);
-        return var_dump($result);
+        return $result;
     }
 
     public static function update($id, $username, $password, $email){
-        $result = Model::update(self::$table,
-            array_merge(
+        $result = Model::update(
+            self::$table,
+             array_merge(
                 $username ? ["username"=> $username] : [],
                 $password ? ["password"=> $password] : [],
-                $email ? ["email"=> $email] : []),
-                [
-                "user_id"=> $id
-                ]);
+                $email ? ["email"=> $email] : []
+            ),
+            ["user_id"=> $id]
+        );
         return $result;
     }
 
