@@ -10,6 +10,7 @@ class Model {
         if (empty($params)) {
             $stmt = self::$db->prepare("SELECT * FROM $table");
             $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         $query = "SELECT * FROM $table WHERE ";
@@ -44,7 +45,7 @@ class Model {
         $columns = [];
         $values = [];
         foreach($params as $key => $value) {
-            $columns[] = "$key";
+            $columns[] = $key;
             $values[] = $value;
         }
         
