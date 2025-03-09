@@ -1,6 +1,7 @@
 <?php
 require_once './controllers/AuthController.php';
-LogIn();
+$authc = new AuthC();
+$authc->LogIn();
 ?>
 <!DOCTYPE html>
 <html lang="fr">

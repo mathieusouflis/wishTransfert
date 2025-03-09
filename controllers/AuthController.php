@@ -1,123 +1,129 @@
 <?php
 session_start();
+class AuthC {
+    // parametre dans les fonctions + mettre sur la page front le if session $id $mail
+    // modifier le nom des fonctions
+    // ajouter des commentaires dans le code
+    // si je suis connecter ca doit me rediriger vers le dashboard
+    // fonction a garder
+    public function estCeQueLadresseExisteDeja($adresse) {
+        $utilisateurs = recupererLesUtilisateurs();
 
-function estCeQueLadresseExisteDeja($adresse) {
-    $utilisateurs = recupererLesUtilisateurs();
+        foreach($utilisateurs as $utilisateur) {
+            if($utilisateur["login"] == $adresse) {
+                return true;
+            }
+        }
+        return false;
+    }
+    // a supp car appel de user controller
+    public function recupererLesUtilisateurs() {
+        if(!file_exists("utilisateurs.json")) {
+            file_put_contents("utilisateurs.json", "[]");
+        }
 
-    foreach($utilisateurs as $utilisateur) {
-        if($utilisateur["login"] == $adresse) {
+        $utilisateursTxt = file_get_contents("utilisateurs.json");
+        $utilisateurs = json_decode($utilisateursTxt, true);
+        return $utilisateurs;
+    }
+    // a supp car appel de user controller
+    public function sauvegarderLesUtilisateurs($utilisateurs) {
+        $utilisateursTxt = json_encode($utilisateurs);
+        file_put_contents("utilisateurs.json", $utilisateursTxt);
+    }
+    // a supp car appel de user controller
+    public function recupererUtilisateurParAdresse($adresse) {
+        $utilisateurs = recupererLesUtilisateurs();
+        foreach($utilisateurs as $utilisateur) {
+            if($utilisateur["login"] == $adresse) {
+                return $utilisateur;
+            }
+        }
+        return null;
+    }
+    // a supp car appel de user controller
+    public function ajouterUtilisateur($utilisateur) {
+        $utilisateurs = recupererLesUtilisateurs();
+        $utilisateurs[] = $utilisateur;
+        sauvegarderLesUtilisateurs($utilisateurs);
+    }
+
+    public function isLog() {
+        if(isset($_SESSION["identifiant"])) {
             return true;
         }
-    }
-    return false;
-}
-
-function recupererLesUtilisateurs() {
-    if(!file_exists("utilisateurs.json")) {
-        file_put_contents("utilisateurs.json", "[]");
+        return false;
     }
 
-    $utilisateursTxt = file_get_contents("utilisateurs.json");
-    $utilisateurs = json_decode($utilisateursTxt, true);
-    return $utilisateurs;
-}
+    // gere la page d'inscription
+    public function Register() {
+        $erreurs = [];
+    if($_SERVER["REQUEST_METHOD"] == "POST") {
+        $identifiant = filter_input(INPUT_POST, "identifiant", FILTER_VALIDATE_EMAIL);
+        $motdepasse = filter_input(INPUT_POST, "motdepasse");
+        $motdepasse2 = filter_input(INPUT_POST, "motdepasse2");
 
-function sauvegarderLesUtilisateurs($utilisateurs) {
-    $utilisateursTxt = json_encode($utilisateurs);
-    file_put_contents("utilisateurs.json", $utilisateursTxt);
-}
+        if(!$identifiant) {
+            $erreurs[] = "L'identifiant est absent ou incorrect";
+        }
+        if(!$motdepasse) {
+            $erreurs[] = "Le mot de passe est obligatoire";
+        }
+        if(!$motdepasse2) {
+            $erreurs[] = "La confirmation de mot de passe est obligatoire";
+        }
+        if($motdepasse !== $motdepasse2) {
+            $erreurs[] = "Les deux mots de passe ne correspondent pas";
+        }
+        if(estCeQueLadresseExisteDeja($identifiant)) {
+            $erreurs[] = "L'adresse existe déjà";
+        }
 
-function recupererUtilisateurParAdresse($adresse) {
-    $utilisateurs = recupererLesUtilisateurs();
-    foreach($utilisateurs as $utilisateur) {
-        if($utilisateur["login"] == $adresse) {
-            return $utilisateur;
+        if(empty($erreurs)) {
+            $utilisateur = [
+                "login" => $identifiant,
+                "pwd" => password_hash($motdepasse, PASSWORD_DEFAULT)
+            ];
+            ajouterUtilisateur($utilisateur);
         }
     }
-    return null;
-}
-
-function ajouterUtilisateur($utilisateur) {
-    $utilisateurs = recupererLesUtilisateurs();
-    $utilisateurs[] = $utilisateur;
-    sauvegarderLesUtilisateurs($utilisateurs);
-}
-
-function isLog() {
-    if(isset($_SESSION["identifiant"])) {
-        return true;
     }
-    return false;
-}
 
-// gere la page d'inscription
-function Register() {
+    // gere la page de connexion
+    public function LogIn() {
+        if(isset($_SESSION["identifiant"])) {
+            header('Location: dashboard.php');
+            exit();
+        }
+
     $erreurs = [];
-if($_SERVER["REQUEST_METHOD"] == "POST") {
-    $identifiant = filter_input(INPUT_POST, "identifiant", FILTER_VALIDATE_EMAIL);
-    $motdepasse = filter_input(INPUT_POST, "motdepasse");
-    $motdepasse2 = filter_input(INPUT_POST, "motdepasse2");
+    if($_SERVER["REQUEST_METHOD"] == "POST") {
+        $identifiant = filter_input(INPUT_POST, "identifiant");
+        $motdepasse = filter_input(INPUT_POST, "motdepasse");
 
-    if(!$identifiant) {
-        $erreurs[] = "L'identifiant est absent ou incorrect";
-    }
-    if(!$motdepasse) {
-        $erreurs[] = "Le mot de passe est obligatoire";
-    }
-    if(!$motdepasse2) {
-        $erreurs[] = "La confirmation de mot de passe est obligatoire";
-    }
-    if($motdepasse !== $motdepasse2) {
-        $erreurs[] = "Les deux mots de passe ne correspondent pas";
-    }
-    if(estCeQueLadresseExisteDeja($identifiant)) {
-        $erreurs[] = "L'adresse existe déjà";
-    }
+        if(!$identifiant) {
+            $erreurs[] = "L'identifiant est obligatoire";
+        }
+        if(!$motdepasse) {
+            $erreurs[] = "Le mot de passe est obligatoire";
+        }
+        
+        $utilisateur = recupererUtilisateurParAdresse($identifiant);
+        if(!$utilisateur) {
+            $erreurs[] = "Le compte n'existe pas";
+        } else {    
+            $hash = $utilisateur["pwd"];
+            if(!password_verify($motdepasse, $hash)) {
+                $erreurs[] = "Le mot de passe est incorrect";
+            }
+        }
 
-    if(empty($erreurs)) {
-        $utilisateur = [
-            "login" => $identifiant,
-            "pwd" => password_hash($motdepasse, PASSWORD_DEFAULT)
-        ];
-        ajouterUtilisateur($utilisateur);
-    }
-}
-}
-
-// gere la page de connexion
-function LogIn() {
-    if(isset($_SESSION["identifiant"])) {
-        header('Location: dashboard.php');
-        exit();
-    }
-
-$erreurs = [];
-if($_SERVER["REQUEST_METHOD"] == "POST") {
-    $identifiant = filter_input(INPUT_POST, "identifiant");
-    $motdepasse = filter_input(INPUT_POST, "motdepasse");
-
-    if(!$identifiant) {
-        $erreurs[] = "L'identifiant est obligatoire";
-    }
-    if(!$motdepasse) {
-        $erreurs[] = "Le mot de passe est obligatoire";
-    }
-    
-    $utilisateur = recupererUtilisateurParAdresse($identifiant);
-    if(!$utilisateur) {
-        $erreurs[] = "Le compte n'existe pas";
-    } else {    
-        $hash = $utilisateur["pwd"];
-        if(!password_verify($motdepasse, $hash)) {
-            $erreurs[] = "Le mot de passe est incorrect";
+        if(empty($erreurs)) {
+            $_SESSION["identifiant"] = $identifiant;
+            header('Location: dashboard.php');
+            exit();
         }
     }
-
-    if(empty($erreurs)) {
-        $_SESSION["identifiant"] = $identifiant;
-        header('Location: dashboard.php');
-        exit();
     }
-}
 }
 ?>
