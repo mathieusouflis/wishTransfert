@@ -2,12 +2,10 @@
 session_start();
 class AuthC {
     // parametre dans les fonctions + mettre sur la page front le if session $id $mail
-    // modifier le nom des fonctions
-    // ajouter des commentaires dans le code
     // si je suis connecter ca doit me rediriger vers le dashboard
     // fonction a garder
-    public function estCeQueLadresseExisteDeja($adresse) {
-        $utilisateurs = recupererLesUtilisateurs();
+    public function existingadress($adresse) {
+        $utilisateurs = $this->getUsers();
 
         foreach($utilisateurs as $utilisateur) {
             if($utilisateur["login"] == $adresse) {
@@ -17,7 +15,7 @@ class AuthC {
         return false;
     }
     // a supp car appel de user controller
-    public function recupererLesUtilisateurs() {
+    public function getUsers() {
         if(!file_exists("utilisateurs.json")) {
             file_put_contents("utilisateurs.json", "[]");
         }
@@ -32,8 +30,8 @@ class AuthC {
         file_put_contents("utilisateurs.json", $utilisateursTxt);
     }
     // a supp car appel de user controller
-    public function recupererUtilisateurParAdresse($adresse) {
-        $utilisateurs = recupererLesUtilisateurs();
+    public function getUsersbyid($adresse) {
+        $utilisateurs = $this->getUsers();
         foreach($utilisateurs as $utilisateur) {
             if($utilisateur["login"] == $adresse) {
                 return $utilisateur;
@@ -43,9 +41,9 @@ class AuthC {
     }
     // a supp car appel de user controller
     public function ajouterUtilisateur($utilisateur) {
-        $utilisateurs = recupererLesUtilisateurs();
+        $utilisateurs = $this->getUsers();
         $utilisateurs[] = $utilisateur;
-        sauvegarderLesUtilisateurs($utilisateurs);
+        $this->sauvegarderLesUtilisateurs($utilisateurs);
     }
 
     public function isLog() {
@@ -62,7 +60,8 @@ class AuthC {
         $identifiant = filter_input(INPUT_POST, "identifiant", FILTER_VALIDATE_EMAIL);
         $motdepasse = filter_input(INPUT_POST, "motdepasse");
         $motdepasse2 = filter_input(INPUT_POST, "motdepasse2");
-
+        
+        // liste de messages d'erreurs
         if(!$identifiant) {
             $erreurs[] = "L'identifiant est absent ou incorrect";
         }
@@ -75,7 +74,7 @@ class AuthC {
         if($motdepasse !== $motdepasse2) {
             $erreurs[] = "Les deux mots de passe ne correspondent pas";
         }
-        if(estCeQueLadresseExisteDeja($identifiant)) {
+        if($this->existingadress($identifiant)) {
             $erreurs[] = "L'adresse existe déjà";
         }
 
@@ -84,7 +83,7 @@ class AuthC {
                 "login" => $identifiant,
                 "pwd" => password_hash($motdepasse, PASSWORD_DEFAULT)
             ];
-            ajouterUtilisateur($utilisateur);
+            $this->ajouterUtilisateur($utilisateur);
         }
     }
     }
@@ -100,7 +99,8 @@ class AuthC {
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         $identifiant = filter_input(INPUT_POST, "identifiant");
         $motdepasse = filter_input(INPUT_POST, "motdepasse");
-
+        
+        // liste de messages d'erreurs
         if(!$identifiant) {
             $erreurs[] = "L'identifiant est obligatoire";
         }
@@ -108,7 +108,7 @@ class AuthC {
             $erreurs[] = "Le mot de passe est obligatoire";
         }
         
-        $utilisateur = recupererUtilisateurParAdresse($identifiant);
+        $utilisateur = $this->getUsersbyid($identifiant);
         if(!$utilisateur) {
             $erreurs[] = "Le compte n'existe pas";
         } else {    
