@@ -8,8 +8,8 @@ class User {
     private $email;
     private static $table = "USERS";
 
-    public static function getById($id){
-        $result = Model::find(self::$table, ['user_id' => $id], 1);
+    public static function get($params){
+        $result = Model::find(self::$table, $params, 1);
 
         $user = new self();
         $user->id = $result[0]["user_id"];
@@ -20,16 +20,20 @@ class User {
         return $user;
     }
     
-    public static function getByEmail($email){
-        $result = Model::find(self::$table, ["email"=> $email],1);
+    public static function getAll($params){
+        $result = Model::find(self::$table, $params);
+        $users = [];
         
-        $user = new self();
-        $user->id = $result[0]["user_id"];
-        $user->username = $result[0]["username"];
-        $user->password = $result[0]["password"];
-        $user->email = $result[0]["email"];
-        
-        return $user;
+        foreach($result as $user){
+            $newUser = new self();
+            $newUser->id = $user["user_id"];
+            $newUser->username = $user["username"];
+            $newUser->email = $user["email"];
+            $newUser->password = $user["password"];
+            $users[] = $newUser;
+        }
+
+        return $users;
     }
 
     public static function create($username, $password, $email){
