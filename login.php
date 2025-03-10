@@ -1,7 +1,11 @@
 <?php
 require_once './controllers/AuthController.php';
-$authc = new AuthC();
-$authc->LogIn();
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+    $identifiant = filter_input(INPUT_POST, "identifiant");
+    $motdepasse = filter_input(INPUT_POST, "motdepasse");
+    $authc = new AuthC();
+    $authc->LogIn($identifiant, $motdepasse);
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">

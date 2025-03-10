@@ -1,7 +1,12 @@
 <?php
 require_once './controllers/AuthController.php';
-$authc = new AuthC();
-$authc->Register();
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+    $identifiant = filter_input(INPUT_POST, "identifiant", FILTER_VALIDATE_EMAIL);
+    $motdepasse = filter_input(INPUT_POST, "motdepasse");
+    $motdepasse2 = filter_input(INPUT_POST, "motdepasse2");
+    $authc = new AuthC();
+    $authc->Register($identifiant, $motdepasse, $motdepasse2);
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">

@@ -1,7 +1,6 @@
 <?php
 session_start();
 class AuthC {
-    // parametre dans les fonctions + mettre sur la page front le if session $id $mail
     // si je suis connecter ca doit me rediriger vers le dashboard
     // fonction a garder
     public function existingadress($adresse) {
@@ -54,12 +53,8 @@ class AuthC {
     }
 
     // gere la page d'inscription
-    public function Register() {
+    public function Register($identifiant, $motdepasse, $motdepasse2) {
         $erreurs = [];
-    if($_SERVER["REQUEST_METHOD"] == "POST") {
-        $identifiant = filter_input(INPUT_POST, "identifiant", FILTER_VALIDATE_EMAIL);
-        $motdepasse = filter_input(INPUT_POST, "motdepasse");
-        $motdepasse2 = filter_input(INPUT_POST, "motdepasse2");
         
         // liste de messages d'erreurs
         if(!$identifiant) {
@@ -86,19 +81,15 @@ class AuthC {
             $this->ajouterUtilisateur($utilisateur);
         }
     }
-    }
 
     // gere la page de connexion
-    public function LogIn() {
+    public function LogIn($identifiant, $motdepasse) {
         if(isset($_SESSION["identifiant"])) {
             header('Location: dashboard.php');
             exit();
         }
 
     $erreurs = [];
-    if($_SERVER["REQUEST_METHOD"] == "POST") {
-        $identifiant = filter_input(INPUT_POST, "identifiant");
-        $motdepasse = filter_input(INPUT_POST, "motdepasse");
         
         // liste de messages d'erreurs
         if(!$identifiant) {
@@ -123,7 +114,6 @@ class AuthC {
             header('Location: dashboard.php');
             exit();
         }
-    }
     }
 }
 ?>
