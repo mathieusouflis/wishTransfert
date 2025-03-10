@@ -66,3 +66,4 @@ class Links {
         return $result;
     }
 }
+?>
