@@ -64,3 +64,4 @@ class Comments {
         return $result;
     }
 }
+?>
