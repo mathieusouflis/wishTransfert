@@ -53,8 +53,12 @@ class AuthC {
     }
 
     // gere la page d'inscription
-    public function Register($identifiant, $motdepasse, $motdepasse2) {
+    public function Register() {
         $erreurs = [];
+        if($_SERVER["REQUEST_METHOD"] == "POST") {
+            $identifiant = filter_input(INPUT_POST, "identifiant", FILTER_VALIDATE_EMAIL);
+            $motdepasse = filter_input(INPUT_POST, "motdepasse");
+            $motdepasse2 = filter_input(INPUT_POST, "motdepasse2");
         
         // liste de messages d'erreurs
         if(!$identifiant) {
@@ -81,15 +85,19 @@ class AuthC {
             $this->ajouterUtilisateur($utilisateur);
         }
     }
+    }
 
     // gere la page de connexion
-    public function LogIn($identifiant, $motdepasse) {
+    public function LogIn() {
         if(isset($_SESSION["identifiant"])) {
             header('Location: dashboard.php');
             exit();
         }
 
     $erreurs = [];
+    if($_SERVER["REQUEST_METHOD"] == "POST") {
+        $identifiant = filter_input(INPUT_POST, "identifiant", FILTER_VALIDATE_EMAIL);
+        $motdepasse = filter_input(INPUT_POST, "motdepasse");
         
         // liste de messages d'erreurs
         if(!$identifiant) {
@@ -115,5 +123,6 @@ class AuthC {
             exit();
         }
     }
+}
 }
 ?>
