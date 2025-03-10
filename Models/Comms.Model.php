@@ -2,14 +2,14 @@
 require_once './Models/Model.php';
 
 class Comments {
-    private $id;
+    private $commentid;
     private $fileid;
     private $userid;
     private $content;
     private static $table = "COMMENTS";
 
-    public static function getCommsById($id) {
-        $result = Model::find(self::$table, ['comment_id' => $id], 1);
+    public static function getCommsById($commentid) {
+        $result = Model::find(self::$table, ['comment_id' => $commentid], 1);
 
         $comment = new self();
         $comment->id = $result[0]["comment_id"];
@@ -49,18 +49,18 @@ class Comments {
         return $result;
     }
 
-    public static function updateComment($id, $content) {
+    public static function updateComment($commentid, $content) {
         $result = Model::update(
             array_merge(
                 $content ? ["content" => $content] : []
             ),
-            ["comment_id" => $id]
+            ["comment_id" => $commentid]
         );
         return $result;
     }
 
-    public static function deleteComment($id){
-        $result = Model::delete(self::$table, ["comment_id"=> $id]);
+    public static function deleteComment($commentid){
+        $result = Model::delete(self::$table, ["comment_id"=> $commentid]);
         return $result;
     }
 }
