@@ -1,50 +1,6 @@
 <?php
 session_start();
 class AuthC {
-    // si je suis connecter ca doit me rediriger vers le dashboard
-    // fonction a garder
-    public function existingadress($adresse) {
-        $utilisateurs = $this->getUsers();
-
-        foreach($utilisateurs as $utilisateur) {
-            if($utilisateur["login"] == $adresse) {
-                return true;
-            }
-        }
-        return false;
-    }
-    // a supp car appel de user controller
-    public function getUsers() {
-        if(!file_exists("utilisateurs.json")) {
-            file_put_contents("utilisateurs.json", "[]");
-        }
-
-        $utilisateursTxt = file_get_contents("utilisateurs.json");
-        $utilisateurs = json_decode($utilisateursTxt, true);
-        return $utilisateurs;
-    }
-    // a supp car appel de user controller
-    public function sauvegarderLesUtilisateurs($utilisateurs) {
-        $utilisateursTxt = json_encode($utilisateurs);
-        file_put_contents("utilisateurs.json", $utilisateursTxt);
-    }
-    // a supp car appel de user controller
-    public function getUsersbyid($adresse) {
-        $utilisateurs = $this->getUsers();
-        foreach($utilisateurs as $utilisateur) {
-            if($utilisateur["login"] == $adresse) {
-                return $utilisateur;
-            }
-        }
-        return null;
-    }
-    // a supp car appel de user controller
-    public function ajouterUtilisateur($utilisateur) {
-        $utilisateurs = $this->getUsers();
-        $utilisateurs[] = $utilisateur;
-        $this->sauvegarderLesUtilisateurs($utilisateurs);
-    }
-
     public function isLog() {
         if(isset($_SESSION["identifiant"])) {
             return true;
@@ -61,13 +17,13 @@ class AuthC {
             $motdepasse2 = filter_input(INPUT_POST, "motdepasse2");
         
         // liste de messages d'erreurs
-        if(!$identifiant) {
+        if(empty($identifiant)) {
             $erreurs[] = "L'identifiant est absent ou incorrect";
         }
-        if(!$motdepasse) {
+        if(empty($motdepasse)) {
             $erreurs[] = "Le mot de passe est obligatoire";
         }
-        if(!$motdepasse2) {
+        if(empty($motdepasse2)) {
             $erreurs[] = "La confirmation de mot de passe est obligatoire";
         }
         if($motdepasse !== $motdepasse2) {
@@ -100,15 +56,15 @@ class AuthC {
         $motdepasse = filter_input(INPUT_POST, "motdepasse");
         
         // liste de messages d'erreurs
-        if(!$identifiant) {
+        if(empty($identifiant)) {
             $erreurs[] = "L'identifiant est obligatoire";
         }
-        if(!$motdepasse) {
+        if(empty($motdepasse)) {
             $erreurs[] = "Le mot de passe est obligatoire";
         }
         
         $utilisateur = $this->getUsersbyid($identifiant);
-        if(!$utilisateur) {
+        if(empty($utilisateur)) {
             $erreurs[] = "Le compte n'existe pas";
         } else {    
             $hash = $utilisateur["pwd"];
