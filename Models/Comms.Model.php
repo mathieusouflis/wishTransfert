@@ -32,20 +32,8 @@ class Comments {
         return $comment;
     }
 
-    public static function getCommsByUserId($fileid) {
+    public static function getCommsByUserId($userid) {
         $result = Model::find(self::$table, ['user_id' => $userid], 1);
-
-        $comment = new self();
-        $comment->id = $result[0]["comment_id"];
-        $comment->fileid = $result[0]["file_id"];
-        $comment->userid = $result[0]["user_id"];
-        $comment->content = $result[0]["content"];
-
-        return $comment;
-    }
-
-    public static function getCommsByContent($content) {
-        $result = Model::find(self::$table, ['content' => $content], 1);
 
         $comment = new self();
         $comment->id = $result[0]["comment_id"];
@@ -66,7 +54,7 @@ class Comments {
             array_merge(
                 $content ? ["content" => $content] : []
             ),
-            ["content_id" => $id]
+            ["comment_id" => $id]
         );
         return $result;
     }
