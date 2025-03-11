@@ -51,8 +51,6 @@ class UserController{
         }
         if(empty($newPassword)){
             $errors[] = "New password is required";
-        }else if(User::verifyPasswordValidity($newPassword)){
-            $errors[] = "Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character"; // A MODIF
         }
         if(empty($newPasswordConfirm)){
             $errors[] = "New password confirmation is required";
