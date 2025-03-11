@@ -7,6 +7,7 @@ class File {
     private $title;
     private $filedata;
     private $downloadcount;
+    private $status;
     private static $table = "FILES";
 
     public static function getByFileId($fileid) {
@@ -18,6 +19,7 @@ class File {
         $file->title = $result[0]["title"];
         $file->filedata = $result[0]["file_data"];
         $file->downloadcount = $result[0]["download_count"];
+        $file->status = $result[0]["status"];
 
         return $file;
     }
@@ -31,12 +33,14 @@ class File {
         $file->title = $result[0]["title"];
         $file->filedata = $result[0]["file_data"];
         $file->downloadcount = $result[0]["download_count"];
+        $file->status = $result[0]["status"];
 
         return $file;
     }
 
     public static function createFile($userid, $title, $filedata){
         $downloadcount = 0;
+        $status = "Stored"
         $result = Model::insert(self::$table, ["user_id" => $userid, "title" => $title, "file_data" => $filedata, "download_count" => $downloadcount]);
         return $result;
     }
