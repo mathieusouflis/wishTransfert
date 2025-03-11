@@ -30,7 +30,9 @@ class UserController{
             $username = filter_input(INPUT_POST,"username", FILTER_SANITIZE_STRING);
             $avatar = filter_input(INPUT_POST,"avatar");
 
-            if(!empty($username || !empty($avatar))){
+            if(empty($username && empty($avatar))){
+                $errors[] = "Everything is empty, can't edit";
+            }else {
                 $modifyRequest = User::update($_SESSION["user_id"], $username ? null : $username, null, null); // Si il y a avatar, a implémenter
                 if(!$modifyRequest){
                     $errors[] = "An error occured";
