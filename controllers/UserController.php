@@ -1,58 +1,88 @@
 <?php
-require_once("models/User.Model.php");
+require_once "Models/User.Model.php";
 
 class UserController{
+    public function editEmail(){
+        if($_SERVER("REQUEST_METHOD") === "POST"){
+            $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
 
-    public function getById($id){
-        // $user = User::get(["user_id" => $id]);
-
-    }
-    
-    public function getByEmail($email){
-        // $user = User::get(["email" => $email]);
-        // return $user;
-    }
-
-    public function getByUsername($username){
-        // return User::get(["username" => $username]);
-    }
-    public function create($data){
-        $username = $data["username"];
-        $email = $data["email"];
-        $password = $data["password"];
-        
-        if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-            $errors[] = "Invalid email format";
+            if(empty($email)){
+                $errors[] = "Email is required";
+            }else {
+                $user = User::get(["email" => $email]);
+                if($user){
+                    $errors[] = "Email already exists";
+                }else {
+                    // VERIF QUE L'UTILISATEUR EST CONNECTE ???
+                    $modifyRequest = User::update($_SESSION["user_id"], null, null, $email);
+                    if($modifyRequest){
+                        // Envoyer une notification ok
+                    }else{
+                        $errors[] = "An error occured";
+                    }
+                }
+            }
         }
-        if (!preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/', $password)) {
-            $errors[] = "Password must be at least 8 characters long and contain at least one letter and one number";
-        }
-        if (!preg_match('/^[A-Za-z0-9._]{2,}$/', $username)) {
-            $errors[] = "Username must be at least 2 characters and can only contain letters, numbers, dots and underscores";
-        }
-
-
     }
 
-    public function update($id, $data){
-        $username = $data["username"];
-        $email = $data["email"];
-        $password = $data["password"];
-        if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-            $errors[] = "Invalid email format";
-        }
-        if (!preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/', $password)) {
-            $errors[] = "Password must be at least 8 characters long and contain at least one letter and one number";
-        }
-        if (!preg_match('/^[A-Za-z0-9._]{2,}$/', $username)) {
-            $errors[] = "Username must be at least 2 characters and can only contain letters, numbers, dots and underscores";
-        }
+    public function editProfile(){
+        if($_SERVER("REQUEST_METHOD") === "POST"){
+            $username = filter_input(INPUT_POST,"username", FILTER_SANITIZE_STRING);
+            $avatar = filter_input(INPUT_POST,"avatar");
 
-
+            if(!empty($username || !empty($avatar))){
+                $modifyRequest = User::update($_SESSION["user_id"], $username ? null : $username, null, null); // Si il y a avatar, a implémenter
+                if(!$modifyRequest){
+                    $errors[] = "An error occured";
+                }else {
+                    // ENVOYER UNE NOTIF OK !
+                }
+            }
+        }
     }
 
-    public function delete($id){
-    
+    public function editPassword(){
+        $oldPassword = filter_input(INPUT_POST,"oldPassword");
+        $newPassword = filter_input(INPUT_POST,"newPassword");
+        $newPasswordConfirm = filter_input(INPUT_POST,"newPasswordConfirm");
+
+        if(empty($oldPassword)){
+            $errors[] = "Old password is required";
+        }
+        if(empty($newPassword)){
+            $errors[] = "New password is required";
+        }else if(User::verifyPasswordValidity($newPassword)){
+            $errors[] = "Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character"; // A MODIF
+        }
+        if(empty($newPasswordConfirm)){
+            $errors[] = "New password confirmation is required";
+        }else if ($newPassword !== $newPasswordConfirm){
+            $errors[] = "Passwords do not match";
+        }
+
+        if(empty($errors)){
+            $modifyRequest = User::update($_SESSION["user_id"], null, hash('sha256', $newPassword), null);
+            if(!$modifyRequest){
+                $errors[] = 'An error occured.';
+            }else {
+                // ENVOYER UN MESSAGE DE CONFIRMATION
+            }
+        }
     }
 
+    public function delete(){
+        if($_SERVER("REQUEST_METHOD") === "POST"){
+            $userId = $_SESSION("user_id");
+            if(empty($userId)){
+                $errors[] = "You must be logged in to delete your account";
+            }else{
+                $deleteRequest = User::delete($userId);
+                if($deleteRequest){
+                    // QQCHOSE
+                }else{
+                    $errors[] = "An error occured";
+                }
+            }
+        }
+    }
 }
