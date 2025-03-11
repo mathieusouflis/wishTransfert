@@ -59,7 +59,7 @@ class UserController{
         }
 
         if(empty($errors)){
-            $modifyRequest = User::update($_SESSION["user_id"], null, hash('sha256', $newPassword), null);
+            $modifyRequest = User::update($_SESSION["user_id"], null, $newPassword, null);
             if(!$modifyRequest){
                 $errors[] = 'An error occured.';
             }else {
