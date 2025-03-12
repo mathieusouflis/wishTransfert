@@ -1,9 +1,9 @@
 <?php
 
 class fileController {
-    public $user;
-    public $refused_extension = ["php","exe","mathieu","leoFaitlHabit",'Bananjara'] ;
-    public $max_size; 
+    private $user;
+    private $refused_extension = ["php","exe","mathieu","leoFaitlHabit",'Bananjara'] ;
+    private $max_size; 
     
     
     
