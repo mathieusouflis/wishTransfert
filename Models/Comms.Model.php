@@ -6,6 +6,7 @@ class Comments {
     private $fileid;
     private $userid;
     private $content;
+    private $createdat;
     private static $table = "COMMENTS";
 
     public static function getCommsById($commentid) {
@@ -16,6 +17,7 @@ class Comments {
         $comment->fileid = $result[0]["file_id"];
         $comment->userid = $result[0]["user_id"];
         $comment->content = $result[0]["content"];
+        $comment->createdat = $createdat[0]["created_at"];
 
         return $comment;
     }
@@ -28,6 +30,7 @@ class Comments {
         $comment->fileid = $result[0]["file_id"];
         $comment->userid = $result[0]["user_id"];
         $comment->content = $result[0]["content"];
+        $comment->createdat = $createdat[0]["created_at"];
 
         return $comment;
     }
@@ -40,6 +43,7 @@ class Comments {
         $comment->fileid = $result[0]["file_id"];
         $comment->userid = $result[0]["user_id"];
         $comment->content = $result[0]["content"];
+        $comment->createdat = $createdat[0]["created_at"];
 
         return $comment;
     }
@@ -51,8 +55,9 @@ class Comments {
 
     public static function updateComment($commentid, $content) {
         $result = Model::update(
+            self::$table,
             array_merge(
-                $content ? ["content" => $content] : []
+                ["content" => $content]
             ),
             ["comment_id" => $commentid]
         );
