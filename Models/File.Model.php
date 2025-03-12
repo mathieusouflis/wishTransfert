@@ -44,13 +44,13 @@ class File {
     public static function createFile($userid, $title, $filedata){
         $downloadcount = 0;
         $status = "Stored"
-        $result = Model::insert(self::$table, ["user_id" => $userid, "title" => $title, "file_data" => $filedata, "download_count" => $downloadcount, "status" => $status, "created_at" => $createdat]);
+        $result = Model::insert(self::$table, ["user_id" => $userid, "title" => $title, "file_data" => $filedata, "download_count" => $downloadcount, "status" => $status]);
         return $result;
     }
 
     public static function moveToBin($userid, $title, $filedata){
         $status = "Trash"
-        $result = Model::insert(self::$table, ["user_id" => $userid, "title" => $title, "file_data" => $filedata, "download_count" => $downloadcount, "status" => $status, "created_at" => $createdat]);
+        $result = Model::insert(self::$table, ["user_id" => $userid, "title" => $title, "file_data" => $filedata, "download_count" => $downloadcount, "status" => $status]);
         return $result;
 
     public static function deleteFile($fileid){
