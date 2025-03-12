@@ -6,6 +6,7 @@ class Links {
     private $fileid;
     private $userid;
     private $token;
+    private $createdat;
     private static $table = "LINKS";
 
     public static function getByLinkId($linkid) {
@@ -16,6 +17,7 @@ class Links {
         $link->fileid = $result[0]["file_id"];
         $link->userid = $result[0]["user_id"];
         $link->token = $result[0]["token"];
+        $link->createdat = $createdat[0]["created_at"];
 
         return $link;
     }
@@ -28,6 +30,7 @@ class Links {
         $link->fileid = $result[0]["file_id"];
         $link->userid = $result[0]["user_id"];
         $link->token = $result[0]["token"];
+        $link->createdat = $createdat[0]["created_at"];
 
         return $link;
     }
@@ -40,6 +43,7 @@ class Links {
         $link->fileid = $result[0]["file_id"];
         $link->userid = $result[0]["user_id"];
         $link->token = $result[0]["token"];
+        $link->createdat = $createdat[0]["created_at"];
 
         return $link;
     }
@@ -52,6 +56,7 @@ class Links {
         $link->fileid = $result[0]["file_id"];
         $link->userid = $result[0]["user_id"];
         $link->token = $result[0]["token"];
+        $link->createdat = $createdat[0]["created_at"];
 
         return $link;
     }
