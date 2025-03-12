@@ -52,6 +52,7 @@ class File {
         $status = "Trash"
         $result = Model::insert(self::$table, ["user_id" => $userid, "title" => $title, "file_data" => $filedata, "download_count" => $downloadcount, "status" => $status]);
         return $result;
+    }
 
     public static function deleteFile($fileid){
         $result = Model::delete(self::$table, ["file_id"=> $fileid]);
