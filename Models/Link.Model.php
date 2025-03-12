@@ -62,7 +62,7 @@ class Links {
     }
 
     public static function createLink($linkid, $fileid, $userid, $token){
-        $result = Model::insert(self::$table, ["link_id"=> $linkid,"file_id"=> $fileid,"user_id"=> $userid], "token"=> $token);
+        $result = Model::insert(self::$table, ["link_id"=> $linkid,"file_id"=> $fileid,"user_id"=> $userid, "token"=> $token]);
         return $result;
     }
     
