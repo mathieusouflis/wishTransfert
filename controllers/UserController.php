@@ -3,7 +3,7 @@ require_once "Models/User.Model.php";
 
 class UserController{
     public function editEmail(){
-        if($_SERVER("REQUEST_METHOD") === "POST"){
+        if($_SERVER["REQUEST_METHOD"] === "POST"){
             $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
 
             if(empty($email)){
@@ -13,7 +13,7 @@ class UserController{
                 if($user){
                     $errors[] = "Email already exists";
                 }else {
-                    // VERIF QUE L'UTILISATEUR EST CONNECTE ???
+                    if(!isset($_SESSION)) session_start();
                     $modifyRequest = User::update($_SESSION["user_id"], null, null, $email);
                     if($modifyRequest){
                         // Envoyer une notification ok
@@ -26,14 +26,15 @@ class UserController{
     }
 
     public function editProfile(){
-        if($_SERVER("REQUEST_METHOD") === "POST"){
+        if($_SERVER["REQUEST_METHOD"] === "POST"){
             $username = filter_input(INPUT_POST,"username", FILTER_SANITIZE_STRING);
             $avatar = filter_input(INPUT_POST,"avatar");
 
             if(empty($username && empty($avatar))){
                 $errors[] = "Everything is empty, can't edit";
             }else {
-                $modifyRequest = User::update($_SESSION["user_id"], $username ? null : $username, null, null); // Si il y a avatar, a implémenter
+                if(!isset($_SESSION)) session_start();
+                $modifyRequest = User::update($_SESSION["user_id"], $username ? null : $username, null, null);
                 if(!$modifyRequest){
                     $errors[] = "An error occured";
                 }else {
@@ -61,6 +62,7 @@ class UserController{
         }
 
         if(empty($errors)){
+            if(!isset($_SESSION)) session_start();
             $modifyRequest = User::update($_SESSION["user_id"], null, $newPassword, null);
             if(!$modifyRequest){
                 $errors[] = 'An error occured.';
@@ -71,8 +73,9 @@ class UserController{
     }
 
     public function delete(){
-        if($_SERVER("REQUEST_METHOD") === "POST"){
-            $userId = $_SESSION("user_id");
+        if($_SERVER["REQUEST_METHOD"] === "POST"){
+            if(!isset($_SESSION)) session_start();
+            $userId = $_SESSION["user_id"];
             if(empty($userId)){
                 $errors[] = "You must be logged in to delete your account";
             }else{
