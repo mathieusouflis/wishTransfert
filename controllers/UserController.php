@@ -16,7 +16,7 @@ class UserController{
                     if(!isset($_SESSION)) session_start();
                     $modifyRequest = User::update($_SESSION["user_id"], null, null, $email);
                     if($modifyRequest){
-                        // Envoyer une notification ok
+                        return true;
                     }else{
                         $errors[] = "An error occured";
                     }
@@ -38,7 +38,7 @@ class UserController{
                 if(!$modifyRequest){
                     $errors[] = "An error occured";
                 }else {
-                    // ENVOYER UNE NOTIF OK !
+                    return true;
                 }
             }
         }
@@ -67,7 +67,7 @@ class UserController{
             if(!$modifyRequest){
                 $errors[] = 'An error occured.';
             }else {
-                // ENVOYER UN MESSAGE DE CONFIRMATION
+                return true;
             }
         }
     }
@@ -81,7 +81,7 @@ class UserController{
             }else{
                 $deleteRequest = User::delete($userId);
                 if($deleteRequest){
-                    // QQCHOSE
+                    return true;
                 }else{
                     $errors[] = "An error occured";
                 }
