@@ -10,6 +10,8 @@ class User {
 
     public static function get($params){
         $result = Model::find(self::$table, $params, 1);
+        
+        if(!$result) return false;
 
         $user = new self();
         $user->id = $result[0]["user_id"];
@@ -22,6 +24,9 @@ class User {
     
     public static function getAll($params){
         $result = Model::find(self::$table, $params);
+        
+        if (!$result) return false;
+        
         $users = [];
         
         foreach($result as $user){
@@ -102,10 +107,10 @@ class User {
     }
 
     public static function isEmailUnique($email){
-        return Model::find(self::$table, ["email"=> $email]) !== null;
+        return self::get(["email"=> $email]) !== false;
     }
 
     public static function isUsernameUnique($username){
-        return Model::find(self::$table, ["username" => $username]) !== null;
+        return self::get(["username" => $username]) !== false;
     }
 }
