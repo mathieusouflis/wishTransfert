@@ -1,8 +1,9 @@
 <?php
 session_start();
 class AuthC {
+    // vérifie si l'utilisateur est connecté
     public function isLog() {
-        if(isset($_SESSION["identifiant"])) {
+        if(isset($_SESSION["connecte"])) {
             return true;
         }
         return false;
@@ -12,31 +13,31 @@ class AuthC {
     public function Register() {
         $erreurs = [];
         if($_SERVER["REQUEST_METHOD"] == "POST") {
-            $identifiant = filter_input(INPUT_POST, "identifiant", FILTER_VALIDATE_EMAIL);
-            $motdepasse = filter_input(INPUT_POST, "motdepasse");
-            $motdepasse2 = filter_input(INPUT_POST, "motdepasse2");
+            $id = filter_input(INPUT_POST, "identifiant", FILTER_VALIDATE_EMAIL);
+            $password = filter_input(INPUT_POST, "motdepasse");
+            $verify = filter_input(INPUT_POST, "motdepasse2");
         
         // liste de messages d'erreurs
-        if(empty($identifiant)) {
+        if(empty($id)) {
             $erreurs[] = "L'identifiant est absent ou incorrect";
         }
-        if(empty($motdepasse)) {
+        if(empty($password)) {
             $erreurs[] = "Le mot de passe est obligatoire";
         }
-        if(empty($motdepasse2)) {
+        if(empty($verify)) {
             $erreurs[] = "La confirmation de mot de passe est obligatoire";
         }
-        if($motdepasse !== $motdepasse2) {
+        elseif($password !== $verify) {
             $erreurs[] = "Les deux mots de passe ne correspondent pas";
         }
-        if($this->existingadress($identifiant)) {
+        if($this->existingadress($id)) {
             $erreurs[] = "L'adresse existe déjà";
         }
 
         if(empty($erreurs)) {
             $utilisateur = [
-                "login" => $identifiant,
-                "pwd" => password_hash($motdepasse, PASSWORD_DEFAULT)
+                "login" => $id,
+                "password" => password_hash($password, PASSWORD_DEFAULT)
             ];
             $this->ajouterUtilisateur($utilisateur);
         }
@@ -45,36 +46,36 @@ class AuthC {
 
     // gere la page de connexion
     public function LogIn() {
-        if(isset($_SESSION["identifiant"])) {
+        if(isset($_SESSION["connecte"])) {
             header('Location: dashboard.php');
             exit();
         }
 
     $erreurs = [];
     if($_SERVER["REQUEST_METHOD"] == "POST") {
-        $identifiant = filter_input(INPUT_POST, "identifiant", FILTER_VALIDATE_EMAIL);
-        $motdepasse = filter_input(INPUT_POST, "motdepasse");
+        $id = filter_input(INPUT_POST, "identifiant", FILTER_VALIDATE_EMAIL);
+        $password = filter_input(INPUT_POST, "motdepasse");
         
         // liste de messages d'erreurs
-        if(empty($identifiant)) {
+        if(empty($id)) {
             $erreurs[] = "L'identifiant est obligatoire";
         }
-        if(empty($motdepasse)) {
+        if(empty($password)) {
             $erreurs[] = "Le mot de passe est obligatoire";
         }
         
-        $utilisateur = $this->getUsersbyid($identifiant);
+        $utilisateur = $this->getUsersbyid($id);
         if(empty($utilisateur)) {
             $erreurs[] = "Le compte n'existe pas";
         } else {    
-            $hash = $utilisateur["pwd"];
-            if(!password_verify($motdepasse, $hash)) {
+            $hash = $utilisateur["password"];
+            if(!password_verify($password, $hash)) {
                 $erreurs[] = "Le mot de passe est incorrect";
             }
         }
 
         if(empty($erreurs)) {
-            $_SESSION["identifiant"] = $identifiant;
+            $_SESSION["identifiant"] = $id;
             header('Location: dashboard.php');
             exit();
         }
