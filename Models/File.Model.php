@@ -8,6 +8,7 @@ class File {
     private $filedata;
     private $downloadcount;
     private $status;
+    private $createdat;
     private static $table = "FILES";
 
     public static function getByFileId($fileid) {
@@ -20,6 +21,7 @@ class File {
         $file->filedata = $result[0]["file_data"];
         $file->downloadcount = $result[0]["download_count"];
         $file->status = $result[0]["status"];
+        $file->createdat = $createdat[0]["created_at"];
 
         return $file;
     }
@@ -34,6 +36,7 @@ class File {
         $file->filedata = $result[0]["file_data"];
         $file->downloadcount = $result[0]["download_count"];
         $file->status = $result[0]["status"];
+        $file->createdat = $createdat[0]["created_at"];
 
         return $file;
     }
@@ -41,9 +44,14 @@ class File {
     public static function createFile($userid, $title, $filedata){
         $downloadcount = 0;
         $status = "Stored"
-        $result = Model::insert(self::$table, ["user_id" => $userid, "title" => $title, "file_data" => $filedata, "download_count" => $downloadcount]);
+        $result = Model::insert(self::$table, ["user_id" => $userid, "title" => $title, "file_data" => $filedata, "download_count" => $downloadcount, "status" => $status, "created_at" => $createdat]);
         return $result;
     }
+
+    public static function moveToBin($userid, $title, $filedata){
+        $status = "Trash"
+        $result = Model::insert(self::$table, ["user_id" => $userid, "title" => $title, "file_data" => $filedata, "download_count" => $downloadcount, "status" => $status, "created_at" => $createdat]);
+        return $result;
 
     public static function deleteFile($fileid){
         $result = Model::delete(self::$table, ["file_id"=> $fileid]);
