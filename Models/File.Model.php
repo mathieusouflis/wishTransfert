@@ -59,4 +59,5 @@ class File {
         return $result;
     }
 }
+$fileModel = new File();
 ?>

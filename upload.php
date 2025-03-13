@@ -1,14 +1,8 @@
 <?php
-$errors= false;
-$user =[
-    "name"=>"John",
-    "id" => 123,
-    "connected" => true,
-    "creationDate" => "14-07-2014",
-];
-$refused_extension =["php","exe","mathieu","leoFaitlHabit",'Bananjara'];
-$max_size = 20 * 1024 * 1024; #20 Mo
 
+$userid = 123;
+ $title = "blabla";
+ 
 require_once "controllers/FileController.php";
 
 ?>
@@ -21,20 +15,11 @@ require_once "controllers/FileController.php";
     <title>Document</title>
 </head>
 <body>
-    <h1>Hello world</h1>
-    <?php if($user["connected"]): ?>
-    <h3>Connecté !</h3>
-    <form method="POST" enctype="multipart/form-data">
-         <input type="file" name="file" id="file"> 
-        <button type="submit" name="create">envoyer</button>
-    </form>
-    <?php endif; ?>
-    <?php if($fichier): ?>
-    <?= "<span>".$fichier["name"]."<span>" ?>
+
     <form method="POST">
-        <button name="delete" type="submit">supprimer</button>
+        <input type="file" placeholder="Choisissez un fichier">
     </form>
-    <?php endif; ?>
+    <button type="submit">upload</button>
     
 </body>
 </html>
