@@ -16,10 +16,10 @@ require_once "controllers/FileController.php";
 </head>
 <body>
 
-    <form method="POST">
-        <input type="file" placeholder="Choisissez un fichier">
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" placeholder="Choisissez un fichier">
     </form>
-    <button type="submit">upload</button>
+    <button type="submit" name="create">upload</button>
     
 </body>
 </html>
