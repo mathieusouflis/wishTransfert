@@ -21,7 +21,7 @@ class File {
         $file->filedata = $result[0]["file_data"];
         $file->downloadcount = $result[0]["download_count"];
         $file->status = $result[0]["status"];
-        $file->createdat = $createdat[0]["created_at"];
+        $file->createdat = $result[0]["created_at"];
 
         return $file;
     }
