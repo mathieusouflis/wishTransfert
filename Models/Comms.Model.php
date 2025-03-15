@@ -13,11 +13,11 @@ class Comments {
         $result = Model::find(self::$table, ['comment_id' => $commentid], 1);
 
         $comment = new self();
-        $comment->id = $result[0]["comment_id"];
+        $comment->commentid = $result[0]["comment_id"];
         $comment->fileid = $result[0]["file_id"];
         $comment->userid = $result[0]["user_id"];
         $comment->content = $result[0]["content"];
-        $comment->createdat = $createdat[0]["created_at"];
+        $comment->createdat = $result[0]["created_at"];
 
         return $comment;
     }
@@ -26,11 +26,11 @@ class Comments {
         $result = Model::find(self::$table, ['file_id' => $fileid], 1);
 
         $comment = new self();
-        $comment->id = $result[0]["comment_id"];
+        $comment->commentid = $result[0]["comment_id"];
         $comment->fileid = $result[0]["file_id"];
         $comment->userid = $result[0]["user_id"];
         $comment->content = $result[0]["content"];
-        $comment->createdat = $createdat[0]["created_at"];
+        $comment->createdat = $result[0]["created_at"];
 
         return $comment;
     }
@@ -39,11 +39,11 @@ class Comments {
         $result = Model::find(self::$table, ['user_id' => $userid], 1);
 
         $comment = new self();
-        $comment->id = $result[0]["comment_id"];
+        $comment->commentid = $result[0]["comment_id"];
         $comment->fileid = $result[0]["file_id"];
         $comment->userid = $result[0]["user_id"];
         $comment->content = $result[0]["content"];
-        $comment->createdat = $createdat[0]["created_at"];
+        $comment->createdat = $result[0]["created_at"];
 
         return $comment;
     }

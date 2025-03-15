@@ -9,7 +9,7 @@ class File {
     private $downloadcount;
     private $status;
     private $createdat;
-    private static $table = "FILES";
+    private static $table = "files";
 
     public static function getByFileId($fileid) {
         $result = Model::find(self::$table, ['file_id' => $fileid], 1);
@@ -36,20 +36,21 @@ class File {
         $file->filedata = $result[0]["file_data"];
         $file->downloadcount = $result[0]["download_count"];
         $file->status = $result[0]["status"];
-        $file->createdat = $createdat[0]["created_at"];
+        $file->createdat = $result[0]["created_at"];
 
         return $file;
     }
 
     public static function createFile($userid, $title, $filedata){
         $downloadcount = 0;
-        $status = "Stored"
+        $status = "Stored";
         $result = Model::insert(self::$table, ["user_id" => $userid, "title" => $title, "file_data" => $filedata, "download_count" => $downloadcount, "status" => $status]);
         return $result;
     }
 
     public static function moveToBin($userid, $title, $filedata){
-        $status = "Trash"
+        $status = "Trash";
+        $downloadcount = 0;
         $result = Model::insert(self::$table, ["user_id" => $userid, "title" => $title, "file_data" => $filedata, "download_count" => $downloadcount, "status" => $status]);
         return $result;
     }
