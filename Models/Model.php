@@ -2,7 +2,7 @@
 class Model {
     private static $db;
     public function __construct() {        
-        self::$db = new PDO("mysql:host=localhost:8889;dbname=wishtransfert", "root", "root");
+        self::$db = new PDO("mysql:host=localhost:3306;dbname=wishtransfert", "root");
     }
 
     public static function find($table, $params = [], $limit = 0) {

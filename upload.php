@@ -1,7 +1,5 @@
 <?php
 
-$userid = 123;
- $title = "blabla";
  
 require_once "controllers/FileController.php";
 
@@ -18,8 +16,8 @@ require_once "controllers/FileController.php";
 
     <form method="POST" enctype="multipart/form-data">
         <input type="file" name="file" placeholder="Choisissez un fichier">
+        <button type="submit" name="create">upload</button>
     </form>
-    <button type="submit" name="create">upload</button>
     
 </body>
 </html>
