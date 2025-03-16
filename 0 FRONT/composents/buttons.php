@@ -15,7 +15,7 @@ function mediumButtonWithIcon($iconName, $content, $style){
         case 'full':
             ?>
             <button class="flex flex-row radius-10 py-8 px-10 content-center items-center gap-10 button bg-primary w-max">
-                <?=icon($iconName, "little")?>
+                <?=icon($iconName, "little", "white")?>
                 <span class="text-15"><?=$content?></span>
             </button>
             <?php
@@ -31,7 +31,7 @@ function mediumButtonWithIcon($iconName, $content, $style){
         case 'left':
             ?>
             <button class="flex flex-row radius-l-10 py-8 px-10 content-center items-center gap-10 button bg-primary w-max">
-                <?=icon($iconName, "little")?>
+                <?=icon($iconName, "little", "white")?>
                 <span class="text-15"><?=$content?></span>
             </button>
             <?php
@@ -39,7 +39,7 @@ function mediumButtonWithIcon($iconName, $content, $style){
         case 'right':
             ?>
             <button class="flex flex-row radius-r-10 py-8 px-10 content-center items-center gap-10 button bg-primary w-max">
-                <?=icon($iconName, "little")?>
+                <?=icon($iconName, "little", "white")?>
                 <span class="text-15"><?=$content?></span>
             </button>
             <?php
@@ -47,7 +47,7 @@ function mediumButtonWithIcon($iconName, $content, $style){
         case 'none':
             ?>
             <button class="flex flex-row py-8 px-10 content-center items-center gap-10 button bg-primary w-max">
-                <?=icon($iconName, "little")?>
+                <?=icon($iconName, "little", "white")?>
                 <span class="text-15"><?=$content?></span>
             </button>
             <?php
