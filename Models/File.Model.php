@@ -48,10 +48,9 @@ class File {
         return $result;
     }
 
-    public static function moveToBin($userid, $fileId){
+    public static function moveToBin($userid, $title, $filedata){
         $status = "Trash";
-        $downloadcount = 0;
-        $result = Model::update(self::$table, ["status" => $status], ["file_id" => $fileId]);
+        $result = Model::insert(self::$table, ["user_id" => $userid, "title" => $title, "file_data" => $filedata, "download_count" => $downloadcount, "status" => $status]);
         return $result;
     }
 
@@ -60,4 +59,5 @@ class File {
         return $result;
     }
 }
+$fileModel = new File();
 ?>
