@@ -3,34 +3,19 @@ require_once './Models/Model.php';
 
 class Links {
     private $linkid;
-    private $fileid;
     private $userid;
     private $token;
     private $createdat;
-    private static $table = "LINKS";
+    private static $table = "links";
 
     public static function getByLinkId($linkid) {
         $result = Model::find(self::$table, ['link_id' => $linkid], 1);
 
         $link = new self();
         $link->linkid = $result[0]["link_id"];
-        $link->fileid = $result[0]["file_id"];
         $link->userid = $result[0]["user_id"];
         $link->token = $result[0]["token"];
-        $link->createdat = $createdat[0]["created_at"];
-
-        return $link;
-    }
-
-    public static function getByFileId($fileid) {
-        $result = Model::find(self::$table, ['file_id' => $fileid], 1);
-
-        $link = new self();
-        $link->linkid = $result[0]["link_id"];
-        $link->fileid = $result[0]["file_id"];
-        $link->userid = $result[0]["user_id"];
-        $link->token = $result[0]["token"];
-        $link->createdat = $createdat[0]["created_at"];
+        $link->createdat = $result[0]["created_at"];
 
         return $link;
     }
@@ -40,10 +25,9 @@ class Links {
 
         $link = new self();
         $link->linkid = $result[0]["link_id"];
-        $link->fileid = $result[0]["file_id"];
         $link->userid = $result[0]["user_id"];
         $link->token = $result[0]["token"];
-        $link->createdat = $createdat[0]["created_at"];
+        $link->createdat = $result[0]["created_at"];
 
         return $link;
     }
@@ -53,16 +37,16 @@ class Links {
 
         $link = new self();
         $link->linkid = $result[0]["link_id"];
-        $link->fileid = $result[0]["file_id"];
         $link->userid = $result[0]["user_id"];
         $link->token = $result[0]["token"];
-        $link->createdat = $createdat[0]["created_at"];
+        $link->createdat = $result[0]["created_at"];
 
         return $link;
     }
 
-    public static function createLink($linkid, $fileid, $userid, $token){
-        $result = Model::insert(self::$table, ["link_id"=> $linkid,"file_id"=> $fileid,"user_id"=> $userid, "token"=> $token]);
+    public static function createLink($userid){
+        $token = bin2hex(random_bytes(32));
+        $result = Model::insert(self::$table, ["user_id"=> $userid, "token"=> $token]);
         return $result;
     }
     
