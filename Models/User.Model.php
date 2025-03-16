@@ -7,6 +7,11 @@ class User {
     private $password;
     private $email;
     private static $table = "USERS";
+    
+    // Ajout d'un getter pour la propriété id
+    public function getId() {
+        return $this->id;
+    }
 
     public static function get($params){
         $result = Model::find(self::$table, $params, 1);
@@ -42,29 +47,46 @@ class User {
     }
 
     public static function create($username, $password, $email){
+        global $errors;
+        $errors = [];
+        
         if(!self::isUsernameValid($username)){
             $errors[] = "Username is not valid (minimum 4 characters), only . and _ allowed";
+            error_log("Username invalide: $username");
         }else if (!self::isUsernameUnique($username)){
             $errors[] = "Username is note unique";
+            error_log("Username déjà utilisé: $username");
         }
+        
         if(!self::isEmailUnique($email)){
             $errors[] = "Email is allready used";
+            error_log("Email déjà utilisé: $email");
         }
+        
         if(!self::isPasswordValid($password)){
             $errors[] = "Password must contain at least  8 characters, 1 lowercase, 1 uppercase, 1 number and 1 special characters (@$!%*?&)";
+            error_log("Mot de passe invalide");
         }
 
         if(empty($errors)){
-            $result = Model::insert(self::$table, ["username"=> $username,"password"=> $password,"email"=> $email]);
-            return $result;
-        }else{
+            error_log("Tentative d'insertion d'utilisateur: $username, $email");
+            try {
+                $result = Model::insert(self::$table, ["username"=> $username,"password"=> $password,"email"=> $email]);
+                error_log("Insertion réussie");
+                return $result;
+            } catch (Exception $e) {
+                error_log("Erreur d'insertion: " . $e->getMessage());
+                $errors[] = "Database error: " . $e->getMessage();
+                return false;
+            }
+        } else {
+            error_log("Erreurs de validation: " . implode(", ", $errors));
             return false;
         }
-
-
     }
 
     public static function update($id, $username, $password, $email){
+        $errors = [];
         if($username && !self::isUsernameValid($username)){
             $errors[] = "Username is not valid (minimum 4 characters), only . and _ allowed";
         }else if ($username && !self::isUsernameUnique($username)){
@@ -107,10 +129,10 @@ class User {
     }
 
     public static function isEmailUnique($email){
-        return self::get(["email"=> $email]) !== false;
+        return self::get(["email"=> $email]) === false;
     }
 
     public static function isUsernameUnique($username){
-        return self::get(["username" => $username]) !== false;
+        return self::get(["username" => $username]) === false;
     }
 }
