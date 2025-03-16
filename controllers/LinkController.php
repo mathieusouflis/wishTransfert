@@ -1,22 +1,27 @@
 <?php
+class LinkController{
 
-require_once("./Models/Link.Model.php");
+    public function delete($id){
+        if($_SERVER["REQUEST_METHOD"] === "DELETE"){
+            // Connexion à la base de données
+            $pdo = new PDO('mysql:host=localhost;dbname=wishtransfert', 'username', 'password');
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-class LinkController {
-    public function generateLink(){
-        
-        if($_SERVER["REQUEST_METHOD"] === "POST"){
-            // $files = uploadFiles(); TODO: DOIT ÊTRE IMPLÉMENTÉ AVEC LE FILECONTROLLER
-            $files = [
-                1,2,3,4,5,6,7,8,9
-            ];
+            // Préparation de la requête de suppression
+            $stmt = $pdo->prepare('DELETE FROM links WHERE id = :id');
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
-            $userId = 1; // TODO: DOIT ÊTRE CHANGÉ PAR LE VRAI USERID
-            Links::createLink($userId);
+            // Exécution de la requête
+            if($stmt->execute()){
+                echo json_encode(['status' => 'success', 'message' => 'Link deleted successfully']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Failed to delete link']);
+            }
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
         }
     }
+
 }
 
-?>
-
-<form action="dazdazd"></form>
+// COMMENT ON FAIT POUR LIER L'HTML ET LE PHP POUR LE DELETE ?

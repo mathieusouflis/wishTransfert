@@ -7,7 +7,7 @@ class Comments {
     private $userid;
     private $content;
     private $createdat;
-    private static $table = "COMMENTS";
+    private static $table = "comments";
 
     public static function getCommsById($commentid) {
         $result = Model::find(self::$table, ['comment_id' => $commentid], 1);

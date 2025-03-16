@@ -2,7 +2,7 @@
 class Model {
     private static $db;
     public function __construct() {        
-        self::$db = new PDO("mysql:host=localhost:8889;dbname=wishtransfert", "root", "root");
+        self::$db = new PDO("mysql:host=localhost:3307;dbname=wishtransfert", "root");
     }
 
     public static function find($table, $params = [], $limit = 0) {
@@ -91,11 +91,20 @@ class Model {
         $stmt = self::$db->prepare($query);
         $stmt->execute($values);
         
-        return true;
+        // Merge new values with where parameters to fetch the updated object
+        $fetchParams = array_merge($whereParams, $newValueParams);
+        $updatedObject = self::find($table, $fetchParams, 1);
+        return $updatedObject;
     }
 
     public static function delete($table, $params = []){
         new self();
+        $deletedObject = self::find($table, $params, 1);
+        if (empty($deletedObject)) {
+            return false;
+        }
+        $deletedObject = $deletedObject[0];
+
         $query = "DELETE FROM $table WHERE ";
         $columns = [];
         $values = [];
@@ -107,6 +116,6 @@ class Model {
         $stmt = self::$db->prepare($query);
         $stmt->execute($values);
         
-        return true;
+        return $deletedObject;
     }
 }
