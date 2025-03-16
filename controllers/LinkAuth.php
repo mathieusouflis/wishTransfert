@@ -1,6 +1,8 @@
 <?php
 session_start();
 require_once 'config/database.php';
+require_once 'Models/Link.Model.php';
+require_once 'Models/FileLink.Model.php';
 
 class LinkAuthC {
     public function verifyLinkToken($token) {
@@ -9,32 +11,18 @@ class LinkAuthC {
         if (empty($token)) {
             return false;
         }
-        
-        $link = dbQuerySingle("SELECT l.*, u.username 
-                              FROM links l
-                              JOIN users u ON l.user_id = u.user_id
-                              WHERE l.token = ?", [$token]);
-        
-        if (!$link) {
+        $link = Links::getByToken($token);
+        if (empty($link)) {
+            return false;
+        }
+
+        $emailRestriction = EmailLink::getByLink_id($link->linkid);
+
+        if (empty($emailRestriction)) {
             return false;
         }
         
-        $files = dbQuery("SELECT f.* 
-                         FROM files f
-                         JOIN links_files fl ON f.file_id = fl.file_id
-                         WHERE fl.link_id = ?", [$link['link_id']]);
-        
-        $link['files'] = $files;
-        
-        $emailRestriction = dbQuerySingle("SELECT el.email 
-                                         FROM email_links el 
-                                         WHERE el.link_id = ?", [$link['link_id']]);
-        
-        if ($emailRestriction) {
-            $link['email_restriction'] = $emailRestriction['email'];
-        }
-        
-        return $link;
+        return true;
     }
     
     private function generateToken() {

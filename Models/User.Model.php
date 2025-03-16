@@ -7,11 +7,6 @@ class User {
     public $password;
     public $email;
     private static $table = "USERS";
-    
-    // Ajout d'un getter pour la propriété id
-    public function getId() {
-        return $this->id;
-    }
 
     public static function get($params){
         $result = Model::find(self::$table, $params, 1);

@@ -2,10 +2,11 @@
 require_once './Models/Model.php';
 
 class Links {
-    private $linkid;
-    private $userid;
-    private $token;
-    private $createdat;
+    public $linkid;
+    public $fileid;
+    public $userid;
+    public $token;
+    public $createdat;
     private static $table = "links";
 
     public static function getByLinkId($linkid) {
@@ -34,15 +35,20 @@ class Links {
     }
 
     public static function getByUserId($userid) {
-        $result = Model::find(self::$table, ['user_id' => $userid], 1);
+        $results = Model::find(self::$table, ['user_id' => $userid]);
 
-        $link = new self();
-        $link->linkid = $result[0]["link_id"];
-        $link->userid = $result[0]["user_id"];
-        $link->token = $result[0]["token"];
-        $link->createdat = $result[0]["created_at"];
+        $links = [];
 
-        return $link;
+        foreach ($results as $result) {
+            $link = new self();
+            $link->linkid = $result[0]["link_id"];
+            $link->userid = $result[0]["user_id"];
+            $link->token = $result[0]["token"];
+            $link->createdat = $result[0]["created_at"];
+            $links[] = $link;
+        }
+
+        return $links;
     }
 
     public static function getByToken($token) {

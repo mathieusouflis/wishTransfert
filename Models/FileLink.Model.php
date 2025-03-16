@@ -2,36 +2,41 @@
 require_once './Models/Model.php';
 
 class FileLink {
-    private $file_link_id;
-    private $link_id;
-    private $file_id;
+    public $file_link_id;
+    public $link_id;
+    public $file_id;
     private static $table = "files_links";
 
     public static function getByLink_id($link_id) {
-        $result = Model::find(self::$table, ['link_id' => $link_id]);
+        $results = Model::find(self::$table, ['link_id' => $link_id]);
 
-        $link = new self();
-        $link->file_link_id = $result[0]["file_link_id"];
-        $link->link_id = $result[0]["link_id"];
-        $link->file_id = $result[0]["file_id"];
+        $links = [];
+        foreach ($results as $result) {
+            $link = new self();
+            $link->file_link_id = $result["file_link_id"];
+            $link->link_id = $result["link_id"];
+            $link->file_id = $result["file_id"];
+            $links[] = $link;
+        }
 
         return $link;
     }
 
     public static function getByFile_id($file_id) {
-        $result = Model::find(self::$table, ['file_id' => $file_id]);
+        $results = Model::find(self::$table, ['file_id' => $file_id]);
 
-        $link = new self();
-        $link->file_link_id = $result[0]["file_link_id"];
-        $link->link_id = $result[0]["link_id"];
-        $link->file_id = $result[0]["file_id"];
-
-        return $link;
+        $links = [];
+        foreach ($results as $result) {
+            $link = new self();
+            $link->file_link_id = $result["file_link_id"];
+            $link->link_id = $result["link_id"];
+            $link->file_id = $result["file_id"];
+            $links[] = $link;
+        }
     }
 
     public static function createFilesLinks($link_id, $file_id){
         $result = Model::insert(self::$table, ["link_id"=> $link_id, "file_id"=> $file_id]);
-        //TODO: Faire en sorte que ça renvois le lien créé
         return $result;
     }
     

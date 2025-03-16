@@ -13,34 +13,6 @@ class File {
     public $createdat;
     private static $table = "files";
 
-    public function getFileid() {
-        return $this->fileid;
-    }
-    
-    public function getUserid() {
-        return $this->userid;
-    }
-    
-    public function getTitle() {
-        return $this->title;
-    }
-    
-    public function getFiledata() {
-        return $this->filedata;
-    }
-    
-    public function getDownloadcount() {
-        return $this->downloadcount;
-    }
-    
-    public function getStatus() {
-        return $this->status;
-    }
-    
-    public function getCreatedat() {
-        return $this->createdat;
-    }
-
     public static function getByFileId($fileid) {
         $result = Model::find(self::$table, ['file_id' => $fileid], 1);
         
@@ -61,16 +33,6 @@ class File {
     }
 
     public static function getByUserId($userid) {
-        $result = Model::find(self::$table, ['user_id' => $userid], 1);
-
-        $file = new self();
-        $file->fileid = $result[0]["file_id"];
-        $file->userid = $result[0]["user_id"];
-        $file->title = $result[0]["title"];
-        $file->filedata = $result[0]["file_data"];
-        $file->downloadcount = $result[0]["download_count"];
-        $file->status = $result[0]["status"];
-        $file->createdat = $result[0]["created_at"];
         $results = Model::find(self::$table, ['user_id' => $userid]);
         
         if (empty($results)) {

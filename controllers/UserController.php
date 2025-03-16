@@ -27,7 +27,7 @@ class UserController{
 
     public function editProfile(){
         if($_SERVER["REQUEST_METHOD"] === "POST"){
-            $username = filter_input(INPUT_POST,"username", FILTER_SANITIZE_STRING);
+            $username = filter_input(INPUT_POST,"username");
             $avatar = filter_input(INPUT_POST,"avatar");
 
             if(empty($username && empty($avatar))){

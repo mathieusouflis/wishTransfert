@@ -26,6 +26,7 @@ class FileController {
     
     public function deleteFile($fileid){
         return File::deleteFile($fileid);
+    }
     public function downloadFile($fileid){
         File::downloadFile($fileid);
         exit;

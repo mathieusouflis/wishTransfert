@@ -1,4 +1,8 @@
 <?php
+require_once ("Models/Link.Model.php");
+require_once ("Models/FileLink.Model.php");
+require_once ("Models/File.Model.php");
+
 class LinkController{
 
     public function delete($id){
@@ -19,6 +23,15 @@ class LinkController{
             }
         } else {
             echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
+        }
+    }
+
+    public function getFiles($link_token){
+        $link = Links::getByToken($link_token);
+        $filesIds = FileLink::getByLink_id($link->linkid);
+        $files = [];
+        foreach($filesIds as $id){
+            $files[] = File::getByFileId( $id );
         }
     }
 
