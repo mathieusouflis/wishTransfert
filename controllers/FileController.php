@@ -26,12 +26,14 @@ if($_SERVER["REQUEST_METHOD"]=== "POST"){
     
     $fileController = new FileController();
     if(isset($_POST["create"])) {
-        $file = $_FILES["file"];
+        $files = $_FILES["files"]["tmp_name"];
         $userid = 1232;
-        $title = $file["name"];
-        $type = $file["type"];
-        $filedata = file_get_contents($file ["tmp_name"]);
-        $fileController->uploadFile($userid,$title,$type,$filedata);
+        foreach ($files as $index => $tmpName) {
+            $title = $_FILES["files"]["name"][$index];
+            $type = $_FILES["files"]["type"][$index];
+            $filedata = file_get_contents($tmpName);
+            $fileController->uploadFile($userid,$title,$type,$filedata);
+        }
     }
     if(isset($_POST["delete"])) $fileController->deleteFile($userid, $title, $filedata);
     if(isset($_POST["download"])) $fileController->downloadFile($fileid);
