@@ -7,7 +7,7 @@ class Links {
     private $userid;
     private $token;
     private $createdat;
-    private static $table = "LINKS";
+    private static $table = "links";
 
     public static function getByLinkId($linkid) {
         $result = Model::find(self::$table, ['link_id' => $linkid], 1);
@@ -17,7 +17,7 @@ class Links {
         $link->fileid = $result[0]["file_id"];
         $link->userid = $result[0]["user_id"];
         $link->token = $result[0]["token"];
-        $link->createdat = $createdat[0]["created_at"];
+        $link->createdat = $result[0]["created_at"];
 
         return $link;
     }
@@ -30,7 +30,7 @@ class Links {
         $link->fileid = $result[0]["file_id"];
         $link->userid = $result[0]["user_id"];
         $link->token = $result[0]["token"];
-        $link->createdat = $createdat[0]["created_at"];
+        $link->createdat = $result[0]["created_at"];
 
         return $link;
     }
@@ -43,7 +43,7 @@ class Links {
         $link->fileid = $result[0]["file_id"];
         $link->userid = $result[0]["user_id"];
         $link->token = $result[0]["token"];
-        $link->createdat = $createdat[0]["created_at"];
+        $link->createdat = $result[0]["created_at"];
 
         return $link;
     }
@@ -56,7 +56,7 @@ class Links {
         $link->fileid = $result[0]["file_id"];
         $link->userid = $result[0]["user_id"];
         $link->token = $result[0]["token"];
-        $link->createdat = $createdat[0]["created_at"];
+        $link->createdat = $result[0]["created_at"];
 
         return $link;
     }
