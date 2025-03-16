@@ -1,5 +1,4 @@
 <?php
-
 class LinkController{
 
     public function delete($id){
