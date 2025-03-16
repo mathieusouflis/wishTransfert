@@ -2,10 +2,10 @@
 require_once './Models/Model.php';
 
 class User {
-    private $id;
-    private $username;
-    private $password;
-    private $email;
+    public $id;
+    public $username;
+    public $password;
+    public $email;
     private static $table = "USERS";
     
     // Ajout d'un getter pour la propriété id

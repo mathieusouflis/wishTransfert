@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once "Models/User.Model.php"; 
+
 class AuthC {
     // vérifie si l'utilisateur est connecté
     public function isLog() {
@@ -13,33 +15,40 @@ class AuthC {
     public function Register() {
         $erreurs = [];
         if($_SERVER["REQUEST_METHOD"] == "POST") {
-            $id = filter_input(INPUT_POST, "identifiant", FILTER_VALIDATE_EMAIL);
+            $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
+            $username = filter_input(INPUT_POST, "username");
             $password = filter_input(INPUT_POST, "motdepasse");
             $verify = filter_input(INPUT_POST, "motdepasse2");
         
         // liste de messages d'erreurs
-        if(empty($id)) {
+        if(empty($email)) {
             $erreurs[] = "L'identifiant est absent ou incorrect";
+        }
+        if(empty($username)){
+            $erreurs[] = "Le nom d'utilisateur est obligatoire.";
+        }else if (User::isUsernameValid($username)) {
+            $erreurs[] = "Le nom d'utilisateur n'est pas valide. Il doit comporter au moins 4 caractères et les seuls caractères spéciaux autorisées sont (._)";
+        }else if (User::get(["username" => $username])){
+            $erreurs[] = "Le nom d'utilisateur est déjà pris";
         }
         if(empty($password)) {
             $erreurs[] = "Le mot de passe est obligatoire";
+        }else if(User::isPasswordValid($password)) {
+            $erreurs[] = "Le mot de passe n'est pas valide, il doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial (@$!%*?&)";
         }
         if(empty($verify)) {
             $erreurs[] = "La confirmation de mot de passe est obligatoire";
         }
-        elseif($password !== $verify) {
+        else if($password !== $verify) {
             $erreurs[] = "Les deux mots de passe ne correspondent pas";
         }
-        if($this->existingadress($id)) {
-            $erreurs[] = "L'adresse existe déjà";
+        if(User::get(["email" => $email])) {
+            $erreurs[] = "L'email existe déjà";
         }
 
         if(empty($erreurs)) {
-            $utilisateur = [
-                "login" => $id,
-                "password" => password_hash($password, PASSWORD_DEFAULT)
-            ];
-            $this->ajouterUtilisateur($utilisateur);
+            $password = password_hash($password, PASSWORD_DEFAULT);
+            User::create($username, $password, $email);
         }
     }
     }
@@ -53,29 +62,29 @@ class AuthC {
 
     $erreurs = [];
     if($_SERVER["REQUEST_METHOD"] == "POST") {
-        $id = filter_input(INPUT_POST, "identifiant", FILTER_VALIDATE_EMAIL);
+        $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
         $password = filter_input(INPUT_POST, "motdepasse");
         
         // liste de messages d'erreurs
-        if(empty($id)) {
+        if(empty($email)) {
             $erreurs[] = "L'identifiant est obligatoire";
         }
         if(empty($password)) {
             $erreurs[] = "Le mot de passe est obligatoire";
         }
         
-        $utilisateur = $this->getUsersbyid($id);
+        $utilisateur = User::get(["email" => $email]);
         if(empty($utilisateur)) {
             $erreurs[] = "Le compte n'existe pas";
         } else {    
-            $hash = $utilisateur["password"];
+            $hash = $utilisateur->password;
             if(!password_verify($password, $hash)) {
                 $erreurs[] = "Le mot de passe est incorrect";
             }
         }
 
         if(empty($erreurs)) {
-            $_SESSION["identifiant"] = $id;
+            $_SESSION["identifiant"] = $utilisateur->id;
             header('Location: dashboard.php');
             exit();
         }

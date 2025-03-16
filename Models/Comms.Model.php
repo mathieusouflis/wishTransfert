@@ -2,11 +2,11 @@
 require_once './Models/Model.php';
 
 class Comments {
-    private $commentid;
-    private $fileid;
-    private $userid;
-    private $content;
-    private $createdat;
+    public $commentid;
+    public $fileid;
+    public $userid;
+    public $content;
+    public $createdat;
     private static $table = "COMMENTS";
 
     public static function getCommsById($commentid) {

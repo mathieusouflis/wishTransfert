@@ -2,11 +2,11 @@
 require_once './Models/Model.php';
 
 class Links {
-    private $linkid;
-    private $fileid;
-    private $userid;
-    private $token;
-    private $createdat;
+    public $linkid;
+    public $fileid;
+    public $userid;
+    public $token;
+    public $createdat;
     private static $table = "LINKS";
 
     public static function getByLinkId($linkid) {

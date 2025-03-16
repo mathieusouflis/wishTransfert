@@ -4,13 +4,13 @@ require_once './Models/Model.php';
 // require_once './Models/User.Model.php';
 
 class File {
-    private $fileid;
-    private $userid;
-    private $title;
-    private $filedata;
-    private $downloadcount;
-    private $status;
-    private $createdat;
+    public $fileid;
+    public $userid;
+    public $title;
+    public $filedata;
+    public $downloadcount;
+    public $status;
+    public $createdat;
     private static $table = "files";
 
     public function getFileid() {
