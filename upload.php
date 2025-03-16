@@ -1,6 +1,6 @@
 <?php
 
- $fileid = 6;
+ $fileid = 12;
 require_once "controllers/FileController.php";
 ?>
 

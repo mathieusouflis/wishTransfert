@@ -41,10 +41,10 @@ class File {
         return $file;
     }
 
-    public static function createFile($userid, $title, $filedata){
+    public static function createFile($userid, $title, $type, $filedata){
         $downloadcount = 0;
         $status = "Stored";
-        $result = Model::insert(self::$table, ["user_id" => $userid, "title" => $title, "file_data" => $filedata, "download_count" => $downloadcount, "status" => $status]);
+        $result = Model::insert(self::$table, ["user_id" => $userid, "title" => $title, "type" => $type, "file_data" => $filedata, "download_count" => $downloadcount, "status" => $status]);
         return $result;
     }
 
@@ -71,7 +71,8 @@ class File {
         header("Content-Disposition: attachment; filename=\"$filename\"");
         header("Content-Length: " . strlen($filedata));
     
-        return $result;
+        echo $filedata;
+        exit;
     }
     
 

@@ -16,6 +16,7 @@ class fileController {
     }
     public function downloadFile($fileid){
         File::downloadFile($fileid);
+        exit;
         
     }
 }
