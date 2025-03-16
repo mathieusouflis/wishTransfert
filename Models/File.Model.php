@@ -1,18 +1,52 @@
 <?php
 require_once './Models/Model.php';
+// Supprimez cette ligne pour éviter la double inclusion
+// require_once './Models/User.Model.php';
 
 class File {
-    private $fileid;
-    private $userid;
-    private $title;
-    private $filedata;
-    private $downloadcount;
-    private $status;
-    private $createdat;
+    public $fileid;
+    public $userid;
+    public $title;
+    public $filedata;
+    public $downloadcount;
+    public $status;
+    public $createdat;
     private static $table = "files";
+
+    public function getFileid() {
+        return $this->fileid;
+    }
+    
+    public function getUserid() {
+        return $this->userid;
+    }
+    
+    public function getTitle() {
+        return $this->title;
+    }
+    
+    public function getFiledata() {
+        return $this->filedata;
+    }
+    
+    public function getDownloadcount() {
+        return $this->downloadcount;
+    }
+    
+    public function getStatus() {
+        return $this->status;
+    }
+    
+    public function getCreatedat() {
+        return $this->createdat;
+    }
 
     public static function getByFileId($fileid) {
         $result = Model::find(self::$table, ['file_id' => $fileid], 1);
+        
+        if (empty($result)) {
+            return false;
+        }
 
         $file = new self();
         $file->fileid = $result[0]["file_id"];
@@ -37,20 +71,51 @@ class File {
         $file->downloadcount = $result[0]["download_count"];
         $file->status = $result[0]["status"];
         $file->createdat = $result[0]["created_at"];
+        $results = Model::find(self::$table, ['user_id' => $userid]);
+        
+        if (empty($results)) {
+            return [];
+        }
+        
+        $files = [];
+        foreach ($results as $result) {
+            $file = new self();
+            $file->fileid = $result["file_id"];
+            $file->userid = $result["user_id"];
+            $file->title = $result["title"];
+            $file->filedata = $result["file_data"];
+            $file->downloadcount = $result["download_count"];
+            $file->status = $result["status"];
+            $file->createdat = $result["created_at"];
+            $files[] = $file;
+        }
 
-        return $file;
+        return $files;
     }
 
-    public static function createFile($userid, $title, $filedata){
+    public static function createFile($userid, $title, $type, $filedata){
         $downloadcount = 0;
         $status = "Stored";
-        $result = Model::insert(self::$table, ["user_id" => $userid, "title" => $title, "file_data" => $filedata, "download_count" => $downloadcount, "status" => $status]);
+        $result = Model::insert(self::$table, [
+            "user_id" => $userid, 
+            "title" => $title, 
+            "file_data" => $filedata, 
+            "download_count" => $downloadcount, 
+            "status" => $status
+        ]);
         return $result;
     }
 
-    public static function moveToBin($fileId){
+    public static function moveToBin($userid, $title, $filedata){
+        $downloadcount = 0;
         $status = "Trash";
-        $result = Model::update(self::$table, ["status" => $status], ["file_id" => $fileId]);
+        $result = Model::insert(self::$table, [
+            "user_id" => $userid, 
+            "title" => $title, 
+            "file_data" => $filedata, 
+            "download_count" => $downloadcount, 
+            "status" => $status
+        ]);
         return $result;
     }
 
@@ -59,4 +124,3 @@ class File {
         return $result;
     }
 }
-?>
