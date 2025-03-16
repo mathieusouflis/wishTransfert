@@ -2,12 +2,12 @@
 require_once './Models/Model.php';
 
 class Comments {
-    public $commentid;
-    public $fileid;
-    public $userid;
-    public $content;
-    public $createdat;
-    private static $table = "COMMENTS";
+    private $commentid;
+    private $fileid;
+    private $userid;
+    private $content;
+    private $createdat;
+    private static $table = "comments";
 
     public static function getCommsById($commentid) {
         $result = Model::find(self::$table, ['comment_id' => $commentid], 1);

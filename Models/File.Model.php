@@ -61,6 +61,16 @@ class File {
     }
 
     public static function getByUserId($userid) {
+        $result = Model::find(self::$table, ['user_id' => $userid], 1);
+
+        $file = new self();
+        $file->fileid = $result[0]["file_id"];
+        $file->userid = $result[0]["user_id"];
+        $file->title = $result[0]["title"];
+        $file->filedata = $result[0]["file_data"];
+        $file->downloadcount = $result[0]["download_count"];
+        $file->status = $result[0]["status"];
+        $file->createdat = $result[0]["created_at"];
         $results = Model::find(self::$table, ['user_id' => $userid]);
         
         if (empty($results)) {
