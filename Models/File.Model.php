@@ -58,6 +58,24 @@ class File {
         $result = Model::delete(self::$table, ["file_id"=> $fileid]);
         return $result;
     }
+
+    public static function downloadFile($fileid) {
+        $result = Model::find(self::$table, ['file_id' => $fileid], 1);
+    
+        $filename = $result[0]["title"]; 
+        $filedata = $result[0]["file_data"]; 
+        $filetype = $result[0]["type"]; 
+    
+        // Définir les headers HTTP pour le téléchargement
+        header("Content-Type: " . $filetype);
+        header("Content-Disposition: attachment; filename=\"$filename\"");
+        header("Content-Length: " . strlen($filedata));
+    
+        return $result;
+    }
+    
+
 }
+
 $fileModel = new File();
 ?>

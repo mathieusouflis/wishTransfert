@@ -1,8 +1,7 @@
 <?php
 
- 
+ $fileid = 6;
 require_once "controllers/FileController.php";
-
 ?>
 
 <!DOCTYPE html>
@@ -18,6 +17,11 @@ require_once "controllers/FileController.php";
         <input type="file" name="file" placeholder="Choisissez un fichier">
         <button type="submit" name="create">upload</button>
     </form>
+    <form method="POST">
+        <input type="text" name="file_id" placeholder="ID du fichier">
+        <button type="submit" name="download">Download</button>
+    </form>
+
     
 </body>
 </html>
