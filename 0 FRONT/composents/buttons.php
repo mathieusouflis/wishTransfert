@@ -59,12 +59,12 @@ function mediumButton($content, $type="button", $buttonStyle="red", $style= ""){
     switch ($buttonStyle) {
         case 'white':
             ?>
-            <input type="<?=$type?>" class="flex justify-center radius-10 py-8 px-10 button bg-white w-max text-15 text-black <?=$style?>"><?=$content?></input>
+            <input type="<?=$type?>" class="flex justify-center radius-10 py-8 px-10 button bg-white w-max text-15 text-black <?=$style?>" value="<?=$content?>">
             <?php
             break;
         case 'red':
             ?>
-            <input type="<?=$type?>" class="flex justify-center radius-10 py-8 px-10 button bg-primary w-max text-15 <?=$style?>"><?=$content?></input>
+            <input type="<?=$type?>" class="flex justify-center radius-10 py-8 px-10 button bg-primary w-max text-15 <?=$style?>" value="<?=$content?>">
             <?php
             break;
     }
@@ -72,6 +72,6 @@ function mediumButton($content, $type="button", $buttonStyle="red", $style= ""){
 
 function littleButton($content, $type="button"){
     ?>
-    <input type="<?=$type?>" class="py-6 px-8 flex radius-4 bg-white button w-max text-black text-10"><?=$content?></input>
+    <input type="<?=$type?>" class="py-6 px-8 flex radius-4 bg-white button w-max text-black text-10" value="<?=$content?>">
     <?php
 }
