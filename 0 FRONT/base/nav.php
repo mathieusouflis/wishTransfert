@@ -14,7 +14,7 @@ if($isConnected){
 
 
 <nav class="flex justify-end">
-    <div class="flex flex-row w-max <?=$navBonnusStyles?> bg-white">
+    <div class="absolute top-10 right-10 flex flex-row w-max <?=$navBonnusStyles?> bg-white">
         <?php 
      if($isConnected){
          
@@ -29,8 +29,8 @@ if($isConnected){
         <?php
      
     }else {
-        mediumButton("Sign Up", "white");
-        mediumButton("Log In", "red");
+        mediumButton("Sign Up", "button", "white", style:"w-70");
+        mediumButton("Log In", "button", "red", style:"w-70");
     }
     
     ?>

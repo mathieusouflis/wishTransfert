@@ -319,10 +319,16 @@ input:focus {
     left: 10px;
 }
 
+.top-10 {
+    top: 10px;
+}
+
 .top-8 {
     top: 8px;
 }
-
+.w-70 {
+    width: 70px;
+}
 .pl-33 {
     padding-left: 33px;
 }
