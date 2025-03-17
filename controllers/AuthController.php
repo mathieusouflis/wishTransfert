@@ -28,7 +28,8 @@ class AuthC {
 
             if(empty($username)){
                 $erreurs[] = "Le nom d'utilisateur est obligatoire.";
-            }else if (User::isUsernameValid($username)) {
+            // Correction: Inversion de la condition pour la validation du nom d'utilisateur
+            }else if (!User::isUsernameValid($username)) {
                 $erreurs[] = "Le nom d'utilisateur n'est pas valide. Il doit comporter au moins 4 caractères et les seuls caractères spéciaux autorisées sont (._)";
             }else if (User::get(["username" => $username])){
                 $erreurs[] = "Le nom d'utilisateur est déjà pris";
@@ -36,7 +37,8 @@ class AuthC {
             
             if(empty($password)) {
                 $erreurs[] = "Le mot de passe est obligatoire";
-            }else if(User::isPasswordValid($password)) {
+            // Correction: Inversion de la condition pour la validation du mot de passe
+            }else if(!User::isPasswordValid($password)) {
                 $erreurs[] = "Le mot de passe n'est pas valide, il doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial (@$!%*?&)";
             }
             

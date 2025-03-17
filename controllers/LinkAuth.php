@@ -42,19 +42,78 @@ class LinkAuthC {
         return bin2hex(random_bytes(16));
     }
     
-    public static function createShareLink($files, $userId, $emails) {
+    /**
+     * Crée un lien de partage pour un ou plusieurs fichiers
+     * 
+     * @param array|int $fileIds Un ID de fichier unique ou un tableau d'IDs de fichiers
+     * @param int $userId L'ID de l'utilisateur qui crée le lien
+     * @param string|null $email Email pour restriction (optionnel)
+     * @return string|false Le token du lien créé ou false en cas d'échec
+     */
+    public static function createShareLink($fileIds, $userId, $email = null) {
+        // Créer le lien
         $link = Links::createLink($userId);
-        
-        foreach ($files as $file) {
-            $result = File::createFile($_SESSION["user_id"], $file["name"], $file["type"], $file["filedata"]);
-            FileLink::createFilesLinks($link->linkid, $file->fileid);
-        }
-
-        foreach ($emails as $email) {
-            $result = EmailLink::createEmailLinks($link->linkid, $email);
+        if (!$link) {
+            return false;
         }
         
-        return $link;
+        // Convertir un ID unique en tableau pour traitement uniforme
+        if (!is_array($fileIds)) {
+            $fileIds = [$fileIds];
+        }
+        
+        // Associer tous les fichiers au lien
+        foreach ($fileIds as $fileId) {
+            FileLink::createFilesLinks($link->linkid, $fileId);
+        }
+        
+        // Si un email est spécifié, l'associer au lien
+        if ($email !== null) {
+            EmailLink::createEmailLinks($link->linkid, $email);
+        }
+        
+        return $link->token;
+    }
+    
+    /**
+     * Récupère les informations complètes d'un lien de partage
+     * 
+     * @param string $token Le token du lien
+     * @return array|false Les informations du lien ou false en cas d'échec
+     */
+    public static function getLinkInfoForDownload($token) {
+        $link = Links::getByToken($token);
+        if (!$link) {
+            return false;
+        }
+        
+        // Récupérer les fichiers associés au lien
+        $fileLinks = FileLink::getByLink_id($link->linkid);
+        $files = [];
+        
+        foreach ($fileLinks as $fileLink) {
+            $file = File::getByFileId($fileLink->file_id);
+            if ($file) {
+                $files[] = $file;
+            }
+        }
+        
+        // Récupérer les restrictions d'email éventuelles
+        $emailLinks = EmailLink::getByLink_id($link->linkid);
+        $emailRestriction = null;
+        
+        if (!empty($emailLinks)) {
+            $emailRestriction = $emailLinks[0]->email;
+        }
+        
+        return [
+            'link_id' => $link->linkid,
+            'user_id' => $link->userid,
+            'token' => $link->token,
+            'created_at' => $link->createdat,
+            'files' => $files,
+            'email_restriction' => $emailRestriction
+        ];
     }
     
     //TODO: Voir pour mettre ça dans le linkcontroller
@@ -79,5 +138,4 @@ class LinkAuthC {
     //     header("Location: download.php?token=" . urlencode($token));
     //     exit();
     // }
-
 }

@@ -6,18 +6,25 @@ class User {
     public $username;
     public $password;
     public $email;
-    private static $table = "USERS";
+    private static $table = "users";  // Correction: changé de "USERS" à "users" pour plus de cohérence
 
     public static function get($params){
         $result = Model::find(self::$table, $params, 1);
         
-        if(!$result) return false;
+        if(!$result || empty($result)) return false;
 
         $user = new self();
-        $user->id = $result[0]["user_id"];
-        $user->username = $result[0]["username"];
-        $user->password = $result[0]["password"];
-        $user->email = $result[0]["email"];
+        // Correction: Accès direct au résultat sans l'index 0
+        if (isset($result[0])) {
+            $data = $result[0];
+        } else {
+            $data = $result;
+        }
+        
+        $user->id = $data["user_id"];
+        $user->username = $data["username"];
+        $user->password = $data["password"];
+        $user->email = $data["email"];
         
         return $user;
     }
@@ -66,14 +73,25 @@ class User {
         if(empty($errors)){
             error_log("Tentative d'insertion d'utilisateur: $username, $email");
             try {
-                $result = Model::insert(self::$table, ["username"=> $username,"password"=> $password,"email"=> $email]);
+                // Hasher le mot de passe avant l'insertion
+                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                $result = Model::insert(self::$table, [
+                    "username" => $username,
+                    "password" => $hashedPassword,
+                    "email" => $email
+                ]);
                 error_log("Insertion réussie");
 
+                if (!$result) {
+                    $errors[] = "Échec de l'insertion en base de données";
+                    return false;
+                }
+
                 $user = new self();
-                $user->id = $result[0]["user_id"];
-                $user->username = $result[0]["username"];
-                $user->password = $result[0]["password"];
-                $user->email = $result[0]["email"];
+                $user->id = $result["user_id"];
+                $user->username = $result["username"];
+                $user->password = $result["password"];
+                $user->email = $result["email"];
                 
                 return $user;
             } catch (Exception $e) {
@@ -102,6 +120,11 @@ class User {
         }
 
         if(empty($errors)){
+            // Si le mot de passe est fourni, le hasher
+            if ($password) {
+                $password = password_hash($password, PASSWORD_DEFAULT);
+            }
+            
             $result = Model::update(
                 self::$table,
                 array_merge(
@@ -112,11 +135,15 @@ class User {
                 ["user_id"=> $id]
             );
 
+            if (!$result) {
+                return false;
+            }
+
             $user = new self();
-            $user->id = $result[0]["user_id"];
-            $user->username = $result[0]["username"];
-            $user->password = $result[0]["password"];
-            $user->email = $result[0]["email"];
+            $user->id = $result["user_id"];
+            $user->username = $result["username"];
+            $user->password = $result["password"];
+            $user->email = $result["email"];
             
             return $user;
         }else{
@@ -127,11 +154,15 @@ class User {
     public static function delete($id){
         $result = Model::delete(self::$table, ["user_id"=> $id]);
 
+        if (!$result) {
+            return false;
+        }
+
         $user = new self();
-        $user->id = $result[0]["user_id"];
-        $user->username = $result[0]["username"];
-        $user->password = $result[0]["password"];
-        $user->email = $result[0]["email"];
+        $user->id = $result["user_id"];
+        $user->username = $result["username"];
+        $user->password = $result["password"];
+        $user->email = $result["email"];
         
         return $user;
     }

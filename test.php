@@ -5,6 +5,8 @@ require_once 'Models/Model.php';
 require_once 'Models/User.Model.php';  // Incluez d'abord User.Model.php
 require_once 'Models/File.Model.php';  // Ensuite File.Model.php
 require_once 'Models/Link.Model.php';
+require_once 'Models/FileLink.Model.php';
+require_once 'Models/EmailLinks.Model.php';
 require_once 'controllers/FileController.php';
 require_once 'controllers/LinkAuth.php';
 
@@ -25,9 +27,13 @@ function cleanupTestData() {
     try {
         $pdo = getDBConnection();
         
-        $testUser = dbQuerySingle("SELECT user_id FROM USERS WHERE email = ?", ['test@test.com']);
+        $testUser = dbQuerySingle("SELECT user_id FROM users WHERE email LIKE 'test%@test.com'");
         if ($testUser) {
-            dbExecute("DELETE FROM USERS WHERE user_id = ?", [$testUser['user_id']]);
+            // D'abord supprimez les données associées
+            dbExecute("DELETE FROM files WHERE user_id = ?", [$testUser['user_id']]);
+            dbExecute("DELETE FROM links WHERE user_id = ?", [$testUser['user_id']]);
+            // Puis supprimez l'utilisateur
+            dbExecute("DELETE FROM users WHERE user_id = ?", [$testUser['user_id']]);
         }
         
         echo "<p>Nettoyage des données de test effectué.</p>";
@@ -44,7 +50,7 @@ try {
     displayResult("Connexion à la base de données", true);
     
     // Vérifier que les tables existent
-    $tables = ['USERS', 'files', 'links', 'links_files', 'email_links'];
+    $tables = ['users', 'files', 'links', 'files_links', 'emails_links', 'comments'];
     $missingTables = [];
     
     echo "<h3>Vérification des tables</h3>";
@@ -72,17 +78,9 @@ try {
 }
 
 echo "<h2>2. Test de création d'un utilisateur</h2>";
-$testUsername = 'tesasatausdzder';
-$testEmail = 'teassaqsdat@test.com';
-$testPassword = 'Teaqsdasst@12a3445';
-
-// Suppression préalable si l'utilisateur existe déjà
-$existingUser = User::get(['email' => $testEmail]);
-if ($existingUser) {
-    // Utilisation du getter pour obtenir l'ID
-    User::delete($existingUser->getId());
-    echo "<p>Utilisateur de test précédent supprimé.</p>";
-}
+$testUsername = 'tesuser' . rand(1000, 9999);
+$testEmail = 'test' . rand(1000, 9999) . '@test.com';
+$testPassword = 'Test@12345';
 
 // Test de validation individuelle
 echo "<h3>Vérification des validations</h3>";
@@ -93,14 +91,14 @@ echo "<li>Email unique : " . (User::isEmailUnique($testEmail) ? "Oui ✅" : "Non
 echo "<li>Mot de passe valide : " . (User::isPasswordValid($testPassword) ? "Oui ✅" : "Non ❌") . "</li>";
 echo "</ul>";
 
-$createUserResult = User::create($testUsername, password_hash($testPassword, PASSWORD_DEFAULT), $testEmail);
+// Important: Ne pas hasher le mot de passe ici, la méthode create() s'en charge
+$createUserResult = User::create($testUsername, $testPassword, $testEmail);
 
 if ($createUserResult) {
     $user = User::get(['email' => $testEmail]);
     if ($user) {
-        // Utilisation du getter pour obtenir l'ID
-        displayResult("Création d'utilisateur", true, "Utilisateur créé avec l'ID: " . $user->getId());
-        $testUserId = $user->getId();
+        displayResult("Création d'utilisateur", true, "Utilisateur créé avec l'ID: " . $user->id);
+        $testUserId = $user->id;
     } else {
         displayResult("Création d'utilisateur", false, "Utilisateur créé mais impossible de le récupérer");
     }
@@ -124,7 +122,7 @@ if (isset($testUserId)) {
     $testFileContent = 'Ceci est un fichier de test pour WishTransfert.';
     $testFileType = 'text/plain';
     
-    $uploadResult = $fileController->uploadFile($testUserId, $testFileName, $testFileType, $testFileContent);
+    $uploadResult = FileController::uploadFile($testUserId, $testFileName, $testFileType, $testFileContent);
     
     if ($uploadResult) {
         displayResult("Upload de fichier", true, "Fichier uploadé avec succès");
@@ -132,7 +130,7 @@ if (isset($testUserId)) {
         $userFiles = File::getByUserId($testUserId);
         if (!empty($userFiles)) {
             $testFile = $userFiles[0];
-            $testFileId = $testFile->getFileid();
+            $testFileId = $testFile->fileid;
             displayResult("Récupération du fichier", true, "Fichier récupéré avec l'ID: " . $testFileId);
             
             echo "<h2>4. Test de création de lien de partage</h2>";
@@ -142,8 +140,9 @@ if (isset($testUserId)) {
             if ($shareToken) {
                 displayResult("Création de lien de partage", true, "Lien créé avec le token: " . $shareToken);
                 
-                $linkInfo = $linkAuth->verifyLinkToken($shareToken);
-                if ($linkInfo) {
+                // Ajout d'un test pour vérifier la récupération par token
+                $link = Links::getByToken($shareToken);
+                if ($link && $link->token === $shareToken) {
                     displayResult("Vérification du token", true, "Token validé");
                     
                     echo "<p>Pour tester le téléchargement, accédez à: <a href='download.php?token=$shareToken'>download.php?token=$shareToken</a></p>";
@@ -166,27 +165,111 @@ if (isset($testUserId)) {
 }
 
 echo "<h2>5. Test de réservation de téléchargement</h2>";
-if (isset($testUserId) && isset($testFileId) && isset($shareToken)) {
-    $restrictedEmail = "restricted@example.com";
-    $restrictedToken = $linkAuth->createShareLink($testFileId, $testUserId, $restrictedEmail);
+if (isset($testUserId) && isset($testFileId) && isset($linkAuth)) {
+    $restrictedEmail = "restricted" . rand(1000, 9999) . "@example.com";
     
-    if ($restrictedToken) {
-        displayResult("Création de lien avec restriction email", true, "Lien créé avec le token: " . $restrictedToken);
+    // Créer un nouveau lien avec restriction par email
+    $newLink = Links::createLink($testUserId);
+    
+    if ($newLink) {
+        // Associer le fichier au lien
+        $fileLink = FileLink::createFilesLinks($newLink->linkid, $testFileId);
         
-        $linkInfo = $linkAuth->verifyLinkToken($restrictedToken);
-        if ($linkInfo && isset($linkInfo['email_restriction']) && $linkInfo['email_restriction'] === $restrictedEmail) {
-            displayResult("Vérification de la restriction", true, "Restriction email correctement appliquée");
+        // Associer l'email au lien
+        $emailLink = EmailLink::createEmailLinks($newLink->linkid, $restrictedEmail);
+        
+        if ($fileLink && $emailLink) {
+            displayResult("Création de lien avec restriction email", true, "Lien créé avec restriction pour: " . $restrictedEmail);
             
-            echo "<p>Pour tester le téléchargement restreint, accédez à: <a href='download.php?token=$restrictedToken'>download.php?token=$restrictedToken</a></p>";
+            // Récupérer les emails associés au lien pour vérification
+            $emailLinks = EmailLink::getByLink_id($newLink->linkid);
+            
+            $emailFound = false;
+            foreach ($emailLinks as $link) {
+                if ($link->email === $restrictedEmail) {
+                    $emailFound = true;
+                    break;
+                }
+            }
+            
+            if ($emailFound) {
+                displayResult("Vérification de la restriction", true, "Restriction email correctement appliquée");
+                echo "<p>Pour tester le téléchargement restreint, accédez à: <a href='download.php?token=" . $newLink->token . "'>download.php?token=" . $newLink->token . "</a></p>";
+            } else {
+                displayResult("Vérification de la restriction", false, "L'email n'a pas été correctement associé au lien");
+            }
         } else {
-            displayResult("Vérification de la restriction", false, "Échec de la vérification de la restriction email");
+            displayResult("Association fichier/email au lien", false, "Échec de l'association du fichier ou de l'email au lien");
         }
     } else {
         displayResult("Création de lien avec restriction email", false, "Échec de la création du lien");
     }
 } else {
-    displayResult("Test de réservation", false, "Impossible de tester sans fichier ou utilisateur valide");
+    displayResult("Test de réservation", false, "Impossible de tester sans utilisateur ou fichier valide");
 }
+
+echo "<h2>6. Test d'upload multiple de fichiers</h2>";
+if (isset($testUserId)) {
+    // Créer plusieurs fichiers de test
+    $fileController = new FileController();
+    $fileIds = [];
+    
+    // Premier fichier
+    $testFileName1 = 'test_file1.txt';
+    $testFileContent1 = 'Ceci est le premier fichier de test pour l\'upload multiple.';
+    $testFileType1 = 'text/plain';
+    
+    // Second fichier
+    $testFileName2 = 'test_file2.txt';
+    $testFileContent2 = 'Ceci est le second fichier de test pour l\'upload multiple.';
+    $testFileType2 = 'text/plain';
+    
+    // Upload des fichiers
+    $uploadResult1 = FileController::uploadFile($testUserId, $testFileName1, $testFileType1, $testFileContent1);
+    $uploadResult2 = FileController::uploadFile($testUserId, $testFileName2, $testFileType2, $testFileContent2);
+    
+    if ($uploadResult1 && $uploadResult2) {
+        $fileIds[] = $uploadResult1->fileid;
+        $fileIds[] = $uploadResult2->fileid;
+        
+        displayResult("Upload de fichiers multiples", true, "Deux fichiers uploadés avec succès: IDs " . implode(", ", $fileIds));
+        
+        // Création d'un lien partagé pour les deux fichiers
+        $linkAuth = new LinkAuthC();
+        $shareToken = $linkAuth->createShareLink($fileIds, $testUserId);
+        
+        if ($shareToken) {
+            displayResult("Création de lien pour fichiers multiples", true, "Lien créé avec le token: " . $shareToken);
+            
+            // Récupérer les informations du lien
+            $link = Links::getByToken($shareToken);
+            if ($link) {
+                // Vérifier que les deux fichiers sont bien associés au lien
+                $fileLinks = FileLink::getByLink_id($link->linkid);
+                
+                if (count($fileLinks) == 2) {
+                    displayResult("Association des fichiers au lien", true, "Les deux fichiers sont correctement associés au lien");
+                    
+                    echo "<p>Pour tester le téléchargement multiple, accédez à: <a href='download.php?token=$shareToken'>download.php?token=$shareToken</a></p>";
+                } else {
+                    displayResult("Association des fichiers au lien", false, "Nombre incorrect de fichiers associés au lien: " . count($fileLinks) . " (attendu: 2)");
+                }
+            } else {
+                displayResult("Récupération du lien", false, "Impossible de récupérer le lien créé");
+            }
+        } else {
+            displayResult("Création de lien pour fichiers multiples", false, "Échec de la création du lien");
+        }
+    } else {
+        displayResult("Upload de fichiers multiples", false, "Échec de l'upload d'un ou plusieurs fichiers");
+    }
+} else {
+    displayResult("Test d'upload multiple", false, "Impossible de tester sans utilisateur valide");
+}
+
+// Affichage des résultats
+echo "<h2>Résumé des tests</h2>";
+echo "<p>Les tests ont été exécutés. Vérifiez les résultats ci-dessus pour voir si tous les tests ont réussi.</p>";
 
 echo "<h2>Nettoyage des données de test</h2>";
 echo "<form method='post'>";

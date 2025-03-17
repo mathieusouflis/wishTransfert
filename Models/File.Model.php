@@ -26,6 +26,7 @@ class File {
         $file->filedata = $result[0]["file_data"];
         $file->downloadcount = $result[0]["download_count"];
         $file->status = $result[0]["status"];
+        // Correction: Accès au bon index du tableau
         $file->type = $result[0]["type"];
         $file->createdat = $result[0]["created_at"];
 
@@ -48,7 +49,8 @@ class File {
             $file->filedata = $result["file_data"];
             $file->downloadcount = $result["download_count"];
             $file->status = $result["status"];
-            $file->type = $result[0]["type"];
+            // Correction: Accès direct au tableau result sans index supplémentaire
+            $file->type = $result["type"];
             $file->createdat = $result["created_at"];
             $files[] = $file;
         }
@@ -64,7 +66,8 @@ class File {
             "title" => $title, 
             "file_data" => $filedata, 
             "download_count" => $downloadcount, 
-            "status" => $status
+            "status" => $status,
+            "type" => $type // Ajout: Inclure le type dans l'insertion
         ]);
 
         $file = new self();
@@ -74,18 +77,17 @@ class File {
         $file->filedata = $result["file_data"];
         $file->downloadcount = $result["download_count"];
         $file->status = $result["status"];
-        $file->type = $result[0]["type"];
+        // Correction: Accès direct au tableau result sans index supplémentaire
+        $file->type = $result["type"];
         $file->createdat = $result["created_at"];
-        $files[] = $file;
         return $file;
     }
 
     public static function moveToBin($fileid){
         $status = "Trash";
         $result = Model::update(self::$table, [
-            "file_id" => $fileid,
             "status" => $status
-        ]);
+        ], ["file_id" => $fileid]);
         
         $file = new self();
         $file->fileid = $result["file_id"];
@@ -94,7 +96,8 @@ class File {
         $file->filedata = $result["file_data"];
         $file->downloadcount = $result["download_count"];
         $file->status = $result["status"];
-        $file->type = $result[0]["type"];
+        // Correction: Accès direct au tableau result sans index supplémentaire
+        $file->type = $result["type"];
         $file->createdat = $result["created_at"];
 
         return $file;
@@ -110,7 +113,8 @@ class File {
         $file->filedata = $result["file_data"];
         $file->downloadcount = $result["download_count"];
         $file->status = $result["status"];
-        $file->type = $result[0]["type"];
+        // Correction: Accès direct au tableau result sans index supplémentaire
+        $file->type = $result["type"];
         $file->createdat = $result["created_at"];
 
         return $file;

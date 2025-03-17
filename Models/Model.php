@@ -24,9 +24,9 @@ class Model {
         
         $query .= implode(' AND ', $keys);
         
-        
+        // Correction: Ajout de l'opérateur de concaténation (.=) pour la clause LIMIT
         if($limit !== 0){
-            $query." LIMIT $limit";
+            $query .= " LIMIT $limit";
         }
 
         $stmt = self::$db->prepare($query);
@@ -57,8 +57,19 @@ class Model {
         $stmt->execute($values);
         
         $lastInsertId = self::$db->lastInsertId();
-        $insertedObject = self::find($table, ['id' => $lastInsertId], 1);
-        return $insertedObject;
+        
+        // Déterminer la clé primaire en fonction de la table
+        $primaryKey = self::getPrimaryKeyForTable($table);
+        
+        $insertedObject = self::find($table, [$primaryKey => $lastInsertId], 1);
+        
+        // Si aucun résultat n'est trouvé, retourner false
+        if (empty($insertedObject)) {
+            return false;
+        }
+        
+        // Retourner le premier élément du tableau
+        return $insertedObject[0];
     }
 
     public static function update($table, $newValueParams = [], $whereParams = []){
@@ -94,10 +105,15 @@ class Model {
         $stmt = self::$db->prepare($query);
         $stmt->execute($values);
         
-        // Merge new values with where parameters to fetch the updated object
-        $fetchParams = array_merge($whereParams, $newValueParams);
-        $updatedObject = self::find($table, $fetchParams, 1);
-        return $updatedObject;
+        // Fetch the updated object using the where parameters
+        // (new value params may not always be good for fetching)
+        $updatedObject = self::find($table, $whereParams, 1);
+        
+        if (empty($updatedObject)) {
+            return false;
+        }
+        
+        return $updatedObject[0];
     }
 
     public static function delete($table, $params = []){
@@ -120,5 +136,35 @@ class Model {
         $stmt->execute($values);
         
         return $deletedObject;
+    }
+    
+    /**
+     * Retourne la clé primaire d'une table spécifique
+     * 
+     * @param string $table Le nom de la table
+     * @return string Le nom de la colonne de clé primaire
+     */
+    private static function getPrimaryKeyForTable($table) {
+        // Normaliser le nom de la table en minuscules pour les comparaisons
+        $tableLowercase = strtolower($table);
+        
+        switch ($tableLowercase) {
+            case 'users':
+            case 'utilisateurs':
+                return 'user_id';
+            case 'files':
+                return 'file_id';
+            case 'links':
+                return 'link_id';
+            case 'files_links':
+                return 'file_link_id';
+            case 'emails_links':
+                return 'file_link_id';
+            case 'comments':
+                return 'comment_id';
+            default:
+                // Par défaut, on suppose que la clé primaire est 'id'
+                return 'id';
+        }
     }
 }

@@ -13,11 +13,13 @@ $authc->LogIn();
 <body>
     <?php require_once './utils/erreurs.php'; ?>
     <form method="POST">
-        <label for="identifiant">Identifiant</label>
-        <input type="text" id="identifiant" name="identifiant">
+        <!-- Correction: Changement de "identifiant" à "email" pour correspondre au contrôleur -->
+        <label for="email">Email</label>
+        <input type="text" id="email" name="email">
 
-        <label for="motdepasse">Mot de passe</label>
-        <input type="password" name="motdepasse" id="motdepasse">
+        <!-- Correction: Changement de "motdepasse" à "password" pour correspondre au contrôleur -->
+        <label for="password">Mot de passe</label>
+        <input type="password" name="password" id="password">
 
         <input type="submit" value="Connexion">
     </form>

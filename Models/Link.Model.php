@@ -13,6 +13,7 @@ class Links {
         $result = Model::find(self::$table, ['link_id' => $linkid], 1);
 
         $link = new self();
+        // Correction: Accès direct au premier élément du tableau result sans index supplémentaire
         $link->linkid = $result[0]["link_id"];
         $link->userid = $result[0]["user_id"];
         $link->token = $result[0]["token"];
@@ -25,6 +26,7 @@ class Links {
         $result = Model::find(self::$table, ['file_id' => $fileid], 1);
 
         $link = new self();
+        // Correction: Accès direct au premier élément du tableau result sans index supplémentaire
         $link->linkid = $result[0]["link_id"];
         $link->fileid = $result[0]["file_id"];
         $link->userid = $result[0]["user_id"];
@@ -41,10 +43,11 @@ class Links {
 
         foreach ($results as $result) {
             $link = new self();
-            $link->linkid = $result[0]["link_id"];
-            $link->userid = $result[0]["user_id"];
-            $link->token = $result[0]["token"];
-            $link->createdat = $result[0]["created_at"];
+            // Correction: Accès direct au tableau result sans index supplémentaire
+            $link->linkid = $result["link_id"];
+            $link->userid = $result["user_id"];
+            $link->token = $result["token"];
+            $link->createdat = $result["created_at"];
             $links[] = $link;
         }
 
@@ -55,6 +58,7 @@ class Links {
         $result = Model::find(self::$table, ['token' => $token], 1);
 
         $link = new self();
+        // Correction: Accès direct au premier élément du tableau result sans index supplémentaire
         $link->linkid = $result[0]["link_id"];
         $link->userid = $result[0]["user_id"];
         $link->token = $result[0]["token"];
@@ -68,10 +72,11 @@ class Links {
         $result = Model::insert(self::$table, ["user_id"=> $userid, "token"=> $token]);
         
         $link = new self();
-        $link->linkid = $result[0]["link_id"];
-        $link->userid = $result[0]["user_id"];
-        $link->token = $result[0]["token"];
-        $link->createdat = $result[0]["created_at"];
+        // Correction: Accès direct au tableau result sans index supplémentaire
+        $link->linkid = $result["link_id"];
+        $link->userid = $result["user_id"];
+        $link->token = $result["token"];
+        $link->createdat = $result["created_at"];
 
         return $link;
     }
@@ -80,10 +85,11 @@ class Links {
         $result = Model::delete(self::$table, ["link_id"=> $linkid]);
 
         $link = new self();
-        $link->linkid = $result[0]["link_id"];
-        $link->userid = $result[0]["user_id"];
-        $link->token = $result[0]["token"];
-        $link->createdat = $result[0]["created_at"];
+        // Correction: Accès direct au tableau result sans index supplémentaire
+        $link->linkid = $result["link_id"];
+        $link->userid = $result["user_id"];
+        $link->token = $result["token"];
+        $link->createdat = $result["created_at"];
 
         return $link;
     }

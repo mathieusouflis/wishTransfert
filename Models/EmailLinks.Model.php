@@ -2,9 +2,11 @@
 require_once './Models/Model.php';
 
 class EmailLink {
-    public $email_link_id;
+    // Correction: Renommage de la propriété pour correspondre à la colonne de la base de données
+    public $file_link_id;
     public $link_id;
     public $email;
+    // Correction: Nom de la table incorrect, c'était le nom d'une colonne
     private static $table = "emails_links";
 
     public static function getByEmail($email) {
@@ -13,9 +15,9 @@ class EmailLink {
         $email_links = [];
         foreach ($results as $result) {
             $email_link = new self();
-            $email_link->email_link_id = $result[0]["email_link_id"];
-            $email_link->link_id = $result[0]["link_id"];
-            $email_link->email = $result[0]["email"];
+            $email_link->file_link_id = $result["file_link_id"];
+            $email_link->link_id = $result["link_id"];
+            $email_link->email = $result["email"];
             $email_links[] = $email_link;
         }
 
@@ -28,9 +30,9 @@ class EmailLink {
         $email_links = [];
         foreach ($results as $result) {
             $email_link = new self();
-            $email_link->email_link_id = $result[0]["email_link_id"];
-            $email_link->link_id = $result[0]["link_id"];
-            $email_link->email = $result[0]["email"];
+            $email_link->file_link_id = $result["file_link_id"];
+            $email_link->link_id = $result["link_id"];
+            $email_link->email = $result["email"];
             $email_links[] = $email_link;
         }
         
@@ -40,10 +42,14 @@ class EmailLink {
     public static function createEmailLinks($link_id, $email){
         $result = Model::insert(self::$table, ["link_id"=> $link_id, "email"=> $email]);
         
+        if (!$result) {
+            return false;
+        }
+        
         $email_link = new self();
-        $email_link->email_link_id = $result[0]["email_link_id"];
-        $email_link->link_id = $result[0]["link_id"];
-        $email_link->email = $result[0]["email"];
+        $email_link->file_link_id = $result["file_link_id"];
+        $email_link->link_id = $result["link_id"];
+        $email_link->email = $result["email"];
 
         return $email_link;
     }
@@ -59,10 +65,14 @@ class EmailLink {
         
         $result = Model::delete(self::$table, $conditions);
         
+        if (!$result) {
+            return false;
+        }
+        
         $email_link = new self();
-        $email_link->email_link_id = $result[0]["email_link_id"];
-        $email_link->link_id = $result[0]["link_id"];
-        $email_link->email = $result[0]["email"];
+        $email_link->file_link_id = $result["file_link_id"];
+        $email_link->link_id = $result["link_id"];
+        $email_link->email = $result["email"];
 
         return $email_link;
     }
