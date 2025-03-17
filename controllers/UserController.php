@@ -14,11 +14,15 @@ class UserController{
                     $errors[] = "Email already exists";
                 }else {
                     if(!isset($_SESSION)) session_start();
-                    $modifyRequest = User::update($_SESSION["user_id"], null, null, $email);
-                    if($modifyRequest){
-                        return true;
-                    }else{
-                        $errors[] = "An error occured";
+                    if(User::isEmailUnique($email)){
+                        $modifyRequest = User::update($_SESSION["user_id"], null, null, $email);
+                        if($modifyRequest){
+                            return true;
+                        }else{
+                            $errors[] = "An error occured";
+                        }
+                    }else {
+                        $errors[] = "Email allready taken.";
                     }
                 }
             }
@@ -34,11 +38,15 @@ class UserController{
                 $errors[] = "Everything is empty, can't edit";
             }else {
                 if(!isset($_SESSION)) session_start();
-                $modifyRequest = User::update($_SESSION["user_id"], $username ? null : $username, null, null);
-                if(!$modifyRequest){
-                    $errors[] = "An error occured";
-                }else {
-                    return true;
+                if($username && User::isUsernameUnique($username)){
+                    $modifyRequest = User::update($_SESSION["user_id"], $username ? null : $username, null, null);
+                    if(!$modifyRequest){
+                        $errors[] = "An error occured";
+                    }else {
+                        return true;
+                    }
+                } else {
+                    $errors[] = "Username allready taken.";
                 }
             }
         }
@@ -54,6 +62,8 @@ class UserController{
         }
         if(empty($newPassword)){
             $errors[] = "New password is required";
+        } else if (User::isPasswordValid($newPassword)) {
+            $errors[] = "Password not ok";
         }
         if(empty($newPasswordConfirm)){
             $errors[] = "New password confirmation is required";
