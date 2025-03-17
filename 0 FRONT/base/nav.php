@@ -1,7 +1,7 @@
 <?php
 require_once "./0 FRONT/composents/buttons.php";
 
-$isConnected = true;
+$isConnected = false;
 $email = "mathieu@souflis.fr";
 $avatar = "https://cdn.cosmos.so/1f89cd92-f0ca-4715-90f8-3b1e2e20b224?format=jpeg";
 

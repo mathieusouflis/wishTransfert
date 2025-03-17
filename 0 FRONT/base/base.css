@@ -7,6 +7,7 @@
     --white-100: #FFF;
     --white-110: #F1F1F1;
     --white-120: #F5F5F5;
+    --white-130: #CBCBCB;
     
     --black-100: #000;
     --black-110: #767676;
@@ -71,6 +72,9 @@ body {
 .radius-10 {
     border-radius: 10px;
 }
+.radius-20 {
+    border-radius: 20px;
+}
 
 .radius-4 {
     border-radius: 4px;
@@ -110,12 +114,20 @@ body {
     background-color: var(--red-100);
 }
 
+.pl-54 {
+    padding-left: 54px;
+}
+
 .bg-white {
     background-color: var(--white-100);
 }
 
 .bg-gray {
     background-color: var(--white-120);
+}
+
+.bg-white-130 {
+    background-color: var(--white-130)
 }
 
 .button.bg-primary:hover {
@@ -146,6 +158,18 @@ body {
     gap: 10px;
 }
 
+.text-center {
+    text-align: center;
+}
+
+.w-272 {
+    width: 272px;
+}
+
+.gap-20 {
+    gap: 20px;
+}
+
 .gap-4 {
     gap: 4px;
 }
@@ -155,8 +179,21 @@ body {
     padding-bottom: 8px;
 }
 
+.py-20 {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.pr-20 {
+    padding-right: 20px;
+}
+
 .p-4 {
     padding: 4px;
+}
+
+.p-16 {
+    padding: 16px;
 }
 
 .p-10 {
@@ -228,12 +265,19 @@ body {
 .justify-end {
     justify-content: end;
 }
+.justify-center {
+    justify-content: center;
+}
 
 .radius-12 {
     border-radius: 12px;
 }
 .input:hover {
     border-color: var(--black-120);
+}
+
+.relative {
+    position: relative;
 }
 
 .input:has(input:focus) {
@@ -246,4 +290,51 @@ input:focus {
 
 .justify-between {
     justify-content: space-between;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.bottom-10 {
+    bottom: 10px;
+}
+
+.right-10 {
+    right: 10px;
+}
+
+.page-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.left-20 {
+    left: 20px;
+}
+
+.left-10 {
+    left: 10px;
+}
+
+.top-8 {
+    top: 8px;
+}
+
+.pl-33 {
+    padding-left: 33px;
+}
+
+.pr-10 {
+    padding-right: 10px;
+}
+
+.top-20 {
+    top: 20px;
+}
+
+.pointer-events-none {
+    pointer-events: none;
 }

@@ -6,7 +6,7 @@ function getIcon($iconName, $color = "black") {
         case 'link':
             ?>
             
-            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 13 13" fill="none">
+            <svg xmlns="http://www.w3.org/2000/svg"width="100%" height="100%" viewBox="0 0 13 13" fill="none">
                 <g clip-path="url(#clip0_8592_248)">
                     <path d="M8.9375 4.0625L4.0625 8.9375" stroke="<?=$color?>" stroke-width="1.08333" stroke-linecap="round"/>
                     <path d="M7.01132 9.38326C6.79558 10.8175 5.55809 11.9171 4.06372 11.9171C2.4174 11.9171 1.08279 10.5825 1.08279 8.93611C1.08279 7.44176 2.18238 6.20422 3.61659 5.98853" stroke="<?=$color?>" stroke-width="1.08333" stroke-linecap="round"/>
@@ -103,7 +103,7 @@ function getIcon($iconName, $color = "black") {
 
 }
 
-function icon($iconName, $size="little", $color="black"){
+function icon($iconName, $size="little", $color="black", $style=""){
     $sizeStyle = "w-13";
 
     if($size === "big"){
@@ -111,7 +111,7 @@ function icon($iconName, $size="little", $color="black"){
     }
 
     ?>
-    <div class="<?=$sizeStyle?> lock-ratio">
+    <div class="<?=$sizeStyle?> lock-ratio pointer-events-none <?=$style?>">
         <?=getIcon($iconName, $color)?>
     </div>
     <?php
