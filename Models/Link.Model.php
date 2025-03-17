@@ -66,7 +66,14 @@ class Links {
     public static function createLink($userid){
         $token = bin2hex(random_bytes(32));
         $result = Model::insert(self::$table, ["user_id"=> $userid, "token"=> $token]);
-        return $result;
+        
+        $link = new self();
+        $link->linkid = $result[0]["link_id"];
+        $link->userid = $result[0]["user_id"];
+        $link->token = $result[0]["token"];
+        $link->createdat = $result[0]["created_at"];
+
+        return $link;
     }
     
     public static function deleteLink($linkid){

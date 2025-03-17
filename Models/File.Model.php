@@ -66,7 +66,18 @@ class File {
             "download_count" => $downloadcount, 
             "status" => $status
         ]);
-        return $result;
+
+        $file = new self();
+        $file->fileid = $result["file_id"];
+        $file->userid = $result["user_id"];
+        $file->title = $result["title"];
+        $file->filedata = $result["file_data"];
+        $file->downloadcount = $result["download_count"];
+        $file->status = $result["status"];
+        $file->type = $result[0]["type"];
+        $file->createdat = $result["created_at"];
+        $files[] = $file;
+        return $file;
     }
 
     public static function moveToBin($fileid){

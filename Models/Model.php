@@ -55,7 +55,10 @@ class Model {
         $query .= ")";
         $stmt = self::$db->prepare($query);
         $stmt->execute($values);
-        return true;
+        
+        $lastInsertId = self::$db->lastInsertId();
+        $insertedObject = self::find($table, ['id' => $lastInsertId], 1);
+        return $insertedObject;
     }
 
     public static function update($table, $newValueParams = [], $whereParams = []){
