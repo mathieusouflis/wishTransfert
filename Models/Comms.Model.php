@@ -65,7 +65,15 @@ class Comments {
 
     public static function createComment($fileid, $userid, $content){
         $result = Model::insert(self::$table, ["file_id" => $fileid, "user_id" => $userid, "content" => $content]);
-        return $result;
+        
+        $comment = new self();
+        $comment->commentid = $result["comment_id"];
+        $comment->fileid = $result["file_id"];
+        $comment->userid = $result["user_id"];
+        $comment->content = $result["content"];
+        $comment->createdat = $result["created_at"];
+
+        return $comment;
     }
 
     public static function updateComment($commentid, $content) {
@@ -76,12 +84,28 @@ class Comments {
             ),
             ["comment_id" => $commentid]
         );
-        return $result;
+
+        $comment = new self();
+        $comment->commentid = $result["comment_id"];
+        $comment->fileid = $result["file_id"];
+        $comment->userid = $result["user_id"];
+        $comment->content = $result["content"];
+        $comment->createdat = $result["created_at"];
+
+        return $comment;
     }
 
     public static function deleteComment($commentid){
         $result = Model::delete(self::$table, ["comment_id"=> $commentid]);
-        return $result;
+        
+        $comment = new self();
+        $comment->commentid = $result["comment_id"];
+        $comment->fileid = $result["file_id"];
+        $comment->userid = $result["user_id"];
+        $comment->content = $result["content"];
+        $comment->createdat = $result["created_at"];
+        
+        return $comment;
     }
 }
 ?>

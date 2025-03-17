@@ -86,11 +86,33 @@ class File {
             "file_id" => $fileid,
             "status" => $status
         ]);
-        return $result;
+        
+        $file = new self();
+        $file->fileid = $result["file_id"];
+        $file->userid = $result["user_id"];
+        $file->title = $result["title"];
+        $file->filedata = $result["file_data"];
+        $file->downloadcount = $result["download_count"];
+        $file->status = $result["status"];
+        $file->type = $result[0]["type"];
+        $file->createdat = $result["created_at"];
+
+        return $file;
     }
 
     public static function deleteFile($fileid){
         $result = Model::delete(self::$table, ["file_id"=> $fileid]);
-        return $result;
+        
+        $file = new self();
+        $file->fileid = $result["file_id"];
+        $file->userid = $result["user_id"];
+        $file->title = $result["title"];
+        $file->filedata = $result["file_data"];
+        $file->downloadcount = $result["download_count"];
+        $file->status = $result["status"];
+        $file->type = $result[0]["type"];
+        $file->createdat = $result["created_at"];
+
+        return $file;
     }
 }

@@ -39,7 +39,13 @@ class EmailLink {
 
     public static function createEmailLinks($link_id, $email){
         $result = Model::insert(self::$table, ["link_id"=> $link_id, "email"=> $email]);
-        return $result;
+        
+        $email_link = new self();
+        $email_link->email_link_id = $result[0]["email_link_id"];
+        $email_link->link_id = $result[0]["link_id"];
+        $email_link->email = $result[0]["email"];
+
+        return $email_link;
     }
     
     public static function deleteEmailLinks($email = null, $link_id = null){
@@ -52,7 +58,13 @@ class EmailLink {
         }
         
         $result = Model::delete(self::$table, $conditions);
-        return $result;
+        
+        $email_link = new self();
+        $email_link->email_link_id = $result[0]["email_link_id"];
+        $email_link->link_id = $result[0]["link_id"];
+        $email_link->email = $result[0]["email"];
+
+        return $email_link;
     }
 }
 ?>

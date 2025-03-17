@@ -68,7 +68,14 @@ class User {
             try {
                 $result = Model::insert(self::$table, ["username"=> $username,"password"=> $password,"email"=> $email]);
                 error_log("Insertion réussie");
-                return $result;
+
+                $user = new self();
+                $user->id = $result[0]["user_id"];
+                $user->username = $result[0]["username"];
+                $user->password = $result[0]["password"];
+                $user->email = $result[0]["email"];
+                
+                return $user;
             } catch (Exception $e) {
                 error_log("Erreur d'insertion: " . $e->getMessage());
                 $errors[] = "Database error: " . $e->getMessage();
@@ -104,7 +111,14 @@ class User {
                 ),
                 ["user_id"=> $id]
             );
-            return $result;
+
+            $user = new self();
+            $user->id = $result[0]["user_id"];
+            $user->username = $result[0]["username"];
+            $user->password = $result[0]["password"];
+            $user->email = $result[0]["email"];
+            
+            return $user;
         }else{
             return false;
         }
@@ -112,7 +126,14 @@ class User {
 
     public static function delete($id){
         $result = Model::delete(self::$table, ["user_id"=> $id]);
-        return $result;
+
+        $user = new self();
+        $user->id = $result[0]["user_id"];
+        $user->username = $result[0]["username"];
+        $user->password = $result[0]["password"];
+        $user->email = $result[0]["email"];
+        
+        return $user;
     }
 
     public static function isPasswordValid($password){
