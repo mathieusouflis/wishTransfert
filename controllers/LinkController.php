@@ -2,6 +2,7 @@
 require_once ("Models/Link.Model.php");
 require_once ("Models/FileLink.Model.php");
 require_once ("Models/File.Model.php");
+require_once ("controllers/FileController.php");
 
 class LinkController{
 
@@ -26,15 +27,15 @@ class LinkController{
         }
     }
 
-    public function getFiles($link_token){
+    public function getFiles(){
+        $link_token = $_GET['token'];
         $link = Links::getByToken($link_token);
         $filesIds = FileLink::getByLink_id($link->linkid);
         $files = [];
         foreach($filesIds as $id){
             $files[] = File::getByFileId( $id );
         }
+        FileController::downloadFile($files);
     }
 
 }
-
-// COMMENT ON FAIT POUR LIER L'HTML ET LE PHP POUR LE DELETE ?

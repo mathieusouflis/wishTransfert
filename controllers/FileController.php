@@ -6,9 +6,9 @@ class FileController {
     private $title;
     private $filedata;
     
-    public function uploadFile($userid, $title, $type, $filedata){
+    public static function uploadFile($userid, $title, $type, $filedata){
         // Vérification de la taille
-        if (strlen($filedata) > 20 * 1024 * 1024) {
+        if (strlen($filedata) > 20 * 1024 * 1024) { //TODO: AJOUTER LA TAILLE MAX AVEC LE CONFIG
             return false;
         }
         
@@ -19,29 +19,37 @@ class FileController {
         }
         
         // Renommage du fichier
-        $newFilename = uniqid() . '_' . $title;
+        $newFilename = uniqid() . '_' . $title; //COMMENT: Pas besoin comme on met tout dans la DB
         
         return File::createFile($userid, $newFilename, $type, $filedata);
     }
     
-    public function deleteFile($fileid){
+    public static function deleteFile($fileid){
         return File::deleteFile($fileid);
     }
-    public function downloadFile($fileid){
-        File::downloadFile($fileid);
+    public static function downloadFile($fileid){
+        // TODO: Doit être fait pour plusieurs fichiers
+        $file = File::getByFileId($fileid);
+        $filename = $file->title; 
+        $filedata = $file->filedata; 
+        $filetype = $file->type; 
+    
+        // Définir les headers HTTP pour le téléchargement
+        header("Content-Type: " . $filetype);
+        header("Content-Disposition: attachment; filename=\"$filename\"");
+        header("Content-Length: " . strlen($filedata));
+    
+        echo $filedata;
         exit;
     }
     
-    public function moveToBin($userid, $title, $filedata){
-        $status = "Trash";
-        return File::moveToBin($userid, $title, $filedata);
+    public static function moveToBin($fileid){
+        return File::moveToBin($fileid);
     }
 }
 
-if($_SERVER["REQUEST_METHOD"]=== "POST"){
+if($_SERVER["REQUEST_METHOD"] === "POST"){
     
-    
-    $fileController = new FileController();
     if(isset($_POST["create"])) {
         $files = $_FILES["files"]["tmp_name"];
         $userid = 1232;
@@ -49,22 +57,12 @@ if($_SERVER["REQUEST_METHOD"]=== "POST"){
             $title = $_FILES["files"]["name"][$index];
             $type = $_FILES["files"]["type"][$index];
             $filedata = file_get_contents($tmpName);
-            $fileController->uploadFile($userid,$title,$type,$filedata);
+            FileController::uploadFile($userid, $title, $type, $filedata);
         }
     }
-    if(isset($_POST["delete"])) $fileController->deleteFile($userid, $title, $filedata);
-    if(isset($_POST["download"])) $fileController->downloadFile($fileid);
-    //$file = $_FILES["file"];
-    //
-    //if (!isset($_SESSION)) {
-    //    session_start();
-    //}
-    //
-    //$userid = $_SESSION["user_id"] ?? 1232; // Fallback pour le test
-    //$title = $file["name"];
-    //$type = $file["type"];
-    //$filedata = file_get_contents($file["tmp_name"]);
     
-    //if(isset($_POST["create"])) FileController::uploadFile($userid, $title, $type, $filedata);
-    //if(isset($_POST["delete"])) FileController::deleteFile($fileid);
+    if(isset($_POST["delete"])) {
+        $fileid = $_POST["fileid"];
+        FileController::deleteFile($fileid);
+    }
 }
