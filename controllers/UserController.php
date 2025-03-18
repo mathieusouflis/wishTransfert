@@ -2,7 +2,7 @@
 require_once "Models/User.Model.php";
 
 class UserController{
-    public function editEmail(){
+    public static function editEmail(){
         if($_SERVER["REQUEST_METHOD"] === "POST"){
             $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
 
@@ -14,37 +14,45 @@ class UserController{
                     $errors[] = "Email already exists";
                 }else {
                     if(!isset($_SESSION)) session_start();
-                    $modifyRequest = User::update($_SESSION["user_id"], null, null, $email);
-                    if($modifyRequest){
-                        return true;
-                    }else{
-                        $errors[] = "An error occured";
+                    if(User::isEmailUnique($email)){
+                        $modifyRequest = User::update($_SESSION["user_id"], null, null, $email);
+                        if($modifyRequest){
+                            return true;
+                        }else{
+                            $errors[] = "An error occured";
+                        }
+                    }else {
+                        $errors[] = "Email allready taken.";
                     }
                 }
             }
         }
     }
 
-    public function editProfile(){
+    public static function editProfile(){
         if($_SERVER["REQUEST_METHOD"] === "POST"){
-            $username = filter_input(INPUT_POST,"username", FILTER_SANITIZE_STRING);
+            $username = filter_input(INPUT_POST,"username");
             $avatar = filter_input(INPUT_POST,"avatar");
 
             if(empty($username && empty($avatar))){
                 $errors[] = "Everything is empty, can't edit";
             }else {
                 if(!isset($_SESSION)) session_start();
-                $modifyRequest = User::update($_SESSION["user_id"], $username ? null : $username, null, null);
-                if(!$modifyRequest){
-                    $errors[] = "An error occured";
-                }else {
-                    return true;
+                if($username && User::isUsernameUnique($username)){
+                    $modifyRequest = User::update($_SESSION["user_id"], $username ? null : $username, null, null);
+                    if(!$modifyRequest){
+                        $errors[] = "An error occured";
+                    }else {
+                        return true;
+                    }
+                } else {
+                    $errors[] = "Username allready taken.";
                 }
             }
         }
     }
 
-    public function editPassword(){
+    public static function editPassword(){
         $oldPassword = filter_input(INPUT_POST,"oldPassword");
         $newPassword = filter_input(INPUT_POST,"newPassword");
         $newPasswordConfirm = filter_input(INPUT_POST,"newPasswordConfirm");
@@ -54,6 +62,8 @@ class UserController{
         }
         if(empty($newPassword)){
             $errors[] = "New password is required";
+        } else if (User::isPasswordValid($newPassword)) {
+            $errors[] = "Password not ok";
         }
         if(empty($newPasswordConfirm)){
             $errors[] = "New password confirmation is required";
@@ -72,7 +82,7 @@ class UserController{
         }
     }
 
-    public function delete(){
+    public static function delete(){
         if($_SERVER["REQUEST_METHOD"] === "POST"){
             if(!isset($_SESSION)) session_start();
             $userId = $_SESSION["user_id"];

@@ -10,6 +10,7 @@ class Model {
         if (empty($params)) {
             $stmt = self::$db->prepare("SELECT * FROM $table");
             $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         $query = "SELECT * FROM $table WHERE ";
@@ -23,9 +24,9 @@ class Model {
         
         $query .= implode(' AND ', $keys);
         
-        
+        // Correction: Ajout de l'opérateur de concaténation (.=) pour la clause LIMIT
         if($limit !== 0){
-            $query." LIMIT $limit";
+            $query .= " LIMIT $limit";
         }
 
         $stmt = self::$db->prepare($query);
@@ -44,7 +45,7 @@ class Model {
         $columns = [];
         $values = [];
         foreach($params as $key => $value) {
-            $columns[] = "$key";
+            $columns[] = $key;
             $values[] = $value;
         }
         
@@ -54,7 +55,21 @@ class Model {
         $query .= ")";
         $stmt = self::$db->prepare($query);
         $stmt->execute($values);
-        return true;
+        
+        $lastInsertId = self::$db->lastInsertId();
+        
+        // Déterminer la clé primaire en fonction de la table
+        $primaryKey = self::getPrimaryKeyForTable($table);
+        
+        $insertedObject = self::find($table, [$primaryKey => $lastInsertId], 1);
+        
+        // Si aucun résultat n'est trouvé, retourner false
+        if (empty($insertedObject)) {
+            return false;
+        }
+        
+        // Retourner le premier élément du tableau
+        return $insertedObject[0];
     }
 
     public static function update($table, $newValueParams = [], $whereParams = []){
@@ -90,11 +105,25 @@ class Model {
         $stmt = self::$db->prepare($query);
         $stmt->execute($values);
         
-        return true;
+        // Fetch the updated object using the where parameters
+        // (new value params may not always be good for fetching)
+        $updatedObject = self::find($table, $whereParams, 1);
+        
+        if (empty($updatedObject)) {
+            return false;
+        }
+        
+        return $updatedObject[0];
     }
 
     public static function delete($table, $params = []){
         new self();
+        $deletedObject = self::find($table, $params, 1);
+        if (empty($deletedObject)) {
+            return false;
+        }
+        $deletedObject = $deletedObject[0];
+
         $query = "DELETE FROM $table WHERE ";
         $columns = [];
         $values = [];
@@ -106,6 +135,36 @@ class Model {
         $stmt = self::$db->prepare($query);
         $stmt->execute($values);
         
-        return true;
+        return $deletedObject;
+    }
+    
+    /**
+     * Retourne la clé primaire d'une table spécifique
+     * 
+     * @param string $table Le nom de la table
+     * @return string Le nom de la colonne de clé primaire
+     */
+    private static function getPrimaryKeyForTable($table) {
+        // Normaliser le nom de la table en minuscules pour les comparaisons
+        $tableLowercase = strtolower($table);
+        
+        switch ($tableLowercase) {
+            case 'users':
+            case 'utilisateurs':
+                return 'user_id';
+            case 'files':
+                return 'file_id';
+            case 'links':
+                return 'link_id';
+            case 'files_links':
+                return 'file_link_id';
+            case 'emails_links':
+                return 'email_link_id';
+            case 'comments':
+                return 'comment_id';
+            default:
+                // Par défaut, on suppose que la clé primaire est 'id'
+                return 'id';
+        }
     }
 }

@@ -2,8 +2,7 @@
 require_once './controllers/AuthController.php';
 require_once "./0 FRONT/composents/input.php";
 require_once "./0 FRONT/composents/buttons.php";
-$authc = new AuthC();
-$authc->LogIn();
+AuthController::LogIn();
 
 
 require_once '0 FRONT/base/header.php';
@@ -19,6 +18,19 @@ require_once '0 FRONT/base/nav.php';
     </form>
 </div>
 </input>
+
+<!-- <?php //require_once './utils/erreurs.php'; ?> -->
+    <!-- <form method="POST"> -->
+        <!-- Correction: Changement de "identifiant" à "email" pour correspondre au contrôleur -->
+        <!-- <label for="email">Email</label> -->
+        <!-- <input type="text" id="email" name="email"> -->
+
+        <!-- Correction: Changement de "motdepasse" à "password" pour correspondre au contrôleur -->
+        <!-- <label for="password">Mot de passe</label> -->
+        <!-- <input type="password" name="password" id="password"> -->
+
+        <!-- <input type="submit" value="Connexion"> -->
+    <!-- </form> -->
 
 <?php
 
