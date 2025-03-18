@@ -22,10 +22,17 @@ require_once '0 FRONT/base/header.php';
         <h2 class="text-20 text-black">Link List</h2>
         <a href="index.php"><button class="text-black">X</button></a>
         </div>
+        <div class="flex flex-col">
         <div class="w-full h-full m-20 flex justify-between">
             <h3 class="w-198 text-start text-14 text-black">Link</h3>
             <h3 class="text-start text-14 text-black">Size</h3>
             <h3 class="text-start text-14 text-black">Views</h3>
+        </div>
+        <div class="w-full h-full m-20 flex justify-between">
+            <a href="localhost:...../downloads.php/?token="LETOKEN"&download_all=1"><?php littleButton("test") ?></a>
+            <button class="text-10 text-black">Copy</button>
+            <button class="text-10 text-black">X</button>
+        </div>
         </div>
     </div>
     </div>
