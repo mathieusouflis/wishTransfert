@@ -3,7 +3,7 @@ require_once './Models/Model.php';
 
 class EmailLink {
     // Correction: Renommage de la propriété pour correspondre à la colonne de la base de données
-    public $file_link_id;
+    public $email_link_id;
     public $link_id;
     public $email;
     // Correction: Nom de la table incorrect, c'était le nom d'une colonne
@@ -15,7 +15,7 @@ class EmailLink {
         $email_links = [];
         foreach ($results as $result) {
             $email_link = new self();
-            $email_link->file_link_id = $result["file_link_id"];
+            $email_link->email_link_id = $result["email_link_id"];
             $email_link->link_id = $result["link_id"];
             $email_link->email = $result["email"];
             $email_links[] = $email_link;
@@ -30,7 +30,7 @@ class EmailLink {
         $email_links = [];
         foreach ($results as $result) {
             $email_link = new self();
-            $email_link->file_link_id = $result["file_link_id"];
+            $email_link->email_link_id = $result["email_link_id"];
             $email_link->link_id = $result["link_id"];
             $email_link->email = $result["email"];
             $email_links[] = $email_link;
@@ -47,7 +47,7 @@ class EmailLink {
         }
         
         $email_link = new self();
-        $email_link->file_link_id = $result["file_link_id"];
+        $email_link->email_link_id = $result["email_link_id"];
         $email_link->link_id = $result["link_id"];
         $email_link->email = $result["email"];
 
@@ -70,7 +70,7 @@ class EmailLink {
         }
         
         $email_link = new self();
-        $email_link->file_link_id = $result["file_link_id"];
+        $email_link->email_link_id = $result["email_link_id"];
         $email_link->link_id = $result["link_id"];
         $email_link->email = $result["email"];
 
