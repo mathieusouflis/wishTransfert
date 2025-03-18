@@ -163,7 +163,7 @@ if (isset($testUserId)) {
 }
 
 echo "<h2>5. Test de réservation de téléchargement</h2>";
-if (isset($testUserId) && isset($testFileId) && isset($linkAuth)) {
+if (isset($testUserId) && isset($testFileId)) {
     $restrictedEmail = "restricted" . rand(1000, 9999) . "@example.com";
     
     // Créer un nouveau lien avec restriction par email

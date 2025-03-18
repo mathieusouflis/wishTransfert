@@ -13,7 +13,7 @@ if (!isset($_GET['token']) || empty($_GET['token'])) {
 $token = $_GET['token'];
 
 // Récupérer les informations du lien
-$linkInfo = LinkAuthController::getLinkInfo($token);
+$linkInfo = LinkAuthController::getLinkInfoForDownload($token);
 
 if (!$linkInfo) {
     header('Location: index.php?error=invalid_link');

@@ -15,7 +15,13 @@ class File {
     public static function getByFileId($fileid) {
         $result = Model::find(self::$table, ['file_id' => $fileid], 1);
         
-        if (empty($result)) {
+        if (!$result || empty($result)) {
+            return false;
+        }
+
+        if (isset($result[0])) {
+            $result = $result[0];
+        } else {
             return false;
         }
 

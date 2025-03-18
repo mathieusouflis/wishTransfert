@@ -12,6 +12,16 @@ class Links {
     public static function getByLinkId($linkid) {
         $result = Model::find(self::$table, ['link_id' => $linkid], 1);
 
+        if (!$result || empty($result)) {
+            return false;
+        }
+
+        if (isset($result[0])) {
+            $result = $result[0];
+        } else {
+            return false;
+        }
+
         $link = new self();
         // Correction: Accès direct au premier élément du tableau result sans index supplémentaire
         $link->linkid = $result["link_id"];
@@ -24,6 +34,16 @@ class Links {
 
     public static function getByFileId($fileid) {
         $result = Model::find(self::$table, ['file_id' => $fileid], 1);
+
+        if (!$result || empty($result)) {
+            return false;
+        }
+
+        if (isset($result[0])) {
+            $result = $result[0];
+        } else {
+            return false;
+        }
 
         $link = new self();
         // Correction: Accès direct au premier élément du tableau result sans index supplémentaire
@@ -56,6 +76,16 @@ class Links {
 
     public static function getByToken($token) {
         $result = Model::find(self::$table, ['token' => $token], 1);
+
+        if (!$result || empty($result)) {
+            return false;
+        }
+
+        if (isset($result[0])) {
+            $result = $result[0];
+        } else {
+            return false;
+        }
 
         $link = new self();
         // Correction: Accès direct au premier élément du tableau result sans index supplémentaire

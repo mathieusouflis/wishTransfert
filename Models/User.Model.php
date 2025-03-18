@@ -11,14 +11,17 @@ class User {
     public static function get($params){
         $result = Model::find(self::$table, $params, 1);
         
-        if(!$result || empty($result)) return false;
+        if (!$result || empty($result)) {
+            return false;
+        }
 
-        $user = new self();
-        // Correction: Accès direct au résultat sans l'index 0
-        if (!isset($result)) {
+        if (isset($result[0])) {
+            $result = $result[0];
+        } else {
             return false;
         }
         
+        $user = new self();
         $user->id = $result["user_id"];
         $user->username = $result["username"];
         $user->password = $result["password"];
