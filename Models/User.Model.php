@@ -15,16 +15,14 @@ class User {
 
         $user = new self();
         // Correction: Accès direct au résultat sans l'index 0
-        if (isset($result[0])) {
-            $data = $result[0];
-        } else {
-            $data = $result;
+        if (!isset($result)) {
+            return false;
         }
         
-        $user->id = $data["user_id"];
-        $user->username = $data["username"];
-        $user->password = $data["password"];
-        $user->email = $data["email"];
+        $user->id = $result["user_id"];
+        $user->username = $result["username"];
+        $user->password = $result["password"];
+        $user->email = $result["email"];
         
         return $user;
     }
@@ -96,7 +94,7 @@ class User {
                 return $user;
             } catch (Exception $e) {
                 error_log("Erreur d'insertion: " . $e->getMessage());
-                $errors[] = "Database error: " . $e->getMessage();
+                $errors[] = "resultbase error: " . $e->getMessage();
                 return false;
             }
         } else {

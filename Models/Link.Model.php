@@ -14,10 +14,10 @@ class Links {
 
         $link = new self();
         // Correction: Accès direct au premier élément du tableau result sans index supplémentaire
-        $link->linkid = $result[0]["link_id"];
-        $link->userid = $result[0]["user_id"];
-        $link->token = $result[0]["token"];
-        $link->createdat = $result[0]["created_at"];
+        $link->linkid = $result["link_id"];
+        $link->userid = $result["user_id"];
+        $link->token = $result["token"];
+        $link->createdat = $result["created_at"];
 
         return $link;
     }
@@ -27,11 +27,11 @@ class Links {
 
         $link = new self();
         // Correction: Accès direct au premier élément du tableau result sans index supplémentaire
-        $link->linkid = $result[0]["link_id"];
-        $link->fileid = $result[0]["file_id"];
-        $link->userid = $result[0]["user_id"];
-        $link->token = $result[0]["token"];
-        $link->createdat = $result[0]["created_at"];
+        $link->linkid = $result["link_id"];
+        $link->fileid = $result["file_id"];
+        $link->userid = $result["user_id"];
+        $link->token = $result["token"];
+        $link->createdat = $result["created_at"];
 
         return $link;
     }
@@ -59,10 +59,10 @@ class Links {
 
         $link = new self();
         // Correction: Accès direct au premier élément du tableau result sans index supplémentaire
-        $link->linkid = $result[0]["link_id"];
-        $link->userid = $result[0]["user_id"];
-        $link->token = $result[0]["token"];
-        $link->createdat = $result[0]["created_at"];
+        $link->linkid = $result["link_id"];
+        $link->userid = $result["user_id"];
+        $link->token = $result["token"];
+        $link->createdat = $result["created_at"];
 
         return $link;
     }

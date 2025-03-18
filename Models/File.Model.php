@@ -20,15 +20,15 @@ class File {
         }
 
         $file = new self();
-        $file->fileid = $result[0]["file_id"];
-        $file->userid = $result[0]["user_id"];
-        $file->title = $result[0]["title"];
-        $file->filedata = $result[0]["file_data"];
-        $file->downloadcount = $result[0]["download_count"];
-        $file->status = $result[0]["status"];
+        $file->fileid = $result["file_id"];
+        $file->userid = $result["user_id"];
+        $file->title = $result["title"];
+        $file->filedata = $result["file_data"];
+        $file->downloadcount = $result["download_count"];
+        $file->status = $result["status"];
         // Correction: Accès au bon index du tableau
-        $file->type = $result[0]["type"];
-        $file->createdat = $result[0]["created_at"];
+        $file->type = $result["type"];
+        $file->createdat = $result["created_at"];
 
         return $file;
     }
