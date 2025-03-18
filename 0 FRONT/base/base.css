@@ -54,6 +54,10 @@ body {
     width: 80px;
 }
 
+.text-start {
+    text-align: start;
+}
+
 .text-red {
     color: var(--red-120)
 }
@@ -183,8 +187,16 @@ body {
     text-align: center;
 }
 
+.w-198 {
+    width: 198px;
+}
+
 .w-272 {
     width: 272px;
+}
+
+.w-738 {
+    width: 738px;
 }
 
 .gap-20 {
@@ -319,6 +331,7 @@ body {
 .justify-end {
     justify-content: end;
 }
+
 .justify-center {
     justify-content: center;
 }
@@ -376,6 +389,13 @@ input:focus {
     position: absolute;
     top: 50%;
     left: 55%;
+    transform: translate(-33%, -50%);
+}
+
+.page-left3 {
+    position: absolute;
+    top: 50%;
+    left: 76%;
     transform: translate(-33%, -50%);
 }
 
