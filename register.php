@@ -11,11 +11,6 @@ require_once "./0 FRONT/composents/input.php";
 require_once "./0 FRONT/composents/buttons.php";
 require_once '0 FRONT/base/header.php';
 require_once '0 FRONT/base/nav.php';
-
-foreach ($errors as $error){
-    echo "<div class='alert alert-danger'>$error</div>";
-}
-
 ?>
 
 <div class="page-center flex flex-col p-16 bg-white radius-20 gap-20 w-272">
@@ -27,6 +22,7 @@ foreach ($errors as $error){
         <?php input("password2", "myseperbpassword", "password", required: true);?>
         <?php mediumButton("Register", "submit", style: "w-full" );?>
     </form>
+    <?php require_once './utils/erreurs.php';?>
 </div>
 </input>
 
