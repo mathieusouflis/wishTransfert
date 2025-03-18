@@ -2,7 +2,7 @@
 class Model {
     private static $db;
     public function __construct() {        
-        self::$db = new PDO("mysql:host=localhost:3307;dbname=wishtransfert", "root");
+        self::$db = new PDO("mysql:host=localhost:8889;dbname=wishtransfert", "root", "root");
     }
 
     public static function find($table, $params = [], $limit = 0) {
@@ -159,7 +159,7 @@ class Model {
             case 'files_links':
                 return 'file_link_id';
             case 'emails_links':
-                return 'file_link_id';
+                return 'email_link_id';
             case 'comments':
                 return 'comment_id';
             default:
