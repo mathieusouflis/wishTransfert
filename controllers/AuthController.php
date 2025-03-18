@@ -2,9 +2,9 @@
 session_start();
 require_once "Models/User.Model.php"; 
 
-class AuthC {
+class AuthController {
     // vérifie si l'utilisateur est connecté
-    public function isLog() {
+    public static function isLog() {
         if(isset($_SESSION["connecte"])) {
             return true;
         }
@@ -12,7 +12,7 @@ class AuthC {
     }
 
     // gere la page d'inscription
-    public function Register() {
+    public static function Register() {
         if($_SERVER["REQUEST_METHOD"] == "POST") {
             $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
             $username = filter_input(INPUT_POST, "username");
@@ -62,7 +62,7 @@ class AuthC {
     }
 
     // gere la page de connexion
-    public function LogIn() {
+    public static function LogIn() {
         if(isset($_SESSION["connecte"])) {
             header('Location: dashboard.php');
             exit();

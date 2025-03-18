@@ -1,7 +1,6 @@
 <?php
 require_once './controllers/AuthController.php';
-$authc = new AuthC();
-$authc->Register();
+AuthController::Register();
 ?>
 <!DOCTYPE html>
 <html lang="fr">

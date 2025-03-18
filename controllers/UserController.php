@@ -2,7 +2,7 @@
 require_once "Models/User.Model.php";
 
 class UserController{
-    public function editEmail(){
+    public static function editEmail(){
         if($_SERVER["REQUEST_METHOD"] === "POST"){
             $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
 
@@ -29,7 +29,7 @@ class UserController{
         }
     }
 
-    public function editProfile(){
+    public static function editProfile(){
         if($_SERVER["REQUEST_METHOD"] === "POST"){
             $username = filter_input(INPUT_POST,"username");
             $avatar = filter_input(INPUT_POST,"avatar");
@@ -52,7 +52,7 @@ class UserController{
         }
     }
 
-    public function editPassword(){
+    public static function editPassword(){
         $oldPassword = filter_input(INPUT_POST,"oldPassword");
         $newPassword = filter_input(INPUT_POST,"newPassword");
         $newPasswordConfirm = filter_input(INPUT_POST,"newPasswordConfirm");
@@ -82,7 +82,7 @@ class UserController{
         }
     }
 
-    public function delete(){
+    public static function delete(){
         if($_SERVER["REQUEST_METHOD"] === "POST"){
             if(!isset($_SESSION)) session_start();
             $userId = $_SESSION["user_id"];

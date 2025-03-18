@@ -117,7 +117,6 @@ if ($createUserResult) {
 
 echo "<h2>3. Test d'upload de fichier</h2>";
 if (isset($testUserId)) {
-    $fileController = new FileController();
     $testFileName = 'test_file.txt';
     $testFileContent = 'Ceci est un fichier de test pour WishTransfert.';
     $testFileType = 'text/plain';
@@ -134,8 +133,7 @@ if (isset($testUserId)) {
             displayResult("Récupération du fichier", true, "Fichier récupéré avec l'ID: " . $testFileId);
             
             echo "<h2>4. Test de création de lien de partage</h2>";
-            $linkAuth = new LinkAuthC();
-            $shareToken = $linkAuth->createShareLink($testFileId, $testUserId);
+            $shareToken = LinkAuthController::createShareLink($testFileId, $testUserId);
             
             if ($shareToken) {
                 displayResult("Création de lien de partage", true, "Lien créé avec le token: " . $shareToken);
@@ -211,7 +209,6 @@ if (isset($testUserId) && isset($testFileId) && isset($linkAuth)) {
 echo "<h2>6. Test d'upload multiple de fichiers</h2>";
 if (isset($testUserId)) {
     // Créer plusieurs fichiers de test
-    $fileController = new FileController();
     $fileIds = [];
     
     // Premier fichier
@@ -235,8 +232,7 @@ if (isset($testUserId)) {
         displayResult("Upload de fichiers multiples", true, "Deux fichiers uploadés avec succès: IDs " . implode(", ", $fileIds));
         
         // Création d'un lien partagé pour les deux fichiers
-        $linkAuth = new LinkAuthC();
-        $shareToken = $linkAuth->createShareLink($fileIds, $testUserId);
+        $shareToken = LinkAuthController::createShareLink($fileIds, $testUserId);
         
         if ($shareToken) {
             displayResult("Création de lien pour fichiers multiples", true, "Lien créé avec le token: " . $shareToken);

@@ -5,7 +5,7 @@ require_once 'Models/Link.Model.php';
 require_once 'Models/FileLink.Model.php';
 require_once 'Models/EmailLinks.Model.php';
 
-class LinkAuthC {
+class LinkAuthController {
     public static function verifyLinkToken($token) {
         $token = trim($token);
         

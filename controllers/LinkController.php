@@ -6,7 +6,7 @@ require_once ("controllers/FileController.php");
 
 class LinkController{
 
-    public function delete($id){
+    public static function delete($id){
         if($_SERVER["REQUEST_METHOD"] === "DELETE"){
             // Connexion à la base de données
             $pdo = new PDO('mysql:host=localhost;dbname=wishtransfert', 'username', 'password');
@@ -27,7 +27,7 @@ class LinkController{
         }
     }
 
-    public function getFiles(){
+    public static function getFiles(){
         $link_token = $_GET['token'];
         $link = Links::getByToken($link_token);
         $filesIds = FileLink::getByLink_id($link->linkid);
