@@ -18,7 +18,10 @@ require_once '0 FRONT/base/header.php';
     </div>
     <div class="page-left2">
     <div class="h-410 w-380 bg-white border-radius20 flex flex-col p-16">
+        <div class="flex justify-between">
         <h2 class="text-20 text-black">Profile</h2>
+        <a href="index.php"><button class="text-black">X</button></a>
+        </div>
         <div class="w-80 h-103 m-20 flex justify-center">
             <img class="h-full" src="" alt="">
             <button class="h-34 text-14 text-black">Edit</button>
