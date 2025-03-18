@@ -23,6 +23,7 @@
     box-sizing: border-box;
     transition: all 100ms;
     font-family: "Bricolage Grotesque";
+    text-decoration: none;
 }
 
 input {
@@ -74,6 +75,14 @@ body {
 }
 .radius-20 {
     border-radius: 20px;
+}
+
+.opacity-0 {
+    opacity: 0;
+}
+
+.opacity-1 {
+    opacity: 1;
 }
 
 .radius-4 {
@@ -177,6 +186,19 @@ body {
 .py-8 {
     padding-top: 8px;
     padding-bottom: 8px;
+}
+
+.-bottom-60p{
+    bottom: -60%;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.center-x {
+    left: 50%;
+    transform: translateX(-50%)
 }
 
 .py-20 {
