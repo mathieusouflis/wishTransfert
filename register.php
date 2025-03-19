@@ -1,28 +1,31 @@
 <?php
 require_once './controllers/AuthController.php';
-$authc = new AuthC();
-$authc->Register();
+
+global $errors;
+$errors = [];
+
+AuthController::Register();
+
+
+require_once "./0 FRONT/composents/input.php";
+require_once "./0 FRONT/composents/buttons.php";
+require_once '0 FRONT/base/header.php';
+require_once '0 FRONT/base/nav.php';
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription</title>
-</head>
-<body>
-    <?php require_once './utils/erreurs.php'; ?>
-    <form method="POST">
-        <label for="identifiant">Identifiant</label>
-        <input type="text" id="identifiant" name="identifiant">
 
-        <label for="motdepasse">Mot de passe</label>
-        <input type="password" name="motdepasse" id="motdepasse">
-
-        <label for="motdepasse2">Confirmer le mot de passe</label>
-        <input type="password" name="motdepasse2" id="motdepasse2">
-
-        <input type="submit" value="Inscription">
+<div class="page-center flex flex-col p-16 bg-white radius-20 gap-20 w-272">
+    <h1 class="text-black text-20 text-center">Register</h1>
+    <form method="post" class="flex flex-col gap-20">
+        <?php input("username", "__blueorchide", required: true);?>
+        <?php input("email", "__blueorchide@hetic.eu","email", required: true);?>
+        <?php input("password", "mysuperbpassword", "password", required: true);?>
+        <?php input("password2", "myseperbpassword", "password", required: true);?>
+        <?php mediumButton("Register", "submit", style: "w-full" );?>
     </form>
-</body>
-</html>
+    <?php require_once './utils/erreurs.php';?>
+</div>
+</input>
+
+<?php
+
+require_once '0 FRONT/base/footer.php';

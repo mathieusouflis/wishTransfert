@@ -1,8 +1,8 @@
-<?php if(!empty($erreurs)): ?>
+<?php if(!empty($errors)): ?>
     <div>
         <ul>
-            <?php foreach ($erreurs as $erreur): ?>
-            <li><?= $erreur ?></li>
+            <?php foreach ($errors as $error): ?>
+            <li><?= $error ?></li>
             <?php endforeach; ?>
         </ul>
     </div>
