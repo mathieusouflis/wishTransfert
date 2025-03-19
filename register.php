@@ -20,7 +20,7 @@ require_once '0 FRONT/base/nav.php';
         <?php input("email", "__blueorchide@hetic.eu","email", required: true);?>
         <?php input("password", "mysuperbpassword", "password", required: true);?>
         <?php input("password2", "myseperbpassword", "password", required: true);?>
-        <?php mediumButton("Register", "submit", style: "w-full" );?>
+        <?php mediumButton("Register", "submit", style: "w-full", other:"name='register'");?>
     </form>
     <?php require_once './utils/erreurs.php';?>
 </div>

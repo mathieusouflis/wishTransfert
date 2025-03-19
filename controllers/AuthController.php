@@ -14,7 +14,7 @@ class AuthController {
     // gere la page d'inscription
     public static function Register() {
         global $errors;
-        if($_SERVER["REQUEST_METHOD"] == "POST") {
+        if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register'])) {
             $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
             $username = filter_input(INPUT_POST, "username");
             $password = filter_input(INPUT_POST, "password");
