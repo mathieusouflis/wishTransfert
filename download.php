@@ -3,7 +3,7 @@ require_once './controllers/LinkAuth.php';
 require_once './config/database.php';
 require_once './Models/File.Model.php';
 
-session_start();
+if(session_status() === PHP_SESSION_NONE) session_start();
 
 if (!isset($_GET['token']) || empty($_GET['token'])) {
     header('Location: index.php');

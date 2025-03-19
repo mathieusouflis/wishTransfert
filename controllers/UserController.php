@@ -1,6 +1,6 @@
 <?php
 require_once "Models/User.Model.php";
-
+if(session_status() === PHP_SESSION_NONE) session_start();
 class UserController{
     public static function editEmail(){
         global $errors;
@@ -14,7 +14,6 @@ class UserController{
                 if($user){
                     $errors[] = "Email already exists";
                 }else {
-                    if(!isset($_SESSION)) session_start();
                     if(User::isEmailUnique($email)){
                         $modifyRequest = User::update($_SESSION["user_id"], null, null, $email);
                         if($modifyRequest){
@@ -39,7 +38,6 @@ class UserController{
             if(empty($username && empty($avatar))){
                 $errors[] = "Everything is empty, can't edit";
             }else {
-                if(!isset($_SESSION)) session_start();
                 if($username && User::isUsernameUnique($username)){
                     $modifyRequest = User::update($_SESSION["user_id"], $username ? null : $username, null, null);
                     if(!$modifyRequest){
@@ -75,7 +73,6 @@ class UserController{
         }
 
         if(empty($errors)){
-            if(!isset($_SESSION)) session_start();
             $modifyRequest = User::update($_SESSION["user_id"], null, $newPassword, null);
             if(!$modifyRequest){
                 $errors[] = 'An error occured.';
@@ -88,7 +85,6 @@ class UserController{
     public static function delete(){
         global $errors;
         if($_SERVER["REQUEST_METHOD"] === "POST"){
-            if(!isset($_SESSION)) session_start();
             $userId = $_SESSION["user_id"];
             if(empty($userId)){
                 $errors[] = "You must be logged in to delete your account";

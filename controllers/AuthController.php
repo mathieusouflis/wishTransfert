@@ -1,5 +1,8 @@
 <?php
-session_start();
+if(session_status() === PHP_SESSION_NONE){
+    session_start();
+}
+echo session_status();
 require_once "Models/User.Model.php"; 
 
 class AuthController {
@@ -85,7 +88,6 @@ class AuthController {
                 $errors[] = "Le compte n'existe pas";
             } else {    
                 $hash = $utilisateur->password;
-                echo($hash);
 
                 if(!password_verify($password, $hash)) {
                     $errors[] = "Le mot de passe est incorrect";
@@ -96,6 +98,9 @@ class AuthController {
                 $_SESSION["identifiant"] = $utilisateur->id;
                 $_SESSION["connecte"] = true;
                 $_SESSION["email"] = $utilisateur->email;
+                $_SESSION["username"] = $utilisateur->username;
+
+                
                 header('Location: dashboard.php');
                 exit();
             }

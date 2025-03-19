@@ -6,7 +6,7 @@ class User {
     public $username;
     public $password;
     public $email;
-    private static $table = "users";  // Correction: changé de "USERS" à "users" pour plus de cohérence
+    private static $table = "users";
 
     public static function get($params){
         $result = Model::find(self::$table, $params, 1);
@@ -73,7 +73,6 @@ class User {
         if(empty($errors)){
             error_log("Tentative d'insertion d'utilisateur: $username, $email");
             try {
-                // Hasher le mot de passe avant l'insertion
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
                 $result = Model::insert(self::$table, [
                     "username" => $username,
@@ -120,7 +119,6 @@ class User {
         }
 
         if(empty($errors)){
-            // Si le mot de passe est fourni, le hasher
             if ($password) {
                 $password = password_hash($password, PASSWORD_DEFAULT);
             }
