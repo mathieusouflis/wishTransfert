@@ -29,14 +29,23 @@ require_once '0 FRONT/base/header.php';
             <h3 class="text-start text-14 text-black">Views</h3>
         </div>
         <div class="w-full h-full m-20 flex justify-between">
-            <a href="localhost:...../downloads.php/?token="LETOKEN"&download_all=1"><?php littleButton("test") ?></a>
-            <button class="text-10 text-black">Copy</button>
+            <a id="token" href="localhost:...../downloads.php/?token="LETOKEN"&download_all=1"><?php littleButton("test") ?></a>
+            <button onclick="Copied()" class="text-10 text-black" id="copy">Copy</button>
             <button class="text-10 text-black">X</button>
         </div>
         </div>
     </div>
     </div>
 </div>
+<script>
+    function Copied() {
+  document.getElementById("copy").innerHTML = "Copied";
+  navigator.clipboard.writeText(document.getElementById("token"));
+  setTimeout(() => {
+    document.getElementById("copy").innerHTML = "Copy";
+}, 3000);
+}
+</script>
 <?php
 require_once '0 FRONT/base/footer.php';
 ?>
