@@ -20,7 +20,7 @@ require_once '0 FRONT/base/header.php';
     <div class="h-410 w-738 bg-white border-radius20 flex flex-col p-16">
         <div class="flex justify-between">
         <h2 class="text-20 text-black">Link List</h2>
-        <a href="index.php"><button class="text-black">X</button></a>
+        <a href="index.php"><button class="text-black"><?php icon("x", "big") ?></button></a>
         </div>
         <div class="flex flex-col">
         <div class="w-full h-full m-20 flex justify-between">
@@ -31,7 +31,7 @@ require_once '0 FRONT/base/header.php';
         <div class="w-full h-full m-20 flex justify-between">
             <a id="token" href="localhost:...../downloads.php/?token="LETOKEN"&download_all=1"><?php littleButton("test") ?></a>
             <button onclick="Copied()" class="text-10 text-black" id="copy">Copy</button>
-            <button class="text-10 text-black">X</button>
+            <button class="text-10 text-black"><?php icon("x") ?></button>
         </div>
         </div>
     </div>
