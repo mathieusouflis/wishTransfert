@@ -21,7 +21,7 @@ class AuthController {
         }
     }
     public static function isLog() {
-        if(empty($_SESSION["connecte"])) {
+        if(!empty($_SESSION["connecte"])) {
             return true;
         }
         return false;

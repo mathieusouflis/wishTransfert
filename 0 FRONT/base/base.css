@@ -509,9 +509,11 @@ input:focus {
 .top-8 {
     top: 8px;
 }
+
 .w-70 {
     width: 70px;
 }
+
 .w-171 {
     width: 171px;
 }
@@ -521,6 +523,7 @@ input:focus {
 .w-561 {
     width: 561px;
 }
+
 .pl-33 {
     padding-left: 33px;
 }
@@ -535,6 +538,44 @@ input:focus {
 
 .pointer-events-none {
     pointer-events: none;
+}
+
+.w-332 {
+    width: 332px;
+}
+
+.h-410 {
+    height: 410px;
+}
+
+.top-200 {
+    top: 200px;
+}
+
+.gap-16 {
+    gap: 15px;
+}
+
+.w-312 {
+    width: 312px;
+}
+
+.py-4 {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.border-bottom-1 {
+    border-bottom: 1px solid black;
+}
+
+.h-260 {
+    height: 260px;
+}
+
+.top-radius-10 {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 .button-bg-gray:hover {
@@ -552,3 +593,4 @@ input:focus {
 .bg-gray {
     background-color: var(--gray-100);
 }
+

@@ -1,11 +1,13 @@
 <?php
 require_once "./0 FRONT/composents/icons.php";
 
+
 function bigButton($iconName, $content, $type="button", $other= ""){
+
     ?>
-    <div class="relative">
+    <div class="relative" <?=$other?>>
         <?=icon($iconName, "big", "white", "absolute left-20 top-20")?>
-        <input type="<?=$type?>"  class="button flex flex-row w-full py-20 pl-54 pr-20 items-center gap-10 bg-primary radius-10 text-20" value="<?=$content?>" <?=$other?>>
+        <input type="<?=$type?>"  class="button flex flex-row w-full py-20 pl-54 pr-20 items-center gap-10 bg-primary radius-10 text-20" value="<?=$content?>">
     </div>
     <?php
 }
@@ -17,7 +19,7 @@ function mediumButtonWithIcon($iconName, $content, $type="button", $buttonStyle=
             ?>
                 <div class="<?=$style?> relative">
                     <?=icon($iconName, "little", "white", "absolute left-10 top-8")?>
-                    <input type="<?=$type?>" class="<?=$baseStyle?> radius-10 bg-primary <?=$style?>" value="<?=$content?>"  <?=$other?>>
+                    <input type="<?=$type?>" class="flex flex-row radius-10 pl-33 pr-10 py-8 justify-center items-center gap-10 button bg-primary text-15 w-full <?=$style?>" value="<?=$content?>">
                 </div>
             <?php
             break;
