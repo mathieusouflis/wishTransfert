@@ -9,12 +9,12 @@ require_once '0 FRONT/base/header.php';
 ?>
 <div class="h-410 w-561 gap-10 page-left">
     <div class="w-171 h-410 bg-white border-radius20 flex flex-col justify-between"></a>
-        <div class="p-16">
+        <div class="p-16 flex flex-col gap-4">
             <a href="profile.php"><?php mediumButtonWithIcon("person", "Profile", "button", "full-white", 'w-full')?></a>
-            <?php mediumButtonWithIcon("link", "Links Created", "button", "full-white", 'w-full'); ?>
+            <a href="links.settings.php"> <?php mediumButtonWithIcon("link", "Links Created", "button", "full-white", 'w-full active'); ?></a>
         </div>
         <div class="flex items-center p-16 border-top">
-            <?php mediumButton("Disconnect", "button", "white", "text-red w-full")?>
+        <?php include './0 FRONT/composents/disconnectButton.php'; ?>
         </div>
     </div>
     <div class="page-left3 h-410 w-738 bg-white border-radius20 p-16">

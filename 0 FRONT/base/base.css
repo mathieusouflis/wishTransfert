@@ -23,7 +23,7 @@
 * {
     margin: 0;
     padding: 0;
-    color: black;
+    color: white;
     box-sizing: border-box;
     transition: all 100ms;
     font-family: "Bricolage Grotesque";
@@ -198,7 +198,7 @@ body {
     background-color: var(--white-110);
 }
 
-.button.bg-white:active {
+.button.bg-white.active {
     background-color: var(--white-120);
 }
 
