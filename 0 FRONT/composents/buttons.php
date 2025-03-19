@@ -10,8 +10,9 @@ function bigButton($iconName, $content, $type="button"){
     <?php
 }
 
-function mediumButtonWithIcon($iconName, $content, $type="button", $buttonStyle="full", $style=""){
+function mediumButtonWithIcon($iconName, $content, $type="button", $buttonStyle="full", $active = false, $style=""){
     $baseStyle = "flex flex-row pl-33 pr-10 py-8 content-center items-center gap-10 button text-15 w-max";
+    $whiteColor = $active ? "bg-white-115": "bg-white";
     switch ($buttonStyle) {
         case 'full':
             ?>
@@ -25,7 +26,7 @@ function mediumButtonWithIcon($iconName, $content, $type="button", $buttonStyle=
             ?>
             <div class="relative">
                 <?=icon($iconName, "little", "black", "absolute left-10 top-8")?>
-                <input type="<?=$type?>" class="<?=$baseStyle?> radius-10 bg-white<?=$style?>" value="<?=$content?>">
+                <input type="<?=$type?>" class="<?=$baseStyle?> radius-10 <?=$whiteColor?> <?=$style?>" value="<?=$content?>">
             </div>
             <?php
             break;
@@ -33,7 +34,7 @@ function mediumButtonWithIcon($iconName, $content, $type="button", $buttonStyle=
             ?>
             <div class="relative">
                 <?=icon($iconName, "little", "white", "absolute left-10 top-8")?>
-                <input type="<?=$type?>" class="<?=$baseStyle?> radius-l-10 bg-white <?=$style?>" value="<?=$content?>">
+                <input type="<?=$type?>" class="<?=$baseStyle?> radius-l-10 <?=$whiteColor?> <?=$style?>" value="<?=$content?>">
             </div>
             <?php
             break;
@@ -41,7 +42,7 @@ function mediumButtonWithIcon($iconName, $content, $type="button", $buttonStyle=
             ?>
             <div class="relative">
                 <?=icon($iconName, "little", "white", "absolute left-10 top-8")?>
-                <input type="<?=$type?>" class="<?=$baseStyle?> radius-r-10 bg-white <?=$style?>" value="<?=$content?>">
+                <input type="<?=$type?>" class="<?=$baseStyle?> radius-r-10 <?=$whiteColor?> <?=$style?>" value="<?=$content?>">
             </div>
             <?php
             break;
@@ -49,7 +50,7 @@ function mediumButtonWithIcon($iconName, $content, $type="button", $buttonStyle=
             ?>
             <div class="relative">
                 <?=icon($iconName, "little", "white", "absolute left-10 top-8")?>
-                <input type="<?=$type?>" class="<?=$baseStyle?> bg-white <?=$style?>" value="<?=$content?>">
+                <input type="<?=$type?>" class="<?=$baseStyle?> <?=$whiteColor?> <?=$style?>" value="<?=$content?>">
             </div>
             <?php
             break;
