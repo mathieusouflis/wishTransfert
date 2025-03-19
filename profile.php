@@ -9,8 +9,8 @@ require_once '0 FRONT/base/header.php';
 <div class="h-410 w-561 gap-10 page-left">
     <div class="w-171 h-410 bg-white border-radius20 flex flex-col justify-between">
         <div class="p-16">
-        <h3 class="w-full h-34 flex items-center text-15 text-black button-bg-gray h-34 gap-10"><?php icon("person") ?>Profile</h3>
-            <h3 class="w-full h-34 flex items-center text-15 text-black button-bg-gray h-34 gap-10"><?php icon("link") ?>Links created</h3>
+        <h3 class="w-full h-34 flex items-center text-15 text-black bg-gray h-34 gap-10"><?php icon("person") ?>Profile</h3>
+        <a href="settings.php"><h3 class="w-full h-34 flex items-center text-15 text-black button-bg-gray h-34 gap-10"><?php icon("link") ?>Links created</h3></a>
         </div>
         <div class="flex items-center p-16 border-top">
             <h3 class="w-full h-34 flex items-center text-15 text-red button-bg-gray gap-10"><?php icon("trash") ?>Disconnect</h3>

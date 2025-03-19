@@ -441,3 +441,7 @@ input:focus {
 .border-radius20 {
     border-radius: 20px;
 }
+
+.bg-gray {
+    background-color: var(--gray-100);
+}
