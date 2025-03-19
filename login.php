@@ -7,7 +7,8 @@ global $errors;
 $errors = [];
 
 AuthController::LogIn();
-
+require_once "./0 FRONT/composents/errorModal.php";
+errorModal($errors);
 require_once '0 FRONT/base/header.php';
 require_once '0 FRONT/base/nav.php';
 ?>
@@ -19,7 +20,6 @@ require_once '0 FRONT/base/nav.php';
         <?php input("password", "arcanerobuste", "password");?>
         <?php mediumButton("Log In", "submit", style: "w-full" );?>
     </form>
-    <?php require_once './utils/erreurs.php';?>
 </div>
 </input>
 <?
