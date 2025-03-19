@@ -1,9 +1,5 @@
 <?php
 require_once "./0 FRONT/composents/buttons.php";
-// require_once "./0 FRONT/composents/input.php";
-// require_once "./0 FRONT/composents/buttons.php";
-// require_once "./0 FRONT/composents/icons.php";
-
 require_once '0 FRONT/base/header.php';
 
 ?>
