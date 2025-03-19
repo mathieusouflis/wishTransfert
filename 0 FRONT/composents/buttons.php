@@ -62,6 +62,11 @@ function mediumButton($content, $type="button", $buttonStyle="red", $style= ""){
             <input type="<?=$type?>" class="flex text-center radius-10 py-8 px-10 button bg-white w-max text-15 text-black <?=$style?>" value="<?=$content?>">
             <?php
             break;
+        case 'white-active':
+            ?>
+            <input type="<?=$type?>" class="flex text-center radius-10 py-8 px-10 button bg-white-115 w-max text-15 text-black <?=$style?>" value="<?=$content?>">
+            <?php
+            break;
         case 'red':
             ?>
             <input type="<?=$type?>" class="flex text-center radius-10 py-8 px-10 button bg-primary w-max text-15 <?=$style?>" value="<?=$content?>">

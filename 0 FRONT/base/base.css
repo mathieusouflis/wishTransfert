@@ -6,6 +6,7 @@
 
     --white-100: #FFF;
     --white-110: #F1F1F1;
+    --white-115: #F5F5F5;
     --white-120: #F5F5F5;
     --white-130: #CBCBCB;
     
@@ -121,6 +122,10 @@ body {
 
 .bg-primary {
     background-color: var(--red-100);
+}
+
+.bg-white-115 {
+    background-color: var(--white-115);
 }
 
 .pl-54 {
