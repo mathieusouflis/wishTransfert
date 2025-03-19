@@ -14,7 +14,7 @@ function mediumButtonWithIcon($iconName, $content, $type="button", $buttonStyle=
     switch ($buttonStyle) {
         case 'full':
             ?>
-                <div class="relative">
+                <div class="<?=$style?> relative">
                     <?=icon($iconName, "little", "white", "absolute left-10 top-8")?>
                     <input type="<?=$type?>" class="flex flex-row radius-10 pl-33 pr-10 py-8 content-center items-center gap-10 button bg-primary text-15 w-max <?=$style?>" value="<?=$content?>">
                 </div>
@@ -22,15 +22,15 @@ function mediumButtonWithIcon($iconName, $content, $type="button", $buttonStyle=
             break;
         case 'full-white':
             ?>
-            <div class="relative">
+            <div class="<?=$style?> relative">
                 <?=icon($iconName, "little", "black", "absolute left-10 top-8")?>
-                <input type="<?=$type?>" class="flex flex-row radius-10 pl-33 pr-10 py-8 content-center items-center gap-10 button bg-white text-15 w-max <?=$style?>" value="<?=$content?>">
+                <input type="<?=$type?>" class="flex flex-row radius-10 pl-33 pr-10 py-8 content-center items-center gap-10 button bg-white text-15 text-black w-max <?=$style?>" value="<?=$content?>">
             </div>
             <?php
             break;
         case 'left':
             ?>
-            <div class="relative">
+            <div class="<?=$style?> relative">
                 <?=icon($iconName, "little", "white", "absolute left-10 top-8")?>
                 <input type="<?=$type?>" class="flex flex-row radius-l-10 pl-33 pr-10 py-8 content-center items-center gap-10 button bg-white text-15 w-max <?=$style?>" value="<?=$content?>">
             </div>
@@ -38,7 +38,7 @@ function mediumButtonWithIcon($iconName, $content, $type="button", $buttonStyle=
             break;
         case 'right':
             ?>
-            <div class="relative">
+            <div class="<?=$style?> relative">
                 <?=icon($iconName, "little", "white", "absolute left-10 top-8")?>
                 <input type="<?=$type?>" class="flex flex-row radius-r-10 pl-33 pr-10 py-8 content-center items-center gap-10 button bg-white text-15 w-max <?=$style?>" value="<?=$content?>">
             </div>
@@ -46,7 +46,7 @@ function mediumButtonWithIcon($iconName, $content, $type="button", $buttonStyle=
             break;
         case 'none':
             ?>
-            <div class="relative">
+            <div class="<?=$style?> relative">
                 <?=icon($iconName, "little", "white", "absolute left-10 top-8")?>
                 <input type="<?=$type?>" class="flex flex-row pl-33 pr-10 py-8 content-center items-center gap-10 button bg-white text-15 w-max <?=$style?>" value="<?=$content?>">
             </div>

@@ -23,7 +23,7 @@
 * {
     margin: 0;
     padding: 0;
-    color: white;
+    color: black;
     box-sizing: border-box;
     transition: all 100ms;
     font-family: "Bricolage Grotesque";
@@ -46,6 +46,32 @@ body {
     background-size: cover;
 }
 
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+    width: 4px;
+    padding: 0 8px;
+    display: none;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--black-110);
+    border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--black-120);
+}
+
+/* Show scrollbar only when content is scrollable */
+*:hover::-webkit-scrollbar {
+    display: block;
+}
+
+
 .w-33 {
     width: 33px;
 }
@@ -58,13 +84,14 @@ body {
     text-align: start;
 }
 
+.text-black {
+    color: var(--black-100)
+}
+
 .text-red {
     color: var(--red-120)
 }
 
-.text-black {
-    color: var(--black-100)
-}
 
 .text-gray {
     color: var(--black-110);
@@ -133,6 +160,14 @@ body {
 .radius-r-10 {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
+}
+
+.overflow-y-scroll {
+    overflow-y: scroll;
+}
+
+.h-full{
+    height: 100%;
 }
 
 .bg-primary {
@@ -277,6 +312,18 @@ body {
     margin-top: 20px;
 }
 
+.gap-30 {
+    gap: 30px;
+}
+
+.gap-50 {
+    gap: 50px;
+}
+
+.mr-31 {
+    margin-right: 31px;
+}
+
 .w-13 {
     width: 13px;
 }
@@ -326,6 +373,10 @@ body {
 
 .self-end {
     align-self: end;
+}
+
+.ml-auto {
+    margin-left: auto;
 }
 
 .justify-end {
