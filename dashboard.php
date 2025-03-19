@@ -1,5 +1,6 @@
 <?php
 require_once './controllers/AuthController.php';
+AuthController::needLog();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -12,6 +13,5 @@ require_once './controllers/AuthController.php';
     <h1>Dashboard</h1>
     <?= var_dump($_SESSION)?>
     <p>Vous êtes connecté(e), <?= $_SESSION["email"] ?>.</p>
-    <?php require_once 'logout.php'; ?>
 </body>
 </html>
