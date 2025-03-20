@@ -51,7 +51,7 @@ body {
 ::-webkit-scrollbar {
     width: 4px;
     padding: 0 8px;
-    display: none;
+    /* display: none; */
 }
 
 ::-webkit-scrollbar-track {
@@ -95,6 +95,10 @@ body {
 
 .text-start {
     text-align: start;
+}
+
+.w-1-2{
+    width: 50%;
 }
 
 .text-black {
@@ -185,6 +189,10 @@ body {
 
 .h-full{
     height: 100%;
+}
+
+.max-h-300 {
+    max-height: 300px;
 }
 
 .bg-primary {
@@ -361,6 +369,14 @@ body {
 }
 .w-24 {
     width: 24px;
+}
+
+.w-px {
+    width: 1px;
+}
+
+.h-px {
+    height: 1px;
 }
 
 .w-max {
