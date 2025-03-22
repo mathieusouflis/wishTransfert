@@ -6,24 +6,32 @@ require_once ("controllers/FileController.php");
 
 class LinkController{
 
-    public static function delete($id){
-        if($_SERVER["REQUEST_METHOD"] === "DELETE"){
-            // Connexion à la base de données
-            $pdo = new PDO('mysql:host=localhost;dbname=wishtransfert', 'username', 'password');
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    public static function delete(){
+        global $errors;
+        if($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["delete-link"])){
+            $id = $_POST["id"]; 
 
-            // Préparation de la requête de suppression
-            $stmt = $pdo->prepare('DELETE FROM links WHERE id = :id');
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-
-            // Exécution de la requête
-            if($stmt->execute()){
-                echo json_encode(['status' => 'success', 'message' => 'Link deleted successfully']);
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'Failed to delete link']);
+            if(empty($id)){
+                $errors[] = "Internal Error.";
+            }else {
+                $link = Links::getByLinkId($id);
+                if(empty($link)){
+                    $errors[] = "Link not found.";
+                }else{
+                    $fileLinks = FileLink::getByLink_id($id);
+                    $files = [];
+                    foreach ($fileLinks as $fileLink){
+                        $file = Files::getByFileId($fileLink->file_id);
+                        Files::delete($file->fileid);
+                        FileLink::delete($fileLink->file_link_id);
+                    }
+                    Links::delete($link->linkid);
+                }
             }
+
+            
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
+            $errors[] = "Internal Error.";
         }
     }
 

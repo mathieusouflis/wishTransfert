@@ -19,7 +19,7 @@ function mediumButtonWithIcon($iconName, $content, $type="button", $buttonStyle=
             ?>
                 <div class="<?=$style?> relative">
                     <?=icon($iconName, "little", "white", "absolute left-10 top-10")?>
-                    <input type="<?=$type?>" class="flex flex-row radius-10 pl-33 pr-10 py-8 justify-center items-center gap-10 button bg-primary text-15 w-full <?=$style?>" value="<?=$content?>">
+                    <input type="<?=$type?>" class="flex flex-row radius-10 pl-33 pr-10 py-8 justify-center items-center gap-10 button bg-primary text-15 w-full <?=$style?>" value="<?=$content?>" <?=$other?>>
                 </div>
             <?php
             break;
@@ -74,8 +74,8 @@ function mediumButton($content, $type="button", $buttonStyle="red", $style= "", 
     }
 }
 
-function littleButton($content, $type="button", $other= ""){
+function littleButton($content, $type="button", $style="", $other= ""){
     ?>
-    <input type="<?=$type?>" class="py-6 px-8 flex text-center radius-4 bg-white button w-max text-black text-10" value="<?=$content?>" <?=$other?>>
+    <input type="<?=$type?>" class="<?=$style?> py-6 px-8 flex text-center radius-4 bg-white button w-max text-black text-10" value="<?=$content?>" <?=$other?>>
     <?php
 }

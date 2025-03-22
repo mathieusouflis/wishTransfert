@@ -1,7 +1,16 @@
 <?php
+global $errors;
+$errors = [];
+require_once './controllers/AuthController.php';
+AuthController::needLog();
+require_once './controllers/LinkController.php';
+LinkController::delete();
+
+require_once "./Models/Link.Model.php";
+$links = Links::getByUserId($_SESSION["user_id"]);
+var_dump($links); 
 require_once "./0 FRONT/composents/buttons.php";
 require_once '0 FRONT/base/header.php';
-
 ?>
 <div class="h-410 w-561 gap-10 page-left">
     <div class="w-171 h-410 bg-white border-radius20 flex flex-col justify-between"></a>
@@ -21,19 +30,30 @@ require_once '0 FRONT/base/header.php';
             </div>
             <div class="w-full m-20 flex gap-50">
                 <h3 class="w-198 text-start text-14 text-black">Link</h3>
-                <h3 class="w-171 text-14 text-black">Size</h3>
-                <h3 class="w-171 text-14 text-black mr-31">Downloads</h3>
+                <h3 class="w-171 text-14 text-black">Date</h3>
             </div>
             <div class="flex flex-col overflow-y-scroll">
+                <?php foreach($links as $link){
+                    $token = $link->token;
+                    $date = $link->createdat;
+                    $url = "http://localhost:8888/download.php/?token=$token";
+                    $linkid = $link->linkid;
+                    ?>
                 <div class="w-full m-20 flex items-center gap-50">
-                    <div class="flex flex-row justify-between gap-4 w-198">
-                        <a id="token" href="localhost:...../downloads.php/?token="LETOKEN"&download_all=1"><?php littleButton("test") ?></a>
-                        <button  class="copy-btn text-10 text-black" id="copy">Copy</button>
+                    <div class="flex flex-row justify-between gap-4 w-198 items-center">
+                        <a id="token" class="w-full text-wrap text-black text-10 underline" href="<?=$url?>"><?=$url?></a>
+                        <?php littleButton("Copy", style: "copy-btn text-10 text-black", other:"id='copy'") ?>
                     </div>
-                    <p class="w-171 text-black text-10">10Go</p>
-                    <p class="w-171 text-black text-10">0</p>
-                    <button class="text-10 text-black ml-auto"><?php icon("x") ?></button>
+                    <p class="w-171 text-black text-10"><?=$date?></p>
+                    <form method="post" class="flex ml-auto">
+                        <input type="hidden" name="id" value="<?= $linkid ?>">
+                        <label for=`submit-<?=$linkid?>` class="pointer"><?php icon("x") ?></label>
+                        <input type="submit" id=`submit-<?=$linkid?>` value="" class="text-10 text-black" name="delete-link">
+                    </form>
                 </div>
+                <?php
+                    }
+                ?>
             </div>
         </div>
     </div>
@@ -44,13 +64,15 @@ require_once '0 FRONT/base/header.php';
             const link = e.target.parentElement.querySelector("#token").href;
             navigator.clipboard.writeText(link);
             
-            e.target.innerHTML = "Copied";
+            e.target.value = "Copied";
             setTimeout(() => {
-                e.target.innerHTML = "Copy";
+                e.target.value = "Copy";
             }, 3000);
         });
     });
 </script>
 <?php
+require_once "./0 FRONT/composents/errorModal.php";
+errorModal($errors); 
 require_once '0 FRONT/base/footer.php';
 ?>

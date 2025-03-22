@@ -2,7 +2,6 @@
 if(session_status() === PHP_SESSION_NONE){
     session_start();
 }
-echo session_status();
 require_once "Models/User.Model.php"; 
 
 class AuthController {

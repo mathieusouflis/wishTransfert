@@ -115,27 +115,4 @@ class LinkAuthController {
             'email_restriction' => $emailRestriction
         ];
     }
-    
-    //TODO: Voir pour mettre ça dans le linkcontroller
-    // public static function processLinkRequest() {
-    //     $errors = [];
-        
-    //     if (!isset($_GET['token']) || empty($_GET['token'])) {
-    //         $errors[] = "Aucun token fourni";
-    //         header("Location: error.php?message=" . urlencode("Lien invalide ou expiré"));
-    //         exit();
-    //     }
-        
-    //     $token = $_GET['token'];
-    //     $linkInfo = self::verifyLinkToken($token);
-        
-    //     if (!$linkInfo) {
-    //         $errors[] = "Token invalide ou expiré";
-    //         header("Location: error.php?message=" . urlencode("Lien invalide ou expiré"));
-    //         exit();
-    //     }
-        
-    //     header("Location: download.php?token=" . urlencode($token));
-    //     exit();
-    // }
 }

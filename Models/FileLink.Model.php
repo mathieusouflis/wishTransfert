@@ -58,7 +58,17 @@ class FileLink {
         }
         
         $result = Model::delete(self::$table, $conditions);
-        
+        if (is_array($result) && array_key_exists(0, $result)) {
+            $links = [];
+            foreach ($result as $item) {
+                $link = new self();
+                $link->file_link_id = $item["file_link_id"];
+                $link->link_id = $item["link_id"];
+                $link->file_id = $item["file_id"];
+                $links[] = $link;
+            }
+            return $links;
+        }
         $link = new self();
         $link->file_link_id = $result["file_link_id"];
         $link->link_id = $result["link_id"];

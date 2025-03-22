@@ -364,6 +364,16 @@ body {
     margin-right: 31px;
 }
 
+.underline {
+    text-decoration: underline;
+}
+
+.text-wrap {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 .w-13 {
     width: 13px;
 }

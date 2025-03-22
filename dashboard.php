@@ -1,27 +1,33 @@
 <?php
+global $errors;
+$errors = [];
 require_once './controllers/AuthController.php';
 AuthController::needLog();
+
+require_once "./controllers/FileController.php";
 
 require_once "0 FRONT/base/header.php";
 require_once "0 FRONT/composents/buttons.php";
 require_once "0 FRONT/composents/input.php";
 require_once "0 FRONT/composents/dashboard/files.php";
+require_once "./0 FRONT/composents/errorModal.php";
+errorModal($errors);
 ?>
 
 <div class="absolute bg-white w-332 top-200 left-20 radius-20 p-10 ">
-    <form method="post" class="flex flex-col gap-16" >
-        <label for="file" class="pointer">
-            <?php  bigButton("plus", "Add File", "button", style:"pointer-events-none",other:"multiple"); ?>
+    <form method="post" class="flex flex-col gap-16" enctype="multipart/form-data">
+        <label for="file-to-upload" class="pointer">
+            <?php  bigButton("plus", "Add File", "button", style: "pointer-events-none", other: "multiple required"); ?>
         </label>
-        <input type="file" name="file" id="file" multiple class="opacity-0 absolute w-px h-px">
+        <input type="file" name="file-to-upload[]" id="file-to-upload" multiple="multiple" class="opacity-0 absolute w-px h-px">
         <div class="flex flex-col w-full gap-10 max-h-300">
             <div  class="w-full py-4 gap-10 border-bottom-1"><span class="text-black text-20">Files</span></div>
             <div id="fileList" class="overflow-y-scroll flex flex-col gap-20">
                 <p class="no-files-message text-black">No files yet...</p>
             </div>
         </div>
-        <?php input("email", "Saisissez un email"); ?>
-        <?php mediumButtonWithIcon("link", "Get a link"); ?>
+        <?php input("email", "Saisissez un email", required: true); ?>
+        <?php mediumButtonWithIcon("link", "Get a link", "submit", other: 'name="upload-file"'); ?>
     </form>
 </div>
 
@@ -82,7 +88,7 @@ require_once "0 FRONT/composents/dashboard/files.php";
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
             const newFile = document.createElement("div");
-            
+
             newFile.className = "flex flex-row justify-between bg-white";
             
             newFile.innerHTML = `

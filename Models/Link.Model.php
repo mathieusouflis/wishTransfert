@@ -111,7 +111,7 @@ class Links {
         return $link;
     }
     
-    public static function deleteLink($linkid){
+    public static function delete($linkid){
         $result = Model::delete(self::$table, ["link_id"=> $linkid]);
 
         $link = new self();

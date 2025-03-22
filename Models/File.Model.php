@@ -112,17 +112,35 @@ class File {
     public static function deleteFile($fileid){
         $result = Model::delete(self::$table, ["file_id"=> $fileid]);
         
-        $file = new self();
-        $file->fileid = $result["file_id"];
-        $file->userid = $result["user_id"];
-        $file->title = $result["title"];
-        $file->filedata = $result["file_data"];
-        $file->downloadcount = $result["download_count"];
-        $file->status = $result["status"];
-        // Correction: Accès direct au tableau result sans index supplémentaire
-        $file->type = $result["type"];
-        $file->createdat = $result["created_at"];
-
-        return $file;
+        // Check if multiple files were deleted
+        if (is_array($result) && isset($result[0])) {
+            $files = [];
+            foreach ($result as $deletedFile) {
+                $file = new self();
+                $file->fileid = $deletedFile["file_id"];
+                $file->userid = $deletedFile["user_id"];
+                $file->title = $deletedFile["title"];
+                $file->filedata = $deletedFile["file_data"];
+                $file->downloadcount = $deletedFile["download_count"];
+                $file->status = $deletedFile["status"];
+                // Correction: Accès direct au tableau result sans index supplémentaire
+                $file->type = $deletedFile["type"];
+                $file->createdat = $deletedFile["created_at"];
+                $files[] = $file;
+            }
+            return $files;
+        } else {
+            $file = new self();
+            $file->fileid = $result["file_id"];
+            $file->userid = $result["user_id"];
+            $file->title = $result["title"];
+            $file->filedata = $result["file_data"];
+            $file->downloadcount = $result["download_count"];
+            $file->status = $result["status"];
+            // Correction: Accès direct au tableau result sans index supplémentaire
+            $file->type = $result["type"];
+            $file->createdat = $result["created_at"];
+            return $file;
+        }
     }
 }
