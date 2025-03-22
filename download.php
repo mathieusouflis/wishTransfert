@@ -1,202 +1,125 @@
 <?php
-require_once './controllers/LinkAuth.php';
-require_once './config/database.php';
-require_once './Models/File.Model.php';
+global $errors;
+$errors = [];
+require_once "./controllers/AuthController.php";
+AuthController::needLog();
 
-if(session_status() === PHP_SESSION_NONE) session_start();
-
-if (!isset($_GET['token']) || empty($_GET['token'])) {
-    header('Location: index.php');
+require_once "./controllers/LinkAuth.php";
+if(!isset($_GET["token"])|| empty($_GET["token"])){
+    var_dump($_GET);
+    header("Location: http://localhost:8888/index.php");
     exit;
 }
-
 $token = $_GET['token'];
-
-// Récupérer les informations du lien
 $linkInfo = LinkAuthController::getLinkInfoForDownload($token);
 
-if (!$linkInfo) {
-    header('Location: index.php?error=invalid_link');
+if (!isset($linkInfo) || empty($linkInfo)) {
+    header("Location: http://localhost:8888/index.php");
+    exit;
+}
+$files = $linkInfo["files"];
+
+$email = $_SESSION["email"];
+if($linkInfo["email_restriction"] !== $email){
+    header("Location: http://localhost:8888/index.php");
     exit;
 }
 
-// Vérifier s'il y a des restrictions d'email
-if (!empty($linkInfo['emails'])) {
-    $hasAccess = false;
-    
-    // Si l'utilisateur est connecté, vérifier son email
-    if (isset($_SESSION['email'])) {
-        foreach ($linkInfo['emails'] as $email) {
-            if ($_SESSION['email'] === $email) {
-                $hasAccess = true;
-                break;
-            }
-        }
-    }
-    
-    // Si accès refusé, rediriger vers la page de connexion
-    if (!$hasAccess) {
-        header('Location: login.php?redirect=' . urlencode('download.php?token=' . $token));
+if(isset($_GET["download_file"])){
+    $fileId = intval($_GET["download_file"]);
+    echo $fileId;
+    if(isset($files[$fileId]) && !empty($files[$fileId])){
+        $file = $files[$fileId];
+        // INCR DOWNLOAD COUNT
+        header('Content-Description: File Transfer');
+        header('Content-Type: ' . $file->type);
+        header('Content-Disposition: attachment; filename="' . $file->title . '"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . strlen($file->filedata));
+        echo $file->filedata;
         exit;
     }
 }
 
-// Si une demande de téléchargement spécifique
-if (isset($_GET['file_id']) && !empty($_GET['file_id'])) {
-    $fileId = intval($_GET['file_id']);
-    
-    // Vérifier que le fichier fait partie du lien
-    $fileFound = false;
-    $fileToDownload = null;
-    
-    foreach ($linkInfo['files'] as $file) {
-        if ($file->fileid == $fileId) {
-            $fileFound = true;
-            $fileToDownload = $file;
-            break;
-        }
-    }
-    
-    if (!$fileFound) {
-        header('Location: download.php?token=' . $token . '&error=file_not_found');
-        exit;
-    }
-    
-    // Incrémenter le compteur de téléchargement
-    incrementDownloadCount($fileId);
-    
-    // Envoyer le fichier au navigateur
-    header('Content-Description: File Transfer');
-    header('Content-Type: ' . $fileToDownload->type);
-    header('Content-Disposition: attachment; filename="' . $fileToDownload->title . '"');
-    header('Expires: 0');
-    header('Cache-Control: must-revalidate');
-    header('Pragma: public');
-    header('Content-Length: ' . strlen($fileToDownload->filedata));
-    echo $fileToDownload->filedata;
-    exit;
-}
-
-// Si demande de téléchargement en ZIP
-if (isset($_GET['download_all']) && count($linkInfo['files']) > 1) {
+if(isset($_GET['download_all']) && !empty($files)){
     $zip = new ZipArchive();
-    $zipName = tempnam(sys_get_temp_dir(), 'zip');
+    $zipName = 'wishtransfert_files_' . date('Y-m-d') . '.zip';
+    $zipPath = sys_get_temp_dir() . '/' . $zipName;
     
-    if ($zip->open($zipName, ZipArchive::CREATE) === true) {
-        foreach ($linkInfo['files'] as $file) {
+    if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
+        foreach ($files as $file) {
             $zip->addFromString($file->title, $file->filedata);
-            incrementDownloadCount($file->fileid);
+            
+            if ($using_real_files && function_exists('incrementDownloadCount')) {
+                incrementDownloadCount($file->fileid);
+            }
         }
         $zip->close();
         
         header('Content-Description: File Transfer');
         header('Content-Type: application/zip');
-        header('Content-Disposition: attachment; filename="wishtransfert_' . date('Y-m-d') . '.zip"');
+        header('Content-Disposition: attachment; filename="' . $zipName . '"');
         header('Expires: 0');
         header('Cache-Control: must-revalidate');
         header('Pragma: public');
-        header('Content-Length: ' . filesize($zipName));
-        readfile($zipName);
-        unlink($zipName);
+        header('Content-Length: ' . filesize($zipPath));
+        readfile($zipPath);
+        unlink($zipPath);
         exit;
     }
 }
+
+
+
+require_once "./Models/File.Model.php";
+require_once "./config/database.php";
+
+require_once "./0 FRONT/base/header.php";
+require_once "./0 FRONT/composents/icons.php";
+require_once "./0 FRONT/composents/errorModal.php";
+errorModal($errors);
 ?>
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Télécharger - WishTransfert</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .container {
-            border: 1px solid #ccc;
-            padding: 20px;
-            border-radius: 5px;
-        }
-        .error {
-            color: red;
-            margin-bottom: 15px;
-        }
-        .file-list {
-            margin-top: 20px;
-        }
-        .file-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            align-items: center;
-        }
-        .file-info {
-            flex: 1;
-        }
-        .file-actions {
-            text-align: right;
-        }
-        .download-all {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .btn {
-            display: inline-block;
-            padding: 8px 15px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            margin-left: 10px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Télécharger des fichiers</h1>
+<div class="download-box bg-white radius-10 w-272 max-h-300 box-shadow absolute left-20 center-y flex flex-col gap-16 pb-15">
+    <a href="?token=<?=$token?>&download_all=1" class="download-button bg-primary  flex items-center justify-center p-15 w-full text-center text-15 radius-t-10 gap-10">
+        <?php icon('download', 'medium', 'white');?>
+        <span>Download All</span>
+    </a>
+    <div class="flex flex-col mx-10 gap-10 overflow-hidden">
+        <div class="file-title text-15 bold text-black">Files</div>
+        <ul class="flex flex-col gap-10 file-list list-none overflow-y-scroll">
+        <?php foreach ($linkInfo['files'] as $index => $file): ?>
+            <li class="file-item flex flex-row justify-between items-center">
+                <span class="file-name text-14 text-black w-1-2 text-wrap"><?=$file->title?></span>
+                <div class="file-info flex flex-row gap-14 items-center">
+                    <span class="file-size text-black text-14 text-gray">
+<?php 
+    $len = strlen($file->filedata);
+    if ($len !== 0){
+        $k = 1024;
+        $sizes = array('B', 'KB', 'MB', 'GB', 'TB');
+        $i = floor(log($len) / log($k));
+        
+        echo number_format($len / pow($k, $i), 2) . ' ' . $sizes[$i];
+    } else{ 
+        echo '0 B';
+    }
     
-    <?php if (isset($_GET['error'])): ?>
-        <div class="error">
-            <?php if ($_GET['error'] === 'file_not_found'): ?>
-                <p>Le fichier demandé n'a pas été trouvé.</p>
-            <?php else: ?>
-                <p>Une erreur s'est produite.</p>
-            <?php endif; ?>
-        </div>
-    <?php endif; ?>
-    
-    <div class="container">
-        <?php if (!empty($linkInfo['files'])): ?>
-            <h2>Fichiers disponibles :</h2>
-            <div class="file-list">
-                <?php foreach ($linkInfo['files'] as $index => $file): ?>
-                    <div class="file-item">
-                        <div class="file-info">
-                            <strong><?= htmlspecialchars($file->title) ?></strong>
-                            <p>Type: <?= htmlspecialchars($file->type) ?></p>
-                            <p>Téléchargé <?= $file->downloadcount ?> fois</p>
-                        </div>
-                        <div class="file-actions">
-                            <a href="download.php?token=<?= $token ?>&file_id=<?= $file->fileid ?>" class="btn">Télécharger</a>
-                        </div>
+?>
+                    </span>
+                    <div class="flex gap-8 flex-row items-center">
+                        <a href="?token=<?=$token?>&download_file=<?=$index?>" class="icon-button" title="Télécharger ce fichier">                            
+                            <?php icon("download", "small", "#777");?>
+                        </a>
                     </div>
-                <?php endforeach; ?>
-            </div>
-            
-            <?php if (count($linkInfo['files']) > 1): ?>
-                <div class="download-all">
-                    <a href="download.php?token=<?= $token ?>&download_all=1" class="btn">Télécharger tous les fichiers (ZIP)</a>
                 </div>
-            <?php endif; ?>
-        <?php else: ?>
-            <p>Aucun fichier n'est disponible pour ce lien.</p>
-        <?php endif; ?>
+            </li>
+        <?php endforeach; ?>
+        </ul>
     </div>
-    
-    <p><a href="index.php">Retour à l'accueil</a></p>
-</body>
-</html>
+</div>
+
+<?php
+require_once "./0 FRONT/base/footer.php";

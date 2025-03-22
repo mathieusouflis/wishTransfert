@@ -104,14 +104,16 @@ function getIcon($iconName, $color = "black") {
 }
 
 function icon($iconName, $size="little", $color="black", $style=""){
-    $sizeStyle = "w-13";
+    $sizeStyle = "w-13 h-13";
 
     if($size === "big"){
-        $sizeStyle = "w-24";
+        $sizeStyle = "w-24 h-24";
+    }else if($size === "medium"){
+        $sizeStyle = "w-18 h-18";
     }
 
     ?>
-    <div class="<?=$sizeStyle?> lock-ratio pointer-events-none <?=$style?>">
+    <div class="<?=$sizeStyle?> flex pointer-events-none <?=$style?>">
         <?=getIcon($iconName, $color)?>
     </div>
     <?php

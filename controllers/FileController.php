@@ -24,9 +24,6 @@ class FileController {
             return false;
         }
         
-        // Renommage du fichier
-        $newFilename = uniqid() . '_' . $title; //COMMENT: Pas besoin comme on met tout dans la DB
-        
         return File::createFile($userid, $newFilename, $type, $filedata);
     }
     
