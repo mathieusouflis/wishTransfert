@@ -23,7 +23,6 @@ errorModal($errors);
         <?php input("password2", "myseperbpassword", "password", required: true);?>
         <?php mediumButton("Register", "submit", style: "w-full", other:"name='register'");?>
     </form>
-    <?php require_once './utils/erreurs.php';?>
 </div>
 </input>
 

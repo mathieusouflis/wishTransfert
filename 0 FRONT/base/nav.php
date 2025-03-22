@@ -31,6 +31,7 @@ $avatar = "https://cdn.cosmos.so/1f89cd92-f0ca-4715-90f8-3b1e2e20b224?format=jpe
      
     }else {
         ?>
+        <div></div>
     <div class="flex flex-row w-max p-4 gap-4 radius-12 bg-white">
         <a href="register.php">
             <?php mediumButton("Sign Up", "button","white", style:"w-70"); ?>

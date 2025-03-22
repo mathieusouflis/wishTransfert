@@ -8,7 +8,7 @@ require_once "./config/config.php";
 class AuthController {
 
     public static function needLog(){
-        if(!isset($_SESSION["connecte"]) && $_SESSION["connecte"] !== true){
+        if(!isset($_SESSION["connecte"]) || $_SESSION["connecte"] !== true){
             header("Location: ". APP_URL ."login.php");
             exit();
         }
