@@ -30,8 +30,6 @@ class LinkController{
             }
 
             
-        } else {
-            $errors[] = "Internal Error.";
         }
     }
 
