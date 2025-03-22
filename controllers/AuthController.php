@@ -9,14 +9,14 @@ class AuthController {
 
     public static function needLog(){
         if(!isset($_SESSION["connecte"]) || $_SESSION["connecte"] !== true){
-            header("Location: ". APP_URL ."index.php");
+            header("Location: ". APP_URL ."login.php");
             exit();
         }
     }
     
     public static function needNoLog() {
         if (isset($_SESSION["connecte"]) && $_SESSION["connecte"] === true) {
-            header("Location: ". APP_URL ."login.php");
+            header("Location: ". APP_URL ."index.php");
             exit();
         }
     }
