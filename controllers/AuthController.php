@@ -3,19 +3,20 @@ if(session_status() === PHP_SESSION_NONE){
     session_start();
 }
 require_once "Models/User.Model.php"; 
+require_once "./config/config.php";
 
 class AuthController {
 
     public static function needLog(){
         if(!isset($_SESSION["connecte"]) && $_SESSION["connecte"] !== true){
-            header("Location: login.php");
+            header("Location: ". APP_URL ."login.php");
             exit();
         }
     }
-
+    
     public static function needNoLog() {
         if (isset($_SESSION["connecte"]) && $_SESSION["connecte"] === true) {
-            header("Location: index.php");
+            header("Location: ". APP_URL ."login.php");
             exit();
         }
     }
@@ -102,7 +103,7 @@ class AuthController {
                 $_SESSION["email"] = $utilisateur->email;
                 $_SESSION["username"] = $utilisateur->username;
                 
-                header('Location: index.php');
+                header("Location: ". APP_URL ."login.php");
                 exit();
             }
         }
