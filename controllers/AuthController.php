@@ -15,7 +15,7 @@ class AuthController {
 
     public static function needNoLog() {
         if (isset($_SESSION["connecte"]) && $_SESSION["connecte"] === true) {
-            header("Location: dashboard.php");
+            header("Location: index.php");
             exit();
         }
     }
@@ -102,7 +102,7 @@ class AuthController {
                 $_SESSION["email"] = $utilisateur->email;
                 $_SESSION["username"] = $utilisateur->username;
                 
-                header('Location: dashboard.php');
+                header('Location: index.php');
                 exit();
             }
         }

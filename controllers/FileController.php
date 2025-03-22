@@ -3,6 +3,7 @@ require_once "Models/File.Model.php";
 require_once "Models/User.Model.php"; 
 require_once "./controllers/FileAuthorisationController.php";
 require_once "./controllers/LinkAuth.php";
+require_once "./config/config.php";
 
 class FileController {
     private $userid;
@@ -11,27 +12,24 @@ class FileController {
     
     public static function uploadFile($userid, $title, $type, $filedata){
         global $errors;
-        // Vérification de la taille
-        if (strlen($filedata) > 20 * 1024 * 1024) { //TODO: AJOUTER LA TAILLE MAX AVEC LE CONFIG
+        if (strlen($filedata) > MAX_UPLOAD_SIZE) {
             $errors[] = "Le fichier est trop volumineux.";
             return false;
         }
         
-        // Interdire les fichiers .php
         $extension = pathinfo($title, PATHINFO_EXTENSION);
         if (strtolower($extension) === 'php') {
             $errors[] = "Les fichiers php ne sont pas autorisés.";
             return false;
         }
         
-        return File::createFile($userid, $newFilename, $type, $filedata);
+        return File::createFile($userid, $title, $type, $filedata);
     }
     
     public static function deleteFile($fileid){
         return File::deleteFile($fileid);
     }
     public static function downloadFile($fileid){
-        // TODO: Doit être fait pour plusieurs fichiers
         $file = File::getByFileId($fileid);
         $filename = $file->title; 
         $filedata = $file->filedata; 
@@ -90,9 +88,23 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
         }
     }
 }
-
         if(!empty($uploadedFilesId)) {
             $link = LinkAuthController::createShareLink($uploadedFilesId, $userid, $email);
+            $shareLink = APP_URL . "download.php/?token=" . $link;
+            echo "<script>
+                navigator.clipboard.writeText('" . $shareLink . "').then(function() {
+                    alert('Link copied to clipboard!');
+                }).catch(function() {
+                    // Fallback for older browsers
+                    var tempInput = document.createElement('input');
+                    tempInput.value = '" . $shareLink . "';
+                    document.body.appendChild(tempInput);
+                    tempInput.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(tempInput);
+                    alert('Link copied to clipboard!');
+                });
+            </script>";
         }
     }
     

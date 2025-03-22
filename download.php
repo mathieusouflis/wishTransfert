@@ -4,24 +4,27 @@ $errors = [];
 require_once "./controllers/AuthController.php";
 AuthController::needLog();
 
+require_once "./config/config.php";
+
 require_once "./controllers/LinkAuth.php";
+
 if(!isset($_GET["token"])|| empty($_GET["token"])){
     var_dump($_GET);
-    header("Location: http://localhost:8888/index.php");
+    header("Location: ".APP_URL."index.php");
     exit;
 }
 $token = $_GET['token'];
 $linkInfo = LinkAuthController::getLinkInfoForDownload($token);
 
 if (!isset($linkInfo) || empty($linkInfo)) {
-    header("Location: http://localhost:8888/index.php");
+    header("Location: ".APP_URL."index.php");
     exit;
 }
 $files = $linkInfo["files"];
 
 $email = $_SESSION["email"];
 if($linkInfo["email_restriction"] !== $email){
-    header("Location: http://localhost:8888/index.php");
+    header("Location: ".APP_URL."index.php");
     exit;
 }
 
@@ -71,9 +74,6 @@ if(isset($_GET['download_all']) && !empty($files)){
     }
 }
 
-
-
-require_once "./Models/File.Model.php";
 require_once "./config/database.php";
 
 require_once "./0 FRONT/base/header.php";

@@ -50,12 +50,8 @@ class FileLink {
     
     public static function deleteFilesLinks($link_id = null, $file_id = null){
         $conditions = [];
-        if ($link_id !== null) {
-            $conditions['link_id'] = $link_id;
-        }
-        if ($file_id !== null) {
-            $conditions['file_id'] = $file_id;
-        }
+        if ($link_id !== null) $conditions['link_id'] = $link_id;
+        if ($file_id !== null) $conditions['file_id'] = $file_id;
         
         $result = Model::delete(self::$table, $conditions);
         if (is_array($result) && array_key_exists(0, $result)) {

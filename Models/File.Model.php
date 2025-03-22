@@ -111,7 +111,6 @@ class File {
 
     public static function deleteFile($fileid){
         $result = Model::delete(self::$table, ["file_id"=> $fileid]);
-        
         // Check if multiple files were deleted
         if (is_array($result) && isset($result[0])) {
             $files = [];

@@ -2,6 +2,14 @@
 require_once "./0 FRONT/composents/icons.php";
 
 function errorModal(array $errors = []) {
+    $phpErrors = error_get_last();
+    if ($phpErrors) {
+        // Add PHP error to the errors array
+        if (!is_array($errors)) {
+            $errors = [];
+        }
+        $errors[] = $phpErrors['message'];
+    }
     if (!empty($errors)) {
         ?>
         <div class="fixed top-20 left-20 z-50 flex flex-col gap-10">

@@ -1,8 +1,10 @@
 <?php
+require_once "./config/config.php";
+
 class Model {
     private static $db;
     public function __construct() {        
-        self::$db = new PDO("mysql:host=localhost:8889;dbname=wishtransfert", "root", "root");
+        self::$db = new PDO("mysql:host=".DB_HOST.":".DB_PORT.";dbname=".DB_NAME, DB_USER, DB_PASS);
     }
 
     public static function find($table, $params = [], $limit = 0) {

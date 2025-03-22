@@ -559,6 +559,10 @@
             left: 10px;
         }
 
+        .right-0 {
+            right: 0px;
+        }
+
         .left-0 {
             left: 0px;
         }

@@ -21,9 +21,8 @@ class LinkController{
                     $fileLinks = FileLink::getByLink_id($id);
                     $files = [];
                     foreach ($fileLinks as $fileLink){
-                        $file = Files::getByFileId($fileLink->file_id);
-                        Files::delete($file->fileid);
-                        FileLink::delete($fileLink->file_link_id);
+                        FileLink::deleteFilesLinks($fileLink->link_id);
+                        File::deleteFile($fileLink->file_id);
                     }
                     Links::delete($link->linkid);
                 }

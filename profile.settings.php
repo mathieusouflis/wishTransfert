@@ -19,7 +19,7 @@ errorModal($errors);
 <div class="h-410 w-561 gap-10 page-left">
     <div class="w-171 h-410 bg-white border-radius20 flex flex-col justify-between"></a>
         <div class="p-16 flex flex-col gap-4">
-            <a href="profile.php"><?php mediumButtonWithIcon("person", "Profile", "button", "full-white", 'w-full active')?></a>
+            <a href="profile.settings.php"><?php mediumButtonWithIcon("person", "Profile", "button", "full-white", 'w-full active')?></a>
             <a href="links.settings.php"> <?php mediumButtonWithIcon("link", "Links Created", "button", "full-white", 'w-full'); ?></a>
         </div>
         <div class="flex items-center p-16 border-top">
