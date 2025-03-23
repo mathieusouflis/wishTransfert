@@ -6,6 +6,8 @@ AuthController::needLog();
 
 require_once "./controllers/FileController.php";
 
+FileController::useController();
+
 require_once "0 FRONT/base/header.php";
 require_once "0 FRONT/composents/buttons.php";
 require_once "0 FRONT/composents/input.php";
