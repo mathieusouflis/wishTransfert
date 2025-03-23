@@ -53,3 +53,4 @@ function bottomList($leftContent, $rightContent = "", $o2 = false){
 
     <?php
 }
+

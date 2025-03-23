@@ -6,6 +6,7 @@ class Links {
     public $fileid;
     public $userid;
     public $token;
+    public $downloadcount;
     public $createdat;
     private static $table = "links";
 
@@ -23,10 +24,10 @@ class Links {
         }
 
         $link = new self();
-        // Correction: Accès direct au premier élément du tableau result sans index supplémentaire
         $link->linkid = $result["link_id"];
         $link->userid = $result["user_id"];
         $link->token = $result["token"];
+        $link->downloadcount = $result["download_count"];
         $link->createdat = $result["created_at"];
 
         return $link;
@@ -46,11 +47,11 @@ class Links {
         }
 
         $link = new self();
-        // Correction: Accès direct au premier élément du tableau result sans index supplémentaire
         $link->linkid = $result["link_id"];
         $link->fileid = $result["file_id"];
         $link->userid = $result["user_id"];
         $link->token = $result["token"];
+        $link->downloadcount = $result["download_count"];
         $link->createdat = $result["created_at"];
 
         return $link;
@@ -63,10 +64,10 @@ class Links {
 
         foreach ($results as $result) {
             $link = new self();
-            // Correction: Accès direct au tableau result sans index supplémentaire
             $link->linkid = $result["link_id"];
             $link->userid = $result["user_id"];
             $link->token = $result["token"];
+            $link->downloadcount = $result["download_count"];
             $link->createdat = $result["created_at"];
             $links[] = $link;
         }
@@ -88,10 +89,10 @@ class Links {
         }
 
         $link = new self();
-        // Correction: Accès direct au premier élément du tableau result sans index supplémentaire
         $link->linkid = $result["link_id"];
         $link->userid = $result["user_id"];
         $link->token = $result["token"];
+        $link->downloadcount = $result["download_count"];
         $link->createdat = $result["created_at"];
 
         return $link;
@@ -99,15 +100,26 @@ class Links {
 
     public static function createLink($userid){
         $token = bin2hex(random_bytes(32));
-        $result = Model::insert(self::$table, ["user_id"=> $userid, "token"=> $token]);
+        $result = Model::insert(self::$table, ["user_id"=> $userid, "token"=> $token, "download_count" => 0]);
         
         $link = new self();
-        // Correction: Accès direct au tableau result sans index supplémentaire
         $link->linkid = $result["link_id"];
         $link->userid = $result["user_id"];
         $link->token = $result["token"];
+        $link->downloadcount = $result["download_count"];
         $link->createdat = $result["created_at"];
 
+        return $link;
+    }
+
+    public static function updateLink($where, $set){
+        $result = Model::update(self::$table, $set, $where);
+        $link = new self();
+        $link->linkid = $result["link_id"];
+        $link->userid = $result["user_id"];
+        $link->token = $result["token"];
+        $link->downloadcount = $result["download_count"];
+        $link->createdat = $result["created_at"];
         return $link;
     }
     
@@ -115,10 +127,10 @@ class Links {
         $result = Model::delete(self::$table, ["link_id"=> $linkid]);
 
         $link = new self();
-        // Correction: Accès direct au tableau result sans index supplémentaire
         $link->linkid = $result["link_id"];
         $link->userid = $result["user_id"];
         $link->token = $result["token"];
+        $link->downloadcount = $result["download_count"];
         $link->createdat = $result["created_at"];
 
         return $link;

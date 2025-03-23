@@ -1,4 +1,5 @@
--- Base de données pour l'application WeTransfer
+-- Database for WeTransfer application
+CREATE DATABASE IF NOT EXISTS wishtransfert;
 USE wishtransfert;
 
 -- utilisateurs
@@ -19,7 +20,6 @@ CREATE TABLE IF NOT EXISTS files (
     type VARCHAR(255) NOT NULL,
     file_data LONGBLOB NOT NULL,
     status VARCHAR(255) DEFAULT 'Stored',
-    download_count INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS links (
     link_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     token VARCHAR(255) NOT NULL UNIQUE,
+    download_count INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );

@@ -7,9 +7,9 @@ AuthController::needLog();
 require_once "./config/config.php";
 
 require_once "./controllers/LinkAuth.php";
+require_once "./Models/Link.Model.php";
 
 if(!isset($_GET["token"])|| empty($_GET["token"])){
-    var_dump($_GET);
     header("Location: ".APP_URL."index.php");
     exit;
 }
@@ -33,7 +33,8 @@ if(isset($_GET["download_file"])){
     echo $fileId;
     if(isset($files[$fileId]) && !empty($files[$fileId])){
         $file = $files[$fileId];
-        // INCR DOWNLOAD COUNT
+        $downloadCount = $linkInfo["download_count"] + 1;
+        Links::updateLink(["link_id" => $linkInfo["link_id"]], ["download_count"=> $downloadCount]);
         header('Content-Description: File Transfer');
         header('Content-Type: ' . $file->type);
         header('Content-Disposition: attachment; filename="' . $file->title . '"');
@@ -61,6 +62,9 @@ if(isset($_GET['download_all']) && !empty($files)){
         }
         $zip->close();
         
+        $downloadCount = $linkInfo["download_count"] + 1;
+        Links::updateLink(["link_id" => $linkInfo["link_id"]], ["download_count"=> $downloadCount]);
+
         header('Content-Description: File Transfer');
         header('Content-Type: application/zip');
         header('Content-Disposition: attachment; filename="' . $zipName . '"');

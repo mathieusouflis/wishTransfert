@@ -79,3 +79,4 @@ function littleButton($content, $type="button", $style="", $other= ""){
     <input type="<?=$type?>" class="<?=$style?> py-6 px-8 flex text-center radius-4 bg-white button w-max text-black text-10" value="<?=$content?>" <?=$other?>>
     <?php
 }
+

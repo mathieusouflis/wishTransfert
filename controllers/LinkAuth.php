@@ -52,18 +52,15 @@ class LinkAuthController {
      * @return string|false Le token du lien créé ou false en cas d'échec
      */
     public static function createShareLink($fileIds, $userId, $email = null) {
-        // Créer le lien
         $link = Links::createLink($userId);
         if (!$link) {
             return false;
         }
         
-        // Convertir un ID unique en tableau pour traitement uniforme
         if (!is_array($fileIds)) {
             $fileIds = [$fileIds];
         }
         
-        // Associer tous les fichiers au lien
         foreach ($fileIds as $fileId) {
             FileLink::createFilesLinks($link->linkid, $fileId);
         }
@@ -88,7 +85,6 @@ class LinkAuthController {
             return false;
         }
         
-        // Récupérer les fichiers associés au lien
         $fileLinks = FileLink::getByLink_id($link->linkid);
         $files = [];
         
@@ -112,6 +108,7 @@ class LinkAuthController {
             'user_id' => $link->userid,
             'token' => $link->token,
             'created_at' => $link->createdat,
+            'download_count' => $link->downloadcount,
             'files' => $files,
             'email_restriction' => $emailRestriction
         ];

@@ -33,6 +33,7 @@ require_once '0 FRONT/base/header.php';
             <div class="w-full m-20 flex gap-50">
                 <h3 class="w-198 text-start text-14 text-black">Link</h3>
                 <h3 class="w-171 text-14 text-black">Date</h3>
+                <h3 class="w-80 text-14 text-black">Downloads</h3>
             </div>
             <div class="flex flex-col overflow-y-scroll">
                 <?php foreach($links as $link){
@@ -40,6 +41,7 @@ require_once '0 FRONT/base/header.php';
                     $date = $link->createdat;
                     $url = APP_URL."download.php/?token=$token";
                     $linkid = $link->linkid;
+                    $downloads = $link->downloadcount;
                     ?>
                 <div class="w-full m-20 flex items-center gap-50">
                     <div class="flex flex-row justify-between gap-4 w-198 items-center">
@@ -47,6 +49,7 @@ require_once '0 FRONT/base/header.php';
                         <?php littleButton("Copy", style: "copy-btn text-10 text-black", other:"id='copy'") ?>
                     </div>
                     <p class="w-171 text-black text-10"><?=$date?></p>
+                    <p class="w-80 text-black text-10"><?=$downloads?></p>
                     <form method="post" class="flex ml-auto">
                         <input type="hidden" name="id" value="<?= $linkid ?>">
                         <label for=`submit-<?=$linkid?>` class="pointer"><?php icon("x") ?></label>

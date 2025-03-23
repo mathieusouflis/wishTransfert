@@ -26,7 +26,6 @@ class Model {
         
         $query .= implode(' AND ', $keys);
         
-        // Correction: Ajout de l'opérateur de concaténation (.=) pour la clause LIMIT
         if($limit !== 0){
             $query .= " LIMIT $limit";
         }
@@ -60,17 +59,14 @@ class Model {
         
         $lastInsertId = self::$db->lastInsertId();
         
-        // Déterminer la clé primaire en fonction de la table
         $primaryKey = self::getPrimaryKeyForTable($table);
         
         $insertedObject = self::find($table, [$primaryKey => $lastInsertId], 1);
         
-        // Si aucun résultat n'est trouvé, retourner false
         if (empty($insertedObject)) {
             return false;
         }
         
-        // Retourner le premier élément du tableau
         return $insertedObject[0];
     }
 
@@ -107,8 +103,6 @@ class Model {
         $stmt = self::$db->prepare($query);
         $stmt->execute($values);
         
-        // Fetch the updated object using the where parameters
-        // (new value params may not always be good for fetching)
         $updatedObject = self::find($table, $whereParams, 1);
         
         if (empty($updatedObject)) {
@@ -147,7 +141,6 @@ class Model {
      * @return string Le nom de la colonne de clé primaire
      */
     private static function getPrimaryKeyForTable($table) {
-        // Normaliser le nom de la table en minuscules pour les comparaisons
         $tableLowercase = strtolower($table);
         
         switch ($tableLowercase) {
@@ -165,7 +158,6 @@ class Model {
             case 'comments':
                 return 'comment_id';
             default:
-                // Par défaut, on suppose que la clé primaire est 'id'
                 return 'id';
         }
     }

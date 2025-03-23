@@ -6,7 +6,6 @@ class File {
     public $userid;
     public $title;
     public $filedata;
-    public $downloadcount;
     public $status;
     public $createdat;
     public $type;
@@ -30,9 +29,7 @@ class File {
         $file->userid = $result["user_id"];
         $file->title = $result["title"];
         $file->filedata = $result["file_data"];
-        $file->downloadcount = $result["download_count"];
         $file->status = $result["status"];
-        // Correction: Accès au bon index du tableau
         $file->type = $result["type"];
         $file->createdat = $result["created_at"];
 
@@ -53,9 +50,7 @@ class File {
             $file->userid = $result["user_id"];
             $file->title = $result["title"];
             $file->filedata = $result["file_data"];
-            $file->downloadcount = $result["download_count"];
             $file->status = $result["status"];
-            // Correction: Accès direct au tableau result sans index supplémentaire
             $file->type = $result["type"];
             $file->createdat = $result["created_at"];
             $files[] = $file;
@@ -65,15 +60,13 @@ class File {
     }
 
     public static function createFile($userid, $title, $type, $filedata){
-        $downloadcount = 0;
         $status = "Stored";
         $result = Model::insert(self::$table, [
             "user_id" => $userid, 
             "title" => $title, 
             "file_data" => $filedata, 
-            "download_count" => $downloadcount, 
             "status" => $status,
-            "type" => $type // Ajout: Inclure le type dans l'insertion
+            "type" => $type 
         ]);
 
         $file = new self();
@@ -81,9 +74,8 @@ class File {
         $file->userid = $result["user_id"];
         $file->title = $result["title"];
         $file->filedata = $result["file_data"];
-        $file->downloadcount = $result["download_count"];
+        
         $file->status = $result["status"];
-        // Correction: Accès direct au tableau result sans index supplémentaire
         $file->type = $result["type"];
         $file->createdat = $result["created_at"];
         return $file;
@@ -100,9 +92,8 @@ class File {
         $file->userid = $result["user_id"];
         $file->title = $result["title"];
         $file->filedata = $result["file_data"];
-        $file->downloadcount = $result["download_count"];
+        
         $file->status = $result["status"];
-        // Correction: Accès direct au tableau result sans index supplémentaire
         $file->type = $result["type"];
         $file->createdat = $result["created_at"];
 
@@ -111,7 +102,6 @@ class File {
 
     public static function deleteFile($fileid){
         $result = Model::delete(self::$table, ["file_id"=> $fileid]);
-        // Check if multiple files were deleted
         if (is_array($result) && isset($result[0])) {
             $files = [];
             foreach ($result as $deletedFile) {
@@ -120,9 +110,7 @@ class File {
                 $file->userid = $deletedFile["user_id"];
                 $file->title = $deletedFile["title"];
                 $file->filedata = $deletedFile["file_data"];
-                $file->downloadcount = $deletedFile["download_count"];
                 $file->status = $deletedFile["status"];
-                // Correction: Accès direct au tableau result sans index supplémentaire
                 $file->type = $deletedFile["type"];
                 $file->createdat = $deletedFile["created_at"];
                 $files[] = $file;
@@ -134,9 +122,7 @@ class File {
             $file->userid = $result["user_id"];
             $file->title = $result["title"];
             $file->filedata = $result["file_data"];
-            $file->downloadcount = $result["download_count"];
             $file->status = $result["status"];
-            // Correction: Accès direct au tableau result sans index supplémentaire
             $file->type = $result["type"];
             $file->createdat = $result["created_at"];
             return $file;

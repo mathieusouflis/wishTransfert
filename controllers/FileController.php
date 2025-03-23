@@ -1,7 +1,6 @@
 <?php
 require_once "Models/File.Model.php"; 
 require_once "Models/User.Model.php"; 
-require_once "./controllers/FileAuthorisationController.php";
 require_once "./controllers/LinkAuth.php";
 require_once "./config/config.php";
 
@@ -35,7 +34,6 @@ class FileController {
         $filedata = $file->filedata; 
         $filetype = $file->type; 
     
-        // Définir les headers HTTP pour le téléchargement
         header("Content-Type: " . $filetype);
         header("Content-Disposition: attachment; filename=\"$filename\"");
         header("Content-Length: " . strlen($filedata));
@@ -61,9 +59,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
         
         $uploadedFilesId = [];
         
-        // Handle both single and multiple file uploads
     if (!is_array($_FILES["file-to-upload"])) {
-    // Single file upload
     $file = $_FILES["file-to-upload"];
     if ($file["error"] === UPLOAD_ERR_OK) {
         $tmpName = $file["tmp_name"];

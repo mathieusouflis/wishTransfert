@@ -2,11 +2,9 @@
 require_once './Models/Model.php';
 
 class EmailLink {
-    // Correction: Renommage de la propriété pour correspondre à la colonne de la base de données
     public $email_link_id;
     public $link_id;
     public $email;
-    // Correction: Nom de la table incorrect, c'était le nom d'une colonne
     private static $table = "emails_links";
 
     public static function getByEmail($email) {

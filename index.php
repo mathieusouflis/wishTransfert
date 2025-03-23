@@ -9,7 +9,6 @@ require_once "./controllers/FileController.php";
 require_once "0 FRONT/base/header.php";
 require_once "0 FRONT/composents/buttons.php";
 require_once "0 FRONT/composents/input.php";
-require_once "0 FRONT/composents/dashboard/files.php";
 require_once "./0 FRONT/composents/errorModal.php";
 errorModal($errors);
 ?>
