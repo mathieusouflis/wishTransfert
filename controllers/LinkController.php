@@ -19,9 +19,8 @@ class LinkController{
                     $errors[] = "Link not found.";
                 }else{
                     $fileLinks = FileLink::getByLink_id($id);
-                    $files = [];
                     foreach ($fileLinks as $fileLink){
-                        FileLink::deleteFilesLinks($fileLink->link_id);
+                        FileLink::deleteFilesLinks(file_id: $fileLink->file_id);
                         File::deleteFile($fileLink->file_id);
                     }
                     Links::delete($link->linkid);

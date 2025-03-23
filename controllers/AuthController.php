@@ -9,6 +9,11 @@ class AuthController {
 
     public static function needLog(){
         if(!isset($_SESSION["connecte"]) || $_SESSION["connecte"] !== true){
+            if (ob_get_level()) {
+                 if (ob_get_level()) {
+    ob_clean();
+}
+            }
             header("Location: ". APP_URL ."login.php");
             exit();
         }
@@ -16,6 +21,9 @@ class AuthController {
     
     public static function needNoLog() {
         if (isset($_SESSION["connecte"]) && $_SESSION["connecte"] === true) {
+             if (ob_get_level()) {
+    ob_clean();
+}
             header("Location: ". APP_URL ."index.php");
             exit();
         }
@@ -64,6 +72,9 @@ class AuthController {
             if(empty($errors)) {
                 $user = User::create($username, $password, $email);
                 if(empty($errors)) {
+                     if (ob_get_level()) {
+    ob_clean();
+}
                     header('Location: login.php');
                     exit();
                 }
@@ -102,7 +113,9 @@ class AuthController {
                 $_SESSION["connecte"] = true;
                 $_SESSION["email"] = $utilisateur->email;
                 $_SESSION["username"] = $utilisateur->username;
-                
+                 if (ob_get_level()) {
+    ob_clean();
+}
                 header("Location: ". APP_URL ."index.php");
                 exit();
             }

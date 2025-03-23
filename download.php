@@ -30,8 +30,10 @@ if($linkInfo["email_restriction"] !== $email){
 
 if(isset($_GET["download_file"])){
     $fileId = intval($_GET["download_file"]);
-    echo $fileId;
     if(isset($files[$fileId]) && !empty($files[$fileId])){
+         if (ob_get_level()) {
+    ob_clean();
+}
         $file = $files[$fileId];
         $downloadCount = $linkInfo["download_count"] + 1;
         Links::updateLink(["link_id" => $linkInfo["link_id"]], ["download_count"=> $downloadCount]);
@@ -55,15 +57,15 @@ if(isset($_GET['download_all']) && !empty($files)){
     if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
         foreach ($files as $file) {
             $zip->addFromString($file->title, $file->filedata);
-            
-            if ($using_real_files && function_exists('incrementDownloadCount')) {
-                incrementDownloadCount($file->fileid);
-            }
         }
         $zip->close();
         
         $downloadCount = $linkInfo["download_count"] + 1;
         Links::updateLink(["link_id" => $linkInfo["link_id"]], ["download_count"=> $downloadCount]);
+
+         if (ob_get_level()) {
+    ob_clean();
+}
 
         header('Content-Description: File Transfer');
         header('Content-Type: application/zip');

@@ -74,7 +74,6 @@ class File {
         $file->userid = $result["user_id"];
         $file->title = $result["title"];
         $file->filedata = $result["file_data"];
-        
         $file->status = $result["status"];
         $file->type = $result["type"];
         $file->createdat = $result["created_at"];
@@ -92,7 +91,6 @@ class File {
         $file->userid = $result["user_id"];
         $file->title = $result["title"];
         $file->filedata = $result["file_data"];
-        
         $file->status = $result["status"];
         $file->type = $result["type"];
         $file->createdat = $result["created_at"];

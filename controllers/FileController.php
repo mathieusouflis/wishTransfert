@@ -33,7 +33,9 @@ class FileController {
         $filename = $file->title; 
         $filedata = $file->filedata; 
         $filetype = $file->type; 
-    
+         if (ob_get_level()) {
+    ob_clean();
+}
         header("Content-Type: " . $filetype);
         header("Content-Disposition: attachment; filename=\"$filename\"");
         header("Content-Length: " . strlen($filedata));
